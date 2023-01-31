@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d97bd230-6f93-4d86-a0c5-2c6856ed5544" name="Changes" comment="Initial commit with some basic structure.">
+      <change afterPath="$PROJECT_DIR$/oceanbench/_src/datasets/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_template/_src/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/oceanbench/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_template/_src/data/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/oceanbench/_src/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_template/_src/data/dataloaders/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/oceanbench/_src/data/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_template/_src/data/datasets/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/oceanbench/_src/dataloaders/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_template/_src/training/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/oceanbench/_src/datamodules/__init__.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2L5PvXYRlPVdeCF95sNBwsHuDfo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "true",
+    "last_opened_file_path": "/Users/eman/code_projects/oceanbench",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d97bd230-6f93-4d86-a0c5-2c6856ed5544" name="Changes" comment="" />
+      <created>1675158201556</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1675158201556</updated>
+      <workItem from="1675158202806" duration="82000" />
+      <workItem from="1675158291898" duration="1084000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial commit with some basic structure.">
+      <created>1675159305128</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1675159305128</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit with some basic structure." />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit with some basic structure." />
+  </component>
+</project>

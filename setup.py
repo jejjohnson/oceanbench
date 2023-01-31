@@ -43,12 +43,12 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-version = find_version("ml_template", "__init__.py")
+version = find_version("oceanbench", "__init__.py")
 readme = open("README.md").read()
 
 
 setup(
-    name="ml_template",
+    name="oceanbench",
     version=version,
     # author="M2Lines",
     author_email="",
