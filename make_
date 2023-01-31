@@ -1,0 +1,66 @@
+.PHONY: help install_mamba install_macos install_linux update_macos update_linux
+.DEFAULT_GOAL = help
+
+PYTHON = python
+VERSION = 3.8
+NAME = py_name
+ROOT = ./
+PIP = pip
+CONDA = conda
+SHELL = bash
+PKGROOT = ml_template
+
+
+help:	## Display this help
+		@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+
+install_mamba: ## Install mamba in base environment
+    conda install mamba -n base
+
+@REM install_macos
+@REM     mamba env create -f environments/macos.yaml
+
+@REM install_linux
+@REM     mamba env create -f environments/linux.yaml
+
+@REM update_macos
+@REM     mamba env update -f environments/macos.yaml
+
+@REM update_linux
+@REM     mamba env update -f environments/linux.yaml
+
+@REM install_precommit
+@REM     mamba install pre-commit -c conda-forge
+@REM     pre-commit install --all-files
+
+@REM ##@ Formatting
+@REM black:  ## Format code in-place using black.
+@REM 		black ${PKGROOT}/ tests/ -l 79 .
+
+@REM isort:  ## Format imports in-place using isort.
+@REM 		isort ${PKGROOT}/ tests/
+
+@REM format: ## Code styling - black, isort
+@REM 		black ${PKGROOT}/ tests/ -l 100 .
+@REM 		@printf "\033[1;34mBlack passes!\033[0m\n\n"
+@REM 		isort ${PKGROOT}/ tests/
+@REM 		@printf "\033[1;34misort passes!\033[0m\n\n"
+
+@REM install_jbook:
+@REM 	mamba env create -f environment_jb.yml
+
+@REM update_jbook:
+@REM 	mamba env update -f environment_jb.yml --prune
+
+@REM install_jaxlib:
+@REM 	mamba env create -f code/jax/environment.yaml
+
+@REM update_jaxlib:
+@REM 	mamba env update -f code/jax/environment.yaml
+
+@REM build:
+@REM 	jupyter-book build research_notebook --all
+
+@REM clean:
+@REM 	jupyter-book clean research_notebook
