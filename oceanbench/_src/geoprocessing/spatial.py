@@ -1,23 +1,27 @@
 import numpy as np
 
 
-def convert_lon_360_180(lon: np.ndarray) -> np.ndarray:
-    """This converts the longitude coordinates from
-    0:360 to -180:180
+def transform_360_to_180(coord: np.ndarray) -> np.ndarray:
+    """This converts the coordinates that are bounded from
+    [-180, 180] to coordinates bounded by [0, 360]
+
     Args:
-        lon (np.ndarray): the longitude coordinates (0, 360)
+        coord (np.ndarray): the input array of coordinates
+
     Returns:
-        np.ndarray: the longitude coordinates (0, 360)
+        coord (np.ndarray): the output array of coordinates
     """
-    return ((lon + 180) % 360) - 180
+    return (coord % 360) - 180
 
 
-def convert_lon_180_360(lon: np.ndarray) -> np.ndarray:
-    """This converts the longitude coordinates from
-    0:360 to -180:180
+def transform_180_to_360(coord: np.ndarray) -> np.ndarray:
+    """This converts the coordinates that are bounded from
+    [0, 360] to coordinates bounded by [-180, 180]
+
     Args:
-        lon (np.ndarray): the longitude coordinates (0, 360)
+        coord (np.ndarray): the input array of coordinates
+
     Returns:
-        np.ndarray: the longitude coordinates (0, 360)
+        coord (np.ndarray): the output array of coordinates
     """
-    return lon % 360
+    return coord % 360
