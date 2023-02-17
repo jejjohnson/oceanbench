@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - pyviz
+dependencies:
+  - pip
+  - pyinterp
+  - xarray
+  - dask
+  - netCDF4
+  - bottleneck
+  - scipy
