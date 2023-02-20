@@ -2,6 +2,7 @@ import pytest
 import xarray as xr
 import numpy as np
 import pandas as pd
+import oceanbench._src.geoprocessing.gridding as gridding
 
 
 @pytest.fixture()
@@ -42,6 +43,19 @@ def simple_grid_ds_12H_05(test_domain):
     ) 
 
 
-def test_fixtures(simple_grid_ds_12H_05, simple_coord_based_ds_1d):
-    print(simple_grid_ds_12H_05,simple_coord_based_ds_1d)
-    assert True
+def test_coord_based_to_grid(simple_grid_ds_12H_05, simple_coord_based_ds_1d):
+    gridded = gridding.coord_based_to_grid(simple_coord_based_ds_1d, simple_grid_ds_12H_05)
+    xr.testing.assert_allclose(
+            gridded[['lat', 'lon']],
+            simple_grid_ds_12H_05[['lat', 'lon']],
+    )
+    
+
+def test_parse_regular_dim(simple_grid_ds_12H_05):
+    assert  False
+
+def test_bin_values(simple_grid_ds_12H_05):
+    assert  False
+
+def test_multi_groupby(simple_grid_ds_12H_05):
+    assert  False
