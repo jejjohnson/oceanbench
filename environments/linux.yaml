@@ -1,0 +1,18 @@
+channels:
+  - conda-forge
+  - pyviz
+dependencies:
+  - python=3.10
+  - pip
+  - matplotlib
+  - cartopy
+  - pyinterp
+  - xarray
+  - zarr
+  - dask
+  - netCDF4
+  - bottleneck
+  - scipy
+  - pyinterp
+  - xesmf
+  - pytest
