@@ -1,4 +1,4 @@
-import pytorch_lightning as pl
+import typing as tp
 import itertools
 import numpy as np
 import xarray as xr
@@ -21,24 +21,45 @@ class XRDataset(torch.utils.data.Dataset):
     """
 
     def __init__(
-            self, da, patch_dims, domain_limits=None, strides=None,
-            check_full_scan=False, check_dim_order=False,
-            postpro_fn=None
+            self,
+            ds: xr.Dataset,
+            patch_dims: tp.Dict, 
+            domain_limits: tp.Optional[tp.Dict]=None, 
+            strides: tp.Optional[tp.Dict]=None,
+            check_full_scan: bool=False,
+            check_dim_order: bool=False,
+            transforms: tp.Optional[tp.Callable]=None
     ):
         """
-        da: xarray.DataArray with patch dims at the end in the dim orders
-        patch_dims: dict of da dimension to size of a patch
-        domain_limits: dict of da dimension to slices of domain to select for patch extractions
-        strides: dict of dims to stride size (default to one)
-        check_full_scan: Boolean: if True raise an error if the whole domain is not scanned by the patch size stride combination
+        Args:
+            ds (xr.Dataset): xarray dataset to be referenced during the iterations
+            patch_dims (Dict): dict of da dimension to size of a patch
+            domain_limits (Optional[Dict]): dict of da dimension to slices of domain
+                to select for patch extractions
+            strides (Optional[Dict]): dict of dims to stride size (default to one)
+            check_full_scan bool: if True raise an error if the whole domain is
+                not scanned by the patch size stride combination
+            check_dim_order (bool): if True raise an error for incorrect specification
+                of patch dims
+            transforms (Optional[Callable]): functions to be called when calling the data.
+
+        Attributes:
+            return_coords (bool): Option to return coords during the iterations
+            transforms (Optional[Callable]): functions to be called when calling the data
+            ds (xr.Dataset): xarray dataset to be referenced during the iterations
+            patch_dims (Dict): dict of da dimension to size of a patch
+            domain_limits (Optional[Dict]): dict of da dimension to slices of domain
+                to select for patch extractions
+            strides (Optional[Dict]): dict of dims to stride size (default to one)
+            ds_size (Dict): the dictionary of dimensions
         """
         super().__init__()
         self.return_coords = False
-        self.postpro_fn = postpro_fn
-        self.da = da.sel(**(domain_limits or {}))
+        self.transforms = transforms
+        self.ds = ds.sel(**(domain_limits or {}))
         self.patch_dims = patch_dims
         self.strides = strides or {}
-        da_dims = dict(zip(self.da.dims, self.da.shape))
+        da_dims = dict(zip(self.ds.dims, self.ds.shape))
         self.ds_size = {
             dim: max((da_dims[dim] - patch_dims[dim]) // self.strides.get(dim, 1) + 1, 0)
             for dim in patch_dims
@@ -59,11 +80,11 @@ class XRDataset(torch.utils.data.Dataset):
 
         if check_dim_order:
             for dim in patch_dims:
-                if not '#'.join(da.dims).endswith('#'.join(list(patch_dims))):
+                if not '#'.join(ds.dims).endswith('#'.join(list(patch_dims))):
                     raise DangerousDimOrdering(
                         f"""
                             input dataarray's dims should end with patch_dims 
-                            dataarray's dim {da.dims}:
+                            dataarray's dim {ds.dims}:
                             patch_dims {list(patch_dims)}
                             """
                     )
@@ -95,14 +116,14 @@ class XRDataset(torch.utils.data.Dataset):
             for dim, idx in zip(self.ds_size.keys(),
                                 np.unravel_index(item, tuple(self.ds_size.values())))
         }
-        item = self.da.isel(**sl)
+        item = self.ds.isel(**sl)
 
         if self.return_coords:
             return item.coords.to_dataset()[list(self.patch_dims)]
 
         item = item.data.astype(np.float32)
-        if self.postpro_fn is not None:
-            return self.postpro_fn(item)
+        if self.transforms is not None:
+            return self.transforms(item)
         return item
 
     def reconstruct(self, batches, weight=None):
@@ -130,13 +151,13 @@ class XRDataset(torch.utils.data.Dataset):
         das = [xr.DataArray(it.numpy(), dims=dims, coords=co.coords)
                for it, co in zip(items, coords)]
 
-        da_shape = dict(zip(coords[0].dims, self.da.shape[-len(coords[0].dims):]))
+        da_shape = dict(zip(coords[0].dims, self.ds.shape[-len(coords[0].dims):]))
         new_shape = dict(zip(new_dims, items[0].shape[:len(new_dims)]))
 
         rec_da = xr.DataArray(
             np.zeros([*new_shape.values(), *da_shape.values()]),
             dims=dims,
-            coords={d: self.da[d] for d in self.patch_dims}
+            coords={d: self.ds[d] for d in self.patch_dims}
         )
         count_da = xr.zeros_like(rec_da)
 
@@ -147,7 +168,7 @@ class XRDataset(torch.utils.data.Dataset):
         return rec_da / count_da
 
 
-class XrConcatDataset(torch.utils.data.ConcatDataset):
+class XRConcatDataset(torch.utils.data.ConcatDataset):
     """
     Concatenation of XrDatasets
     """

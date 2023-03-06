@@ -15,8 +15,13 @@ dependencies:
   - bottleneck
   - scipy
   - pyinterp
-  - xesmf
+  - conda-forge::esmpy
+  - conda-forge::sparse
+  - conda-forge::xesmf
   - pytest
   - pytorch::cpuonly
   - pytorch::pytorch
   - pytorch::torchvision
+  - tqdm
+  - pip:
+      - pip install pyrootutils
