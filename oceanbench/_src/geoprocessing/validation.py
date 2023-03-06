@@ -3,21 +3,23 @@ import xarray as xr
 
 
 def validate_latlon(da):
-    da = da.copy()
-    da["lon"] = da.lon.assign_attrs(
-        units="degrees_east",
+    new_da = da.copy()
+    new_da["lon"] = (da.lon + 180) % 360 - 180
+    new_da["lon"] = new_da.lon.assign_attrs(
+        **{**dict(units="degrees_east",
         standard_name="longitude",
-        long_name="Longitude",
+        long_name="Longitude",),
+        **da.lon.attrs}
     )
-    da["lon"] = (da.lon + 180) % 360 - 180
 
-    da["lat"] = da.lat.assign_attrs(
-        units="degrees_north",
+    new_da["lat"] = (da.lat + 90) % 180 - 90
+    new_da["lat"] = new_da.lat.assign_attrs(
+        **{**dict(units="degrees_north",
         standard_name="latitude",
-        long_name="Latitude",
+        long_name="Latitude",),
+        **da.lat.attrs,}
     )
-    da["lat"] = (da.lat + 90) % 180 - 90
-    return da
+    return new_da
 
 
 def decode_cf_time(da, units='seconds since 2012-10-01'):
