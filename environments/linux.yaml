@@ -16,3 +16,5 @@ dependencies:
   - pyinterp
   - xesmf
   - pytest
+  - pip:
+    - hydra-core
