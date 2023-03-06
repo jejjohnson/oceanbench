@@ -17,3 +17,5 @@ dependencies:
   - pyinterp
   - xesmf
   - pytest
+  - pytorch::pytorch
+  - pytorch::torchvision
