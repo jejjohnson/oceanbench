@@ -23,4 +23,5 @@ dependencies:
   - pytorch::torchvision
   - tqdm
   - pip:
-      - pip install pyrootutils
+      - pyrootutils
+      - xarray-dataclass

@@ -5,6 +5,13 @@ import pyinterp
 import pyinterp.backends.xarray
 
 
+def create_coord_grid(*args):
+
+    grid = np.meshgrid(*args, indexing="ij")
+
+    return np.stack(grid, axis=-1)
+
+
 def to_dim(ds, v):
     """
     ds: xr.Dataset
