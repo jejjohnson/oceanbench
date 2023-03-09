@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from oceanbench._src.geoprocessing.gridding import create_coord_grid
 
+
 X = Literal["x"]
 Y = Literal["y"]
 Z = Literal["z"]
@@ -16,8 +17,6 @@ TIME = Literal["time"]
 @dataclass
 class CoordinateAxis:
     data: Data[X, np.ndarray]
-    long_name: Attr[str] = ""
-    units: Attr[str] = ""
 
     @classmethod
     def init_from_bounds(cls, x_min: float, x_max: float, dx: float, **kwargs):
@@ -70,7 +69,7 @@ class TimeAxis:
         dt = pd.to_timedelta(dt)
         data = np.arange(t_min, t_max + dt, dt)
         return cls(data=data, **kwargs)
-    
+
     @property
     def ndim(self):
         return len(self.data)
@@ -87,7 +86,7 @@ class Grid2D(AsDataArray):
     
     @property
     def grid(self):
-        return create_coord_grid(self.lat, self.lon)
+        return create_coord_grid(self.lat.data, self.lon.data)
     
 
 @dataclass
@@ -108,6 +107,10 @@ class SSH2D:
     units: Attr[str] = "m"
     standard_name: Attr[str] = "sea_surface_height"
     long_name: Attr[str] = "Sea Surface Height"
+
+    @property
+    def ndim(self):
+        return (self.lat.ndim, self.lon.ndim)
 
     @classmethod
     def init_from_axis(cls, lon: LongitudeAxis, lat: LatitudeAxis):
@@ -130,13 +133,18 @@ class SSH2DT:
     standard_name: Attr[str] = "sea_surface_height"
     long_name: Attr[str] = "Sea Surface Height"
 
+    @property
+    def ndim(self):
+        return (self.time.ndim, self.lat.ndim, self.lon.ndim)
+
     @classmethod
     def init_from_axis(cls, lon: LongitudeAxis, lat: LatitudeAxis, time: TimeAxis):
-        data_init = np.ones((time.ndim, lat.ndim, lon.ndim))
-        return cls(data=data_init, time=time, lon=lon, lat=lat)
+        return cls(
+            data=np.ones((time.ndim, lat.ndim, lon.ndim)),
+            time=time, lon=lon, lat=lat)
     
     @classmethod
     def init_from_grid(cls, grid: Grid2DT):
-        return cls(data=np.ones(grid.ndim), lon=grid.lon, lat=grid.lat, time=grid.time)
-
-    
+        return cls(
+            data=np.ones(grid.ndim),
+            lon=grid.lon, lat=grid.lat, time=grid.time)
