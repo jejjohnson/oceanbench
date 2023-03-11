@@ -25,7 +25,7 @@ class XArrayDataset(torch.utils.data.Dataset):
     def __init__(
             self,
             da: xr.DataArray,
-            patch_dims: tp.Dict,
+            patch_dims: tp.Optional[tp.Dict]=None,
             domain_limits: tp.Optional[tp.Union[Bounds, tp.Iterable[Bounds]]]=None,
             strides: tp.Optional[tp.Dict]=None,
             check_full_scan: bool=False,
@@ -58,8 +58,9 @@ class XArrayDataset(torch.utils.data.Dataset):
         super().__init__()
         self.return_coords = False
         self.transforms = transforms
-
-        if isinstance(domain_limits, Bounds):
+        if domain_limits is None:
+            pass
+        elif isinstance(domain_limits, Bounds):
             da = select_bounds(da, domain_limits)
         elif isinstance(domain_limits, tp.Iterable):
             da = select_bounds_multiple(da, domain_limits)
@@ -68,6 +69,9 @@ class XArrayDataset(torch.utils.data.Dataset):
         
         self.da = da
         # self.da = ds.sel(**(domain_limits or {}))
+        if patch_dims is None:
+            patch_dims = {f"{idim}":1 for idim in da.dims}
+
         self.patch_dims = patch_dims
         self.strides = strides or {}
         da_dims = dict(zip(self.da.dims, self.da.shape))

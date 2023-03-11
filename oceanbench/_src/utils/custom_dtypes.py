@@ -130,8 +130,8 @@ class Grid2DT(Grid2D):
 @dataclass
 class SSH2D:
     data: Data[tuple[LAT, LON], np.ndarray]
-    lon: Coordof[LongitudeAxis] = 0
     lat: Coordof[LatitudeAxis] = 0
+    lon: Coordof[LongitudeAxis] = 0
     name: Name[str] = "ssh"
     units: Attr[str] = "m"
     standard_name: Attr[str] = "sea_surface_height"
@@ -154,9 +154,9 @@ class SSH2D:
 @dataclass
 class SSH2DT:
     data: Data[tuple[TIME, LAT, LON], np.ndarray]
-    lon: Coordof[LongitudeAxis] = 0
-    lat: Coordof[LatitudeAxis] = 0
     time: Coordof[TimeAxis] = 0
+    lat: Coordof[LatitudeAxis] = 0
+    lon: Coordof[LongitudeAxis] = 0
     name: Name[str] = "ssh"
     units: Attr[str] = "m"
     standard_name: Attr[str] = "sea_surface_height"
