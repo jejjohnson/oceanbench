@@ -4,10 +4,12 @@ import numpy as np
 import xarray as xr
 import tqdm
 import torch
-from ..utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
+from oceanbench._src.utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
+from oceanbench._src.geoprocessing.select import select_bounds, select_bounds_multiple
+from oceanbench._src.utils.custom_dtypes import Bounds
 
 
-class XRDataset(torch.utils.data.Dataset):
+class XArrayDataset(torch.utils.data.Dataset):
     """
     torch Dataset based on an xarray.DataArray with on the fly slicing.
     ### Usage: ####
@@ -22,9 +24,9 @@ class XRDataset(torch.utils.data.Dataset):
 
     def __init__(
             self,
-            ds: xr.Dataset,
-            patch_dims: tp.Dict, 
-            domain_limits: tp.Optional[tp.Dict]=None, 
+            da: xr.DataArray,
+            patch_dims: tp.Dict,
+            domain_limits: tp.Optional[tp.Union[Bounds, tp.Iterable[Bounds]]]=None,
             strides: tp.Optional[tp.Dict]=None,
             check_full_scan: bool=False,
             check_dim_order: bool=False,
@@ -32,7 +34,7 @@ class XRDataset(torch.utils.data.Dataset):
     ):
         """
         Args:
-            ds (xr.Dataset): xarray dataset to be referenced during the iterations
+            da (xr.DataArray): xarray datarray to be referenced during the iterations
             patch_dims (Dict): dict of da dimension to size of a patch
             domain_limits (Optional[Dict]): dict of da dimension to slices of domain
                 to select for patch extractions
@@ -46,7 +48,7 @@ class XRDataset(torch.utils.data.Dataset):
         Attributes:
             return_coords (bool): Option to return coords during the iterations
             transforms (Optional[Callable]): functions to be called when calling the data
-            ds (xr.Dataset): xarray dataset to be referenced during the iterations
+            da (xr.DataArray): xarray datarray to be referenced during the iterations
             patch_dims (Dict): dict of da dimension to size of a patch
             domain_limits (Optional[Dict]): dict of da dimension to slices of domain
                 to select for patch extractions
@@ -56,15 +58,23 @@ class XRDataset(torch.utils.data.Dataset):
         super().__init__()
         self.return_coords = False
         self.transforms = transforms
-        self.ds = ds.sel(**(domain_limits or {}))
+
+        if isinstance(domain_limits, Bounds):
+            da = select_bounds(da, domain_limits)
+        elif isinstance(domain_limits, tp.Iterable):
+            da = select_bounds_multiple(da, domain_limits)
+        else:
+            raise ValueError(f"Unrecognized domain limits type: {type(domain_limits)}")
+        
+        self.da = da
+        # self.da = ds.sel(**(domain_limits or {}))
         self.patch_dims = patch_dims
         self.strides = strides or {}
-        da_dims = dict(zip(self.ds.dims, self.ds.shape))
-        self.ds_size = {
+        da_dims = dict(zip(self.da.dims, self.da.shape))
+        self.da_size = {
             dim: max((da_dims[dim] - patch_dims[dim]) // self.strides.get(dim, 1) + 1, 0)
             for dim in patch_dims
         }
-
         if check_full_scan:
             for dim in patch_dims:
                 if (da_dims[dim] - self.patch_dims[dim]) % self.strides.get(dim, 1) != 0:
@@ -80,18 +90,18 @@ class XRDataset(torch.utils.data.Dataset):
 
         if check_dim_order:
             for dim in patch_dims:
-                if not '#'.join(ds.dims).endswith('#'.join(list(patch_dims))):
+                if not '#'.join(da.dims).endswith('#'.join(list(patch_dims))):
                     raise DangerousDimOrdering(
                         f"""
                             input dataarray's dims should end with patch_dims 
-                            dataarray's dim {ds.dims}:
+                            dataarray's dim {da.dims}:
                             patch_dims {list(patch_dims)}
                             """
                     )
 
     def __len__(self):
         size = 1
-        for v in self.ds_size.values():
+        for v in self.da_size.values():
             size *= v
         return size
 
@@ -113,10 +123,10 @@ class XRDataset(torch.utils.data.Dataset):
         sl = {
             dim: slice(self.strides.get(dim, 1) * idx,
                        self.strides.get(dim, 1) * idx + self.patch_dims[dim])
-            for dim, idx in zip(self.ds_size.keys(),
-                                np.unravel_index(item, tuple(self.ds_size.values())))
+            for dim, idx in zip(self.da_size.keys(),
+                                np.unravel_index(item, tuple(self.da_size.values())))
         }
-        item = self.ds.isel(**sl)
+        item = self.da.isel(**sl)
 
         if self.return_coords:
             return item.coords.to_dataset()[list(self.patch_dims)]
@@ -151,13 +161,13 @@ class XRDataset(torch.utils.data.Dataset):
         das = [xr.DataArray(it.numpy(), dims=dims, coords=co.coords)
                for it, co in zip(items, coords)]
 
-        da_shape = dict(zip(coords[0].dims, self.ds.shape[-len(coords[0].dims):]))
+        da_shape = dict(zip(coords[0].dims, self.da.shape[-len(coords[0].dims):]))
         new_shape = dict(zip(new_dims, items[0].shape[:len(new_dims)]))
 
         rec_da = xr.DataArray(
             np.zeros([*new_shape.values(), *da_shape.values()]),
             dims=dims,
-            coords={d: self.ds[d] for d in self.patch_dims}
+            coords={d: self.da[d] for d in self.patch_dims}
         )
         count_da = xr.zeros_like(rec_da)
 
@@ -184,3 +194,92 @@ class XRConcatDataset(torch.utils.data.ConcatDataset):
             rec_das.append(ds.reconstruct_from_items(ds_items, weight))
 
         return rec_das
+
+
+# class XRDatasetLatLon(XRDataset):
+#     """
+#     torch Dataset based on an xarray.DataArray with on the fly slicing.
+#     ### Usage: ####
+#     If you want to be able to reconstruct the input
+#     the input xr.DataArray should:
+#         - have coordinates
+#         - have the last dims correspond to the patch dims in same order
+#         - have for each dim of patch_dim (size(dim) - patch_dim(dim)) divisible by stride(dim)
+#     the batches passed to self.reconstruct should:
+#         - have the last dims correspond to the patch dims in same order
+#     """
+
+#     def __init__(
+#             self,
+#             ds: xr.Dataset,
+#             patch_dims: tp.Dict, 
+#             region: tp.Optional[Region]=None,
+#             period: tp.Optional[Period]=None,
+#             strides: tp.Optional[tp.Dict]=None,
+#             check_full_scan: bool=False,
+#             check_dim_order: bool=False,
+#             transforms: tp.Optional[tp.Callable]=None
+#     ):
+#         """
+#         Args:
+#             ds (xr.Dataset): xarray dataset to be referenced during the iterations
+#             patch_dims (Dict): dict of da dimension to size of a patch
+#             region (Optional[Region]): a custom region to subset the xr.Dataset
+#             period (Optional[Period]): a custom period to subset the xr.Dataset
+#             strides (Optional[Dict]): dict of dims to stride size (default to one)
+#             check_full_scan bool: if True raise an error if the whole domain is
+#                 not scanned by the patch size stride combination
+#             check_dim_order (bool): if True raise an error for incorrect specification
+#                 of patch dims
+#             transforms (Optional[Callable]): functions to be called when calling the data.
+
+#         Attributes:
+#             return_coords (bool): Option to return coords during the iterations
+#             transforms (Optional[Callable]): functions to be called when calling the data
+#             ds (xr.Dataset): xarray dataset to be referenced during the iterations
+#             patch_dims (Dict): dict of da dimension to size of a patch
+#             domain_limits (Optional[Dict]): dict of da dimension to slices of domain
+#                 to select for patch extractions
+#             strides (Optional[Dict]): dict of dims to stride size (default to one)
+#             ds_size (Dict): the dictionary of dimensions
+#         """
+#         super().__init__()
+
+#         if period is not None:
+#             ds = select_period(ds=ds, period=period)
+#         if region is not None:
+#             ds = select_region(ds=ds, region=region)
+#         self.ds = ds
+#         self.return_coords = False
+#         self.transforms = transforms
+#         self.patch_dims = patch_dims
+#         self.strides = strides or {}
+#         da_dims = dict(zip(self.ds.dims, self.ds.shape))
+#         self.ds_size = {
+#             dim: max((da_dims[dim] - patch_dims[dim]) // self.strides.get(dim, 1) + 1, 0)
+#             for dim in patch_dims
+#         }
+
+#         if check_full_scan:
+#             for dim in patch_dims:
+#                 if (da_dims[dim] - self.patch_dims[dim]) % self.strides.get(dim, 1) != 0:
+#                     raise IncompleteScanConfiguration(
+#                         f"""
+#                             Incomplete scan in dimension dim {dim}:
+#                             dataarray shape on this dim {da_dims[dim]}
+#                             patch_size along this dim {self.patch_dims[dim]}
+#                             stride along this dim {self.strides.get(dim, 1)}
+#                             [shape - patch_size] should be divisible by stride
+#                             """
+#                     )
+
+#         if check_dim_order:
+#             for dim in patch_dims:
+#                 if not '#'.join(ds.dims).endswith('#'.join(list(patch_dims))):
+#                     raise DangerousDimOrdering(
+#                         f"""
+#                             input dataarray's dims should end with patch_dims 
+#                             dataarray's dim {ds.dims}:
+#                             patch_dims {list(patch_dims)}
+#                             """
+#                     )
