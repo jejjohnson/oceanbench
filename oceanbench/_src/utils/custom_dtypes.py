@@ -15,11 +15,40 @@ TIME = Literal["time"]
 
 
 @dataclass
+class Bounds:
+    val_min: float
+    val_max: float
+    name: str = ""
+
+
+@dataclass
+class Region:
+    lon_min: float
+    lon_max: float
+    lat_min: float
+    lat_max: float
+    name: str = ""
+
+
+@dataclass
+class Period:
+    t_min: float
+    t_max: float
+    name: str = ""
+
+    @classmethod
+    def init_from_str(cls, t_min: str, t_max: str, **kwargs):
+        t_min = pd.to_datetime(t_min)
+        t_max = pd.to_datetime(t_max)
+        return cls(t_min=t_min, t_max=t_max, **kwargs)
+
+
+@dataclass
 class CoordinateAxis:
     data: Data[X, np.ndarray]
 
     @classmethod
-    def init_from_bounds(cls, x_min: float, x_max: float, dx: float, **kwargs):
+    def init_from_limits(cls, x_min: float, x_max: float, dx: float, **kwargs):
         data = np.arange(x_min, x_max + dx, dx)
         return cls(data=data, **kwargs)
     
@@ -37,7 +66,7 @@ class LongitudeAxis(CoordinateAxis):
     units: Attr[str] = "degrees_east"
 
     @classmethod
-    def init_from_bounds(cls, lon_min: float, lon_max: float, dlon: float, **kwargs):
+    def init_from_limits(cls, lon_min: float, lon_max: float, dlon: float, **kwargs):
         data = np.arange(lon_min, lon_max + dlon, dlon)
         return cls(data=data, **kwargs)
 
@@ -51,7 +80,7 @@ class LatitudeAxis(CoordinateAxis):
     units: Attr[str] = "degrees_west"
 
     @classmethod
-    def init_from_bounds(cls, lat_min: float, lat_max: float, dlat: float, **kwargs):
+    def init_from_limits(cls, lat_min: float, lat_max: float, dlat: float, **kwargs):
         data = np.arange(lat_min, lat_max + dlat, dlat)
         return cls(data=data, **kwargs)
 
@@ -63,7 +92,7 @@ class TimeAxis:
     long_name: Attr[str] = "Date"
 
     @classmethod
-    def init_from_bounds(cls, t_min: str, t_max: str, dt: str, **kwargs):
+    def init_from_limits(cls, t_min: str, t_max: str, dt: str, **kwargs):
         t_min = pd.to_datetime(t_min)
         t_max = pd.to_datetime(t_max)
         dt = pd.to_timedelta(dt)
