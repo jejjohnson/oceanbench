@@ -4,12 +4,36 @@ import pandas as pd
 import numpy as np
 
 
-def test_xrdataset_check_full_scan():
-    n_points = 100
-    day = np.arange(n_points) // 2
-    time = pd.to_datetime('2020-01-01') + day * pd.to_timedelta("1D") + (np.arange(n_points) % 20) * pd.to_timedelta('1H')
-    print(time.min(), time.max())
-    pass
+# def test_xdataset_check_null_case_1d():
+#     pass
+
+
+# def test_xdataset_check_null_case_1dt():
+#     pass
+
+
+# def test_xdataset_check_null_case_2d():
+#     pass
+
+
+# def test_xdataset_check_null_case_2dt():
+#     pass
+
+
+# def test_xrdataset_check_full_scan_1d():
+#     pass
+
+
+# def test_xrdataset_check_full_scan_1dt():
+#     pass
+
+
+# def test_xrdataset_check_full_scan_2d():
+#     pass
+
+
+# def test_xrdataset_check_full_scan_2dt():
+#     pass
 
 # def test_xrdataset_check_dim_order():
 #     pass
