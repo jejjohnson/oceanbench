@@ -73,7 +73,7 @@ class XArrayDataset(torch.utils.data.Dataset):
             patch_dims = {f"{idim}":1 for idim in da.dims}
 
         self.patch_dims = patch_dims
-        self.strides = strides or {}
+        self.strides = {} if strides is None else strides
         da_dims = dict(zip(self.da.dims, self.da.shape))
         self.da_size = {
             dim: max((da_dims[dim] - patch_dims[dim]) // self.strides.get(dim, 1) + 1, 0)
