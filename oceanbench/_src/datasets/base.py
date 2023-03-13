@@ -7,6 +7,7 @@ import torch
 from oceanbench._src.utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
 from oceanbench._src.geoprocessing.select import select_bounds, select_bounds_multiple
 from oceanbench._src.utils.custom_dtypes import Bounds
+from oceanbench._src.datasets.utils import get_xrda_dims, check_lists_equal, update_dict_xdims
 
 
 class XArrayDataset(torch.utils.data.Dataset):
@@ -25,8 +26,8 @@ class XArrayDataset(torch.utils.data.Dataset):
     def __init__(
             self,
             da: xr.DataArray,
-            patch_dims: tp.Optional[tp.Dict]=None,
-            domain_limits: tp.Optional[tp.Union[Bounds, tp.Iterable[Bounds]]]=None,
+            patches: tp.Optional[tp.Dict]=None,
+            domain_limits: tp.Optional[tp.Dict]=None,
             strides: tp.Optional[tp.Dict]=None,
             check_full_scan: bool=False,
             check_dim_order: bool=False,
@@ -58,48 +59,50 @@ class XArrayDataset(torch.utils.data.Dataset):
         super().__init__()
         self.return_coords = False
         self.transforms = transforms
-        if domain_limits is None:
-            pass
-        elif isinstance(domain_limits, Bounds):
-            da = select_bounds(da, domain_limits)
-        elif isinstance(domain_limits, tp.Iterable):
-            da = select_bounds_multiple(da, domain_limits)
-        else:
-            raise ValueError(f"Unrecognized domain limits type: {type(domain_limits)}")
+
+        
+
+        da_dims = get_xrda_dims(da)
+
+            
+        if domain_limits is not None:
+            check_lists_equal(list(da_dims.keys()),list(domain_limits.keys()))
+            
+            da = da.sel(**domain_limits)
         
         self.da = da
-        # self.da = ds.sel(**(domain_limits or {}))
-        if patch_dims is None:
-            patch_dims = {f"{idim}":1 for idim in da.dims}
 
-        self.patch_dims = patch_dims
-        self.strides = {} if strides is None else strides
+        self.patches = update_dict_xdims(da, patches if patches is not None else {})
+        
+        self.strides = update_dict_xdims(da, strides if strides is not None else {})
+
+
         da_dims = dict(zip(self.da.dims, self.da.shape))
-        self.da_size = {
-            dim: max((da_dims[dim] - patch_dims[dim]) // self.strides.get(dim, 1) + 1, 0)
-            for dim in patch_dims
-        }
+        from .utils import get_xrda_size
+
+        self.da_size = get_xrda_size(da, patches=self.patches, strides=self.strides)
+
         if check_full_scan:
-            for dim in patch_dims:
-                if (da_dims[dim] - self.patch_dims[dim]) % self.strides.get(dim, 1) != 0:
+            for dim in self.patches:
+                if (da_dims[dim] - self.patches[dim]) % self.strides.get(dim, 1) != 0:
                     raise IncompleteScanConfiguration(
                         f"""
                             Incomplete scan in dimension dim {dim}:
                             dataarray shape on this dim {da_dims[dim]}
-                            patch_size along this dim {self.patch_dims[dim]}
+                            patch_size along this dim {self.patches[dim]}
                             stride along this dim {self.strides.get(dim, 1)}
                             [shape - patch_size] should be divisible by stride
                             """
                     )
 
         if check_dim_order:
-            for dim in patch_dims:
-                if not '#'.join(da.dims).endswith('#'.join(list(patch_dims))):
+            for dim in self.patches:
+                if not '#'.join(da.dims).endswith('#'.join(list(self.patches))):
                     raise DangerousDimOrdering(
                         f"""
                             input dataarray's dims should end with patch_dims 
                             dataarray's dim {da.dims}:
-                            patch_dims {list(patch_dims)}
+                            patch_dims {list(self.patches)}
                             """
                     )
 
@@ -126,14 +129,14 @@ class XArrayDataset(torch.utils.data.Dataset):
     def __getitem__(self, item):
         sl = {
             dim: slice(self.strides.get(dim, 1) * idx,
-                       self.strides.get(dim, 1) * idx + self.patch_dims[dim])
+                       self.strides.get(dim, 1) * idx + self.patches[dim])
             for dim, idx in zip(self.da_size.keys(),
                                 np.unravel_index(item, tuple(self.da_size.values())))
         }
         item = self.da.isel(**sl)
 
         if self.return_coords:
-            return item.coords.to_dataset()[list(self.patch_dims)]
+            return item.coords.to_dataset()[list(self.patches)]
 
         item = item.data.astype(np.float32)
         if self.transforms is not None:
@@ -154,8 +157,8 @@ class XArrayDataset(torch.utils.data.Dataset):
 
     def reconstruct_from_items(self, items, weight=None):
         if weight is None:
-            weight = np.ones(list(self.patch_dims.values()))
-        w = xr.DataArray(weight, dims=list(self.patch_dims.keys()))
+            weight = np.ones(list(self.patches.values()))
+        w = xr.DataArray(weight, dims=list(self.patches.keys()))
 
         coords = self.get_coords()
 
@@ -171,7 +174,7 @@ class XArrayDataset(torch.utils.data.Dataset):
         rec_da = xr.DataArray(
             np.zeros([*new_shape.values(), *da_shape.values()]),
             dims=dims,
-            coords={d: self.da[d] for d in self.patch_dims}
+            coords={d: self.da[d] for d in self.patches}
         )
         count_da = xr.zeros_like(rec_da)
 

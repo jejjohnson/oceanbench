@@ -11,6 +11,7 @@ Y = Literal["y"]
 Z = Literal["z"]
 LON = Literal["lon"]
 LAT = Literal["lat"]
+HEIGHT = Literal["z"]
 TIME = Literal["time"]
 
 
@@ -45,7 +46,7 @@ class Period:
 
 @dataclass
 class CoordinateAxis:
-    data: Data[X, np.ndarray]
+    data: Coord[Literal["x"], np.float32]
 
     @classmethod
     def init_from_limits(cls, x_min: float, x_max: float, dx: float, **kwargs):
@@ -55,11 +56,33 @@ class CoordinateAxis:
     @property
     def ndim(self):
         return len(self.data)
+    
+
+class XAxis(CoordinateAxis):
+    data: Data[X, np.float32]
+
+
+class YAxis(CoordinateAxis):
+    data: Data[Y, np.float32]
+
+    @classmethod
+    def init_from_limits(cls, y_min: float, y_max: float, dy: float, **kwargs):
+        data = np.arange(y_min, y_max + dy, dy)
+        return cls(data=data, **kwargs)
+
+
+class ZAxis(CoordinateAxis):
+    data: Data[Z, float]
+
+    @classmethod
+    def init_from_limits(cls, z_min: float, z_max: float, dz: float, **kwargs):
+        data = np.arange(z_min, z_max + dz, dz)
+        return cls(data=data, **kwargs)
 
 
 @dataclass
 class LongitudeAxis(CoordinateAxis):
-    data: Data[LON, np.ndarray]
+    data: Data[LON, np.float32]
     name: Name[str] = "lon"
     standard_name: Attr[str] = "longitude"
     long_name: Attr[str] = "Longitude"
@@ -73,7 +96,7 @@ class LongitudeAxis(CoordinateAxis):
 
 @dataclass
 class LatitudeAxis(CoordinateAxis):
-    data: Data[LAT, np.ndarray]
+    data: Data[LAT, np.float32]
     name: Name[str] = "lat"
     standard_name: Attr[str] = "latitude"
     long_name: Attr[str] = "Latitude"
@@ -129,7 +152,7 @@ class Grid2DT(Grid2D):
 
 @dataclass
 class SSH2D:
-    data: Data[tuple[LAT, LON], np.ndarray]
+    data: Data[tuple[LAT, LON], np.float32]
     lat: Coordof[LatitudeAxis] = 0
     lon: Coordof[LongitudeAxis] = 0
     name: Name[str] = "ssh"
@@ -153,7 +176,7 @@ class SSH2D:
 
 @dataclass
 class SSH2DT:
-    data: Data[tuple[TIME, LAT, LON], np.ndarray]
+    data: Data[tuple[TIME, LAT, LON], np.float32]
     time: Coordof[TimeAxis] = 0
     lat: Coordof[LatitudeAxis] = 0
     lon: Coordof[LongitudeAxis] = 0

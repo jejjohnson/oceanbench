@@ -5,6 +5,14 @@ import pyinterp
 import pyinterp.backends.xarray
 
 
+def create_grid_1d(start: float, stop: float, change: float):
+    return np.arange(start, stop + change, change)
+
+
+def create_grid_2d(start_a: float, start_b: float, ):
+    pass
+
+
 def create_coord_grid(*args):
 
     grid = np.meshgrid(*args, indexing="ij")
