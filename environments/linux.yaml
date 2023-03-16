@@ -15,8 +15,6 @@ dependencies:
   - bottleneck
   - scipy
   - pyinterp
-  - conda-forge::esmpy
-  - conda-forge::sparse
   - conda-forge::xesmf
   - pytest
   - pytorch::cpuonly
@@ -24,4 +22,5 @@ dependencies:
   - pytorch::torchvision
   - tqdm
   - pip:
-      - pip install pyrootutils
+      - pyrootutils
+      - xarray-dataclasses
