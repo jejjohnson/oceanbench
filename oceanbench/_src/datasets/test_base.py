@@ -15,41 +15,26 @@ Z = Literal["z"]
 
 @dataclass
 class Variable1D:
-    data: Data[tuple[X], np.ndarray]
-    x: Coord[X, np.ndarray] = 0
+    data: Data[tuple[X], np.float32]
+    x: Coord[X, np.float32] = 0
     name: Name[str] = "var"
 
 
 @dataclass
 class Variable2D:
-    data: Data[tuple[X,Y], np.ndarray]
-    x: Coord[X, np.ndarray] = 0
-    y: Coord[Y, np.ndarray] = 0
+    data: Data[tuple[X, Y], np.float32]
+    x: Coord[X, np.float32] = 0
+    y: Coord[Y, np.float32] = 0
     name: Name[str] = "var"
 
 
 @dataclass
 class Variable3D:
-    data: Data[tuple[X, Y, Z], np.ndarray]
-    x: Coord[X, np.ndarray] = 0
-    y: Coord[Y, np.ndarray] = 0
-    z: Coord[Z, np.ndarray] = 0
+    data: Data[tuple[X, Y, Z], np.float32]
+    x: Coord[X, np.float32] = 0
+    y: Coord[Y, np.float32] = 0
+    z: Coord[Z, np.float32] = 0
     name: Name[str] = "var"
-
-
-@pytest.fixture
-def bounds_1d():
-    return Bounds(-5, 5, name="x")
-
-
-@pytest.fixture
-def bounds_2d(bounds_1d):
-    return [bounds_1d, Bounds(-10, 10, name="y")]
-
-
-@pytest.fixture
-def bounds_3d(bounds_1d, bounds_2d):
-    return [bounds_1d, bounds_2d, Bounds(-15, 15, name="z")]
 
 
 @pytest.fixture
@@ -83,33 +68,22 @@ def variable_2d(axis_2d):
     var = Variable2D(ones, axis1, axis2)
     return asdataarray(var)
 
+@pytest.fixture
+def variable_3d(axis_3d):
+    axis1, axis2, axis3 = axis_3d
+    ones = np.ones((len(axis1),len(axis2), len(axis3)))
+    var = Variable3D(ones, axis1, axis2, axis3)
+    return asdataarray(var)
 
-def test_xarraydataset_check_case_1d_null(variable_1d):
-    patch_dims = None
-    strides = None
-    domain_limits = None
-    check_full_scan = True
-    check_dim_order = True
-    transforms = None
-
-    ds = XArrayDataset(
-        da=variable_1d,
-        patches=patch_dims,
-        strides=strides,
-        domain_limits=domain_limits,
-        check_full_scan=check_full_scan,
-        check_dim_order=check_dim_order,
-        transforms=transforms
-    )
-    assert ds.patches == {"x": 1}
-    assert ds.strides == {} if strides is None else strides
-    assert domain_limits == None
-    assert ds[0].shape == (1,)
-
+# TODO: Test Domain Limits
+# TODO: Test Patch Dims
+# TODO: Test Strides
+# TODO: Test Transformations
 
 @pytest.mark.parametrize(
-        "patch,stride,xlims,datasize",
+        "patch,stride,limits,datasize",
         [
+    (None, None, None, 21),
     (1, None, None, 21),
     (1, 1, None, 21),
     (1, None, {"x": slice(-5,5)}, 11),
@@ -117,51 +91,93 @@ def test_xarraydataset_check_case_1d_null(variable_1d):
     (5, 2, None, 9),
     (5, 2, {"x": slice(-5,5)}, 4)
     ])
-def test_xarraydataset_check_1d(variable_1d, patch, stride,xlims, datasize):
-    patch_dims = {"x": patch} if patch is not None else None
+def test_xarraydataset_check_1d(variable_1d, patch, stride,limits, datasize):
+    patches = {"x": patch} if patch is not None else None
     strides = {"x": stride} if stride is not None else None
     # create bounds object
-    domain_limits = None if xlims is None else xlims
+    domain_limits = None if limits is None else limits
     check_full_scan = True
     check_dim_order = True
     transforms = None
 
     ds = XArrayDataset(
         da=variable_1d,
-        patches=patch_dims,
+        patches=patches,
         strides=strides,
         domain_limits=domain_limits,
         check_full_scan=check_full_scan,
         check_dim_order=check_dim_order,
         transforms=transforms
     )
-    assert patch_dims == ds.patches
-    assert ds.strides == {} if strides is None else strides
+    assert ds.strides == {"x": 1} if strides is None else strides
+    assert ds.patches == {"x": 1} if patches is None else patches
     assert ds.da_size == {"x": datasize}
-    assert ds[0].shape == (patch,)
+    assert ds[0].shape == (patch,) if patch is not None else (1,)
 
 
-def test_xarraydataset_check_case_2d_null(variable_2d):
-    patch_dims = None
-    strides = None
-    domain_limits = None
-    check_full_scan = True
-    check_dim_order = True
+@pytest.mark.parametrize(
+        "patch,stride,limits,datasize",
+        [
+    (None, None, None, (21,41)),
+    ((1,1), None, None, (21,41)),
+    ((1,1), (1,1), None, (21,41)),
+    ((1,1), None, {"x": slice(-5,5)}, (11,41)),
+    ((1,1), None, {"y": slice(-10,10)}, (21,21)),
+    ((1,1), None, {"x": slice(-5,5), "y": slice(-10,10)}, (11,21)),
+    ((5,1), None, None, (17,41)),
+    ((1,5), None, None, (21,37)),
+    ((5,5), None, None, (17,37)),
+    ((1,1), (2,1), None, (11,41)),
+    ((1,1), (1,3), None, (21,14)),
+    ((1,1), (3,4), None, (7,11)),
+    ])
+def test_xarraydataset_check_2d(variable_2d, patch, stride,limits, datasize):
+    patches = {"x": patch[0], "y": patch[1]} if patch is not None else None
+    strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
+    # create bounds object
+    domain_limits = None if limits is None else limits
+    check_full_scan = False
+    check_dim_order = False
     transforms = None
 
     ds = XArrayDataset(
         da=variable_2d,
-        patches=patch_dims,
+        patches=patches,
         strides=strides,
         domain_limits=domain_limits,
         check_full_scan=check_full_scan,
         check_dim_order=check_dim_order,
         transforms=transforms
     )
-    assert ds.patches == {"x": 1, "y": 1}
-    assert ds.strides == {} if strides is None else strides
-    assert domain_limits == None
-    assert ds[0].shape == (1,1,)
+
+    assert ds.strides == {"x": 1, "y": 1} if strides is None else strides
+    assert ds.patches == {"x": 1, "y": 1} if patches is None else patches
+    assert ds.da_size == {"x": datasize[0], "y": datasize[1]}
+    assert ds[0].shape == (patch[0],patch[1]) if patch is not None else (1,1)
+
+
+
+# def test_xarraydataset_check_case_2d_null(variable_2d):
+#     patch_dims = None
+#     strides = None
+#     domain_limits = None
+#     check_full_scan = True
+#     check_dim_order = True
+#     transforms = None
+
+#     ds = XArrayDataset(
+#         da=variable_2d,
+#         patches=patch_dims,
+#         strides=strides,
+#         domain_limits=domain_limits,
+#         check_full_scan=check_full_scan,
+#         check_dim_order=check_dim_order,
+#         transforms=transforms
+#     )
+#     assert ds.patches == {"x": 1, "y": 1}
+#     assert ds.strides == {} if strides is None else strides
+#     assert domain_limits == None
+#     assert ds[0].shape == (1,1,)
 
 
 # @pytest.mark.parametrize(

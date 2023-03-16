@@ -7,7 +7,13 @@ import torch
 from oceanbench._src.utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
 from oceanbench._src.geoprocessing.select import select_bounds, select_bounds_multiple
 from oceanbench._src.utils.custom_dtypes import Bounds
-from oceanbench._src.datasets.utils import get_xrda_dims, check_lists_equal, update_dict_xdims
+from oceanbench._src.datasets.utils import (
+    get_dims_xrda,
+    check_lists_equal,
+    update_dict_xdims,
+    check_lists_subset,
+    get_patches_size
+)
 
 
 class XArrayDataset(torch.utils.data.Dataset):
@@ -36,10 +42,12 @@ class XArrayDataset(torch.utils.data.Dataset):
         """
         Args:
             da (xr.DataArray): xarray datarray to be referenced during the iterations
-            patch_dims (Dict): dict of da dimension to size of a patch
+            patch_dims (Optional[Dict]): dict of da dimension to size of a patch
+                (defaults to one stride per dimension)
+            strides (Optional[Dict]): dict of dims to stride size
+                (defaults to one stride per dimension)
             domain_limits (Optional[Dict]): dict of da dimension to slices of domain
                 to select for patch extractions
-            strides (Optional[Dict]): dict of dims to stride size (default to one)
             check_full_scan bool: if True raise an error if the whole domain is
                 not scanned by the patch size stride combination
             check_dim_order (bool): if True raise an error for incorrect specification
@@ -51,24 +59,23 @@ class XArrayDataset(torch.utils.data.Dataset):
             transforms (Optional[Callable]): functions to be called when calling the data
             da (xr.DataArray): xarray datarray to be referenced during the iterations
             patch_dims (Dict): dict of da dimension to size of a patch
-            domain_limits (Optional[Dict]): dict of da dimension to slices of domain
+                (defaults to one stride per dimension)
+            strides (Dict): dict of dims to stride size
+                (defaults to one stride per dimension)
+            domain_limits (Dict): dict of da dimension to slices of domain
                 to select for patch extractions
-            strides (Optional[Dict]): dict of dims to stride size (default to one)
             ds_size (Dict): the dictionary of dimensions
         """
         super().__init__()
         self.return_coords = False
         self.transforms = transforms
 
-        
-
-        da_dims = get_xrda_dims(da)
-
-            
         if domain_limits is not None:
-            check_lists_equal(list(da_dims.keys()),list(domain_limits.keys()))
-            
+            da_dims = get_dims_xrda(da)
+            check_lists_subset(list(domain_limits.keys()), list(da_dims.keys()))
             da = da.sel(**domain_limits)
+        
+        da_dims = get_dims_xrda(da)
         
         self.da = da
 
@@ -77,10 +84,7 @@ class XArrayDataset(torch.utils.data.Dataset):
         self.strides = update_dict_xdims(da, strides if strides is not None else {})
 
 
-        da_dims = dict(zip(self.da.dims, self.da.shape))
-        from .utils import get_xrda_size
-
-        self.da_size = get_xrda_size(da, patches=self.patches, strides=self.strides)
+        self.da_size = get_patches_size(dims=da_dims, patches=self.patches, strides=self.strides)
 
         if check_full_scan:
             for dim in self.patches:
@@ -127,13 +131,19 @@ class XArrayDataset(torch.utils.data.Dataset):
             return coords
 
     def __getitem__(self, item):
-        sl = {
-            dim: slice(self.strides.get(dim, 1) * idx,
-                       self.strides.get(dim, 1) * idx + self.patches[dim])
+        # sl = {
+        #     dim: slice(self.strides.get(dim, 1) * idx,
+        #                self.strides.get(dim, 1) * idx + self.patches[dim])
+        #     for dim, idx in zip(self.da_size.keys(),
+        #                         np.unravel_index(item, tuple(self.da_size.values())))
+        # }
+        slices = {
+            dim: slice(self.strides[dim] * idx,
+                       self.strides[dim] * idx + self.patches[dim])
             for dim, idx in zip(self.da_size.keys(),
                                 np.unravel_index(item, tuple(self.da_size.values())))
         }
-        item = self.da.isel(**sl)
+        item = self.da.isel(**slices)
 
         if self.return_coords:
             return item.coords.to_dataset()[list(self.patches)]
