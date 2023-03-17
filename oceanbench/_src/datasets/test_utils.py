@@ -7,12 +7,6 @@ from oceanbench._src.datasets.utils import (
 )
 
 
-
-
-# TODO: Add demo dataset
-# TODO: test get_xrda_dims gets dataset/dataarray dims
-
-
 @pytest.mark.parametrize(
         "list1,list2",[
     ([1, 2, 3, 5], [1, 3, 2, 5]),
@@ -71,29 +65,47 @@ def test_check_lists_subset_false(list1, list2):
     ({"x": 1, "y": 1}, {"x": 10}, {"x": 10, "y": 1}),
     ({"x": 50, "y": 100}, {"x": 10}, {"x": 10, "y": 1}),
     ])
-def test_update_dict_keys_true(source, new, correct):
+def test_update_dict_keys_not_default(source, new, correct):
 
-    new_update = update_dict_keys(source, new)
+    new_update = update_dict_keys(source, new, False)
+
+    assert new_update == correct
+
+
+@pytest.mark.parametrize(
+        "source,new,correct",[
+    ({"x": 1, "y": 1}, {"x": 1, "y": 1}, {"x": 1, "y": 1}),
+    ({"x": 1, "y": 1}, {"y": 1, "x": 1}, {"x": 1, "y": 1}),
+    ({"x": 10, "y": 100}, {"x": 1, "y": 1}, {"x": 1, "y": 1}),
+    ({"x": 1, "y": 1}, {"x": 1}, {"x": 1, "y": 1}),
+    ({"x": 1, "y": 1}, {"y": 1}, {"x": 1, "y": 1}),
+    ({"x": 1, "y": 1}, {"x": 10}, {"x": 10, "y": 1}),
+    ({"x": 50, "y": 100}, {"x": 10}, {"x": 10, "y": 100}),
+    ])
+def test_update_dict_keys_default(source, new, correct):
+
+    new_update = update_dict_keys(source, new, True)
 
     assert new_update == correct
 
 
 @pytest.mark.parametrize(
         "dims,patches,strides,correct",[
-    ({"x": 10}, {}, {}, {"x": 10}),
+    ({"x": 10}, {}, {}, {"x": 1}),
     ({"x": 10}, {"x": 1}, {}, {"x": 10}),
-    ({"x": 10}, {}, {"x": 1}, {"x": 10}),
+    ({"x": 10}, {}, {"x": 1}, {"x": 1}),
     ({"x": 10}, {"x": 2}, {}, {"x": 9}),
     ({"x": 10}, {"x": 3}, {}, {"x": 8}),
     ({"x": 10}, {"x": 4}, {}, {"x": 7}),
-    ({"x": 10}, {}, {"x": 2}, {"x": 5}),
-    ({"x": 10}, {}, {"x": 3}, {"x": 4}),
-    ({"x": 10}, {}, {"x": 4}, {"x": 3}),
+    ({"x": 10}, {}, {"x": 2}, {"x": 1}),
+    ({"x": 10}, {}, {"x": 3}, {"x": 1}),
+    ({"x": 10}, {}, {"x": 4}, {"x": 1}),
     ({"x": 10}, {"x": 2}, {"x": 2}, {"x": 5}),
     ({"x": 10}, {"x": 3}, {"x": 3}, {"x": 3}),
     ])
 def test_get_patches_size(dims, patches, strides, correct):
 
-    dims_size = get_patches_size(dims, patches, strides)
+    dims_size, patches, strides = get_patches_size(dims, patches, strides)
 
-    assert dims_size == correct
+    msg = f"Dims: {dims} | Patches: {patches} | Strides: {strides} | Dims: {dims_size}"
+    assert dims_size == correct, msg

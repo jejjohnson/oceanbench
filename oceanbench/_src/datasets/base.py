@@ -12,7 +12,8 @@ from oceanbench._src.datasets.utils import (
     check_lists_equal,
     update_dict_xdims,
     check_lists_subset,
-    get_patches_size
+    get_patches_size,
+    get_slices
 )
 
 
@@ -33,8 +34,8 @@ class XArrayDataset(torch.utils.data.Dataset):
             self,
             da: xr.DataArray,
             patches: tp.Optional[tp.Dict]=None,
-            domain_limits: tp.Optional[tp.Dict]=None,
             strides: tp.Optional[tp.Dict]=None,
+            domain_limits: tp.Optional[tp.Dict]=None,
             check_full_scan: bool=False,
             check_dim_order: bool=False,
             transforms: tp.Optional[tp.Callable]=None
@@ -42,7 +43,7 @@ class XArrayDataset(torch.utils.data.Dataset):
         """
         Args:
             da (xr.DataArray): xarray datarray to be referenced during the iterations
-            patch_dims (Optional[Dict]): dict of da dimension to size of a patch
+            patches (Optional[Dict]): dict of da dimension to size of a patch
                 (defaults to one stride per dimension)
             strides (Optional[Dict]): dict of dims to stride size
                 (defaults to one stride per dimension)
@@ -59,7 +60,7 @@ class XArrayDataset(torch.utils.data.Dataset):
             transforms (Optional[Callable]): functions to be called when calling the data
             da (xr.DataArray): xarray datarray to be referenced during the iterations
             patch_dims (Dict): dict of da dimension to size of a patch
-                (defaults to one stride per dimension)
+                (defaults to the same dimension as dataset stride per dimension)
             strides (Dict): dict of dims to stride size
                 (defaults to one stride per dimension)
             domain_limits (Dict): dict of da dimension to slices of domain
@@ -79,22 +80,21 @@ class XArrayDataset(torch.utils.data.Dataset):
         
         self.da = da
 
-        self.patches = update_dict_xdims(da, patches if patches is not None else {})
+        self.da_size, self.patches, self.strides = get_patches_size(
+            dims=da_dims, 
+            patches=patches if patches is not None else {}, 
+            strides=strides if strides is not None else {}
+            )
         
-        self.strides = update_dict_xdims(da, strides if strides is not None else {})
-
-
-        self.da_size = get_patches_size(dims=da_dims, patches=self.patches, strides=self.strides)
-
         if check_full_scan:
             for dim in self.patches:
-                if (da_dims[dim] - self.patches[dim]) % self.strides.get(dim, 1) != 0:
+                if (da_dims[dim] - self.patches[dim]) % self.strides[dim] != 0:
                     raise IncompleteScanConfiguration(
                         f"""
                             Incomplete scan in dimension dim {dim}:
                             dataarray shape on this dim {da_dims[dim]}
                             patch_size along this dim {self.patches[dim]}
-                            stride along this dim {self.strides.get(dim, 1)}
+                            stride along this dim {self.strides[dim]}
                             [shape - patch_size] should be divisible by stride
                             """
                     )
@@ -131,18 +131,11 @@ class XArrayDataset(torch.utils.data.Dataset):
             return coords
 
     def __getitem__(self, item):
-        # sl = {
-        #     dim: slice(self.strides.get(dim, 1) * idx,
-        #                self.strides.get(dim, 1) * idx + self.patches[dim])
-        #     for dim, idx in zip(self.da_size.keys(),
-        #                         np.unravel_index(item, tuple(self.da_size.values())))
-        # }
-        slices = {
-            dim: slice(self.strides[dim] * idx,
-                       self.strides[dim] * idx + self.patches[dim])
-            for dim, idx in zip(self.da_size.keys(),
-                                np.unravel_index(item, tuple(self.da_size.values())))
-        }
+
+        slices = get_slices(
+            idx=item, da_size=self.da_size, patches=self.patches, strides=self.strides
+        )
+        
         item = self.da.isel(**slices)
 
         if self.return_coords:

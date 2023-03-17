@@ -7,6 +7,7 @@ from oceanbench._src.utils.custom_dtypes import CoordinateAxis, Bounds
 from oceanbench._src.geoprocessing.gridding import create_coord_grid
 from xarray_dataclasses import Data, Name, Coord, asdataarray
 from dataclasses import dataclass
+from oceanbench._src.datasets.utils import list_product
 
 X = Literal["x"]
 Y = Literal["y"]
@@ -49,9 +50,9 @@ def axis_2d(axis_1d):
 
 @pytest.fixture
 def axis_3d(axis_2d):
-    axis_1d, axis_2d = axis_2d
+    axis1, axis2 = axis_2d
     axis3 = np.arange(-30, 30+1, 1)
-    return axis_1d, axis_2d, axis3
+    return axis1, axis2, axis3
 
 
 @pytest.fixture
@@ -75,15 +76,13 @@ def variable_3d(axis_3d):
     var = Variable3D(ones, axis1, axis2, axis3)
     return asdataarray(var)
 
-# TODO: Test Domain Limits
-# TODO: Test Patch Dims
-# TODO: Test Strides
+
 # TODO: Test Transformations
 
 @pytest.mark.parametrize(
-        "patch,stride,limits,datasize",
+        "patch,stride,domain_limits,datasize",
         [
-    (None, None, None, 21),
+    (None, None, None, 1),
     (1, None, None, 21),
     (1, 1, None, 21),
     (1, None, {"x": slice(-5,5)}, 11),
@@ -91,13 +90,11 @@ def variable_3d(axis_3d):
     (5, 2, None, 9),
     (5, 2, {"x": slice(-5,5)}, 4)
     ])
-def test_xarraydataset_check_1d(variable_1d, patch, stride,limits, datasize):
+def test_xarraydataset_check_1d(variable_1d, patch, stride,domain_limits, datasize):
     patches = {"x": patch} if patch is not None else None
     strides = {"x": stride} if stride is not None else None
-    # create bounds object
-    domain_limits = None if limits is None else limits
-    check_full_scan = True
-    check_dim_order = True
+    check_full_scan = False
+    check_dim_order = False
     transforms = None
 
     ds = XArrayDataset(
@@ -109,16 +106,20 @@ def test_xarraydataset_check_1d(variable_1d, patch, stride,limits, datasize):
         check_dim_order=check_dim_order,
         transforms=transforms
     )
-    assert ds.strides == {"x": 1} if strides is None else strides
-    assert ds.patches == {"x": 1} if patches is None else patches
-    assert ds.da_size == {"x": datasize}
-    assert ds[0].shape == (patch,) if patch is not None else (1,)
+
+    msg = f"Patches: {ds.patches} | Strides: {ds.strides} | Dims: {ds.da_size}"
+    assert ds.strides == {"x": 1} if strides is None else strides, msg
+    assert ds.patches == {"x": 21} if patches is None else patches, msg
+    assert ds.da_size == {"x": datasize}, msg
+    assert ds[0].shape == (patch,) if patch is not None else (1,), msg
+    assert len(ds) == datasize
+    
 
 
 @pytest.mark.parametrize(
-        "patch,stride,limits,datasize",
+        "patch,stride,domain_limits,datasize",
         [
-    (None, None, None, (21,41)),
+    (None, None, None, (1,1)),
     ((1,1), None, None, (21,41)),
     ((1,1), (1,1), None, (21,41)),
     ((1,1), None, {"x": slice(-5,5)}, (11,41)),
@@ -131,11 +132,9 @@ def test_xarraydataset_check_1d(variable_1d, patch, stride,limits, datasize):
     ((1,1), (1,3), None, (21,14)),
     ((1,1), (3,4), None, (7,11)),
     ])
-def test_xarraydataset_check_2d(variable_2d, patch, stride,limits, datasize):
+def test_xarraydataset_check_2d(variable_2d, patch, stride,domain_limits, datasize):
     patches = {"x": patch[0], "y": patch[1]} if patch is not None else None
     strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
-    # create bounds object
-    domain_limits = None if limits is None else limits
     check_full_scan = False
     check_dim_order = False
     transforms = None
@@ -150,10 +149,12 @@ def test_xarraydataset_check_2d(variable_2d, patch, stride,limits, datasize):
         transforms=transforms
     )
 
-    assert ds.strides == {"x": 1, "y": 1} if strides is None else strides
-    assert ds.patches == {"x": 1, "y": 1} if patches is None else patches
-    assert ds.da_size == {"x": datasize[0], "y": datasize[1]}
-    assert ds[0].shape == (patch[0],patch[1]) if patch is not None else (1,1)
+    msg = f"Patches: {ds.patches} | Strides: {ds.strides} | Dims: {ds.da_size}"
+    assert ds.strides == {"x": 1, "y": 1} if strides is None else strides, msg
+    assert ds.patches == {"x": 21, "y": 41} if patches is None else patches, msg
+    assert ds.da_size == {"x": datasize[0], "y": datasize[1]}, msg
+    assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
+    assert len(ds) == list_product(list(datasize)) 
 
 
 
