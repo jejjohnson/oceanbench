@@ -24,3 +24,5 @@ dependencies:
   - pip:
       - pyrootutils
       - xarray-dataclasses
+      - autoroot
+      - einops
