@@ -22,6 +22,15 @@ from oceanbench._src.datasets.utils import (
 
 @dataclass
 class XRDABatcher:
+    """
+    A dataclass for xarray.DataArray with on the fly slicing.
+    ### Usage: ####
+    If you want to be able to reconstruct the input
+    the input xr.DataArray should:
+        - have coordinates
+        - have for each dim of patch_dim (size(dim) - patch_dim(dim)) divisible by stride(dim)
+    the batches passed to self.reconstruct should:
+    """
     da: xr.DataArray
     patches: tp.Dict[str, int]
     strides: tp.Dict[str, int]
@@ -37,7 +46,31 @@ class XRDABatcher:
             domain_limits: tp.Optional[tp.Dict]=None,
             check_full_scan: bool=False,
         ):
-        
+        """
+        Args:
+            da (xr.DataArray): xarray datarray to be referenced during the iterations
+            patches (Optional[Dict]): dict of da dimension to size of a patch
+                (defaults to one stride per dimension)
+            strides (Optional[Dict]): dict of dims to stride size
+                (defaults to one stride per dimension)
+            domain_limits (Optional[Dict]): dict of da dimension to slices of domain
+                to select for patch extractions
+            check_full_scan bool: if True raise an error if the whole domain is
+                not scanned by the patch size stride combination
+                
+        Attributes:
+            return_coords (bool): Option to return coords during the iterations
+
+            da (xr.DataArray): xarray datarray to be referenced during the iterations
+            patch_dims (Dict): dict of da dimension to size of a patch
+                (defaults to the same dimension as dataset stride per dimension)
+            strides (Dict): dict of dims to stride size
+                (defaults to one stride per dimension)
+            domain_limits (Dict): dict of da dimension to slices of domain
+                to select for patch extractions
+            ds_size (Dict): the dictionary of dimensions for the slicing
+            da_dims (Dict): the dictionary of the original dimensions
+        """
         if domain_limits is not None:
             da_dims = get_dims_xrda(da)
             check_lists_subset(list(domain_limits.keys()), list(da_dims.keys()))
