@@ -115,25 +115,15 @@ class XRDABatcher:
     @property
     def coord_names(self) -> tp.List[str]:
         return list(self.da_dims.keys())
-    def get_da_slice(self, idx: int, da: xr.DataArray) -> xr.DataArray:
-        
-        slices = get_slices(idx, 
-                          da_size=self.da_size, 
-                          patches=self.patches, 
-                          strides=self.strides
-                         )
-        return self.da.isel(**slices)
     
     def __len__(self):
         return list_product(list(self.da_size.values()))
-    
     
     def __iter__(self):
         for i in range(len(self)):
             yield self[i]
     
     def __getitem__(self, item):
-        output = {}
 
         slices = get_slices(
             idx=item, 
