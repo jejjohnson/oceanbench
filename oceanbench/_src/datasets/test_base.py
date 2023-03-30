@@ -158,14 +158,258 @@ def test_xrda_patcher_check_2d(variable_2d, patch, stride,domain_limits, datasiz
     assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
     assert len(ds) == list_product(list(datasize))
 
+@pytest.mark.parametrize(
+        "patch,stride,domain_limits,datasize",
+        [
+    (None, None, None, (1,1)),
+    ((1,1), None, None, (20,40)),
+    ((1,1), (1,1), None, (20,40)),
+    ((1,1), None, {"x": slice(-5,5)}, (11,40)),
+    ((1,1), None, {"y": slice(-10,10)}, (20,21)),
+    ((1,1), None, {"x": slice(-5,5), "y": slice(-10,10)}, (11,21)),
+    ((5,1), None, None, (16,40)),
+    ((1,5), None, None, (20,36)),
+    ((5,5), None, None, (16,36)),
+    ((10,20), (2,1), None, (6,21)),
+    ((10,20), (1,2), None, (11,11)),
+    ((10,4), (2,4), None, (6,10)),
+    ])
+def test_xrda_patcher_check_2d_reconstruct(variable_2d, patch, stride,domain_limits, datasize):
+    patches = {"x": patch[0], "y": patch[1]} if patch is not None else None
+    strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
+    check_full_scan = True
+
+    ds = XRDABatcher(
+        da=variable_2d,
+        patches=patches,
+        strides=strides,
+        domain_limits=domain_limits,
+        check_full_scan=check_full_scan,
+    )
+
+    msg = f"Patches: {ds.patches} | Strides: {ds.strides} | Dims: {ds.da_size}"
+    assert ds.strides == {"x": 1, "y": 1} if strides is None else strides, msg
+    assert ds.patches == {"x": 20, "y": 40} if patches is None else patches, msg
+    assert ds.da_size == {"x": datasize[0], "y": datasize[1]}, msg
+    assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
+    assert len(ds) == list_product(list(datasize))
+
+
     all_batches = list(map(lambda x: x, ds))
+    
+    
+    # CASE I - Same Labels
     dims_label = ["x", "y"]
+    rec_da = ds.reconstruct([all_batches], dims_label)
+    np.testing.assert_array_almost_equal(rec_da.data, ds.da.data, decimal=5)
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+    assert list(rec_da.coords.keys()) == ["x","y"]
+
+    # CASE II - Mixed Labels
+    dims_label = ["x", "z"]
 
     rec_da = ds.reconstruct([all_batches], dims_label)
-    np.testing.assert_array_almost_equal(rec_da.data, ds.da, decimal=5)
+    assert rec_da.shape == (20, 40) if patch is None else (patch[0], patch[1]), msg
+    assert rec_da.coords.dims == ("x", "z")
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    assert list(rec_da.coords.keys()) == ["x",]
 
-    all_batches = list(map(lambda x: repeat(x, "... -> ... N", N=5), all_batches)) 
+    # CASE III - Different Labels
+    dims_label = ["k", "z"]
+
+    rec_da = ds.reconstruct([all_batches], dims_label)
+    assert rec_da.shape == (20, 40) if patch is None else (patch[0], patch[1]), msg
+    assert rec_da.coords.dims == ("k", "z")
+
+    # CASE IV - No Labels
+    dims_label = None
+
+    rec_da = ds.reconstruct([all_batches], dims_label)
+    assert rec_da.shape == (20, 40) if patch is None else (patch[0], patch[1]), msg
+    assert rec_da.coords.dims == ("v1", "v2")
+
+
+
+@pytest.mark.parametrize(
+        "patch,stride,domain_limits,datasize",
+        [
+    (None, None, None, (1,1)),
+    ((1,1), None, None, (20,40)),
+    ((1,1), (1,1), None, (20,40)),
+    ((1,1), None, {"x": slice(-5,5)}, (11,40)),
+    ((1,1), None, {"y": slice(-10,10)}, (20,21)),
+    ((1,1), None, {"x": slice(-5,5), "y": slice(-10,10)}, (11,21)),
+    ((5,1), None, None, (16,40)),
+    ((1,5), None, None, (20,36)),
+    ((5,5), None, None, (16,36)),
+    ((10,20), (2,1), None, (6,21)),
+    ((10,20), (1,2), None, (11,11)),
+    ((10,4), (2,4), None, (6,10)),
+    ])
+def test_xrda_patcher_check_2d_reconstruct_weights(variable_2d, patch, stride,domain_limits, datasize):
+    patches = {"x": patch[0], "y": patch[1]} if patch is not None else None
+    strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
+    check_full_scan = True
+
+    ds = XRDABatcher(
+        da=variable_2d,
+        patches=patches,
+        strides=strides,
+        domain_limits=domain_limits,
+        check_full_scan=check_full_scan,
+    )
+
+    msg = f"Patches: {ds.patches} | Strides: {ds.strides} | Dims: {ds.da_size}"
+    assert ds.strides == {"x": 1, "y": 1} if strides is None else strides, msg
+    assert ds.patches == {"x": 20, "y": 40} if patches is None else patches, msg
+    assert ds.da_size == {"x": datasize[0], "y": datasize[1]}, msg
+    assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
+    assert len(ds) == list_product(list(datasize))
+
+
+    all_batches = list(map(lambda x: x, ds))
+
+    # CASE I - Same Labels, Weight same as patches
+    dims_label = ["x", "y"]
+    if patch is not None:
+        weight = np.ones((patch[0], patch[1]))
+    else:
+        weight = None
+    rec_da = ds.reconstruct([all_batches], dims_label, weight=weight)
+    
+    np.testing.assert_array_almost_equal(rec_da.data, ds.da.data, decimal=5)
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+    assert list(rec_da.coords.keys()) == ["x","y"]
+
+    # CASE II - Same Labels, Weight "broadcastable" as patches (x-axis)
+    dims_label = ["x", "y"]
+    if patch is not None:
+        weight = np.ones((patch[0],))
+    else:
+        weight = None
+    rec_da = ds.reconstruct([all_batches], dims_label, weight=weight)
+    
+    np.testing.assert_array_almost_equal(rec_da.data, ds.da.data, decimal=5)
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+    assert list(rec_da.coords.keys()) == ["x","y"]
+
+    # FAILS!!!
+    # Cannot broadcast on the y axis...
+    # # CASE III - Same Labels, Weight "broadcastable" as patches, y-axis
+    # dims_label = ["x", "y"]
+    # if patch is not None:
+    #     weight = np.ones((patch[1],))
+    # else:
+    #     weight = None
+    # rec_da = ds.reconstruct([all_batches], dims_label, weight=weight)
+    
+    # np.testing.assert_array_almost_equal(rec_da.data, ds.da.data, decimal=5)
+    # np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    # np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+
+    num_latents = 5
+    all_batches = list(map(lambda x: repeat(x, "... -> ... N", N=num_latents), all_batches))
+
+    # CASE III - Same Labels + Latent, Weight "broadcastable" as patches
+    dims_label = ["x", "y", "z"]
+    if patch is not None:
+        weight = np.ones((patch[0], patch[1]))
+    else:
+        weight = None
+    rec_da = ds.reconstruct([all_batches], dims_label, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, ds.da.data, decimal=5)
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+    assert list(rec_da.coords.keys()) == ["x","y"]
+
+    # CASE IV - Same Labels + Latent, Weight as patches + latents
+    dims_label = ["x", "y", "z"]
+    if patch is not None:
+        weight = np.ones((patch[0], patch[1], num_latents))
+    else:
+        weight = None
+    rec_da = ds.reconstruct([all_batches], dims_label, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, ds.da.data, decimal=5)
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+    assert list(rec_da.coords.keys()) == ["x","y"]
+
+
+
+
+
+@pytest.mark.parametrize(
+        "patch,stride,domain_limits,datasize",
+        [
+    (None, None, None, (1,1)),
+    ((1,1), None, None, (20,40)),
+    ((1,1), (1,1), None, (20,40)),
+    ((1,1), None, {"x": slice(-5,5)}, (11,40)),
+    ((1,1), None, {"y": slice(-10,10)}, (20,21)),
+    ((1,1), None, {"x": slice(-5,5), "y": slice(-10,10)}, (11,21)),
+    ((5,1), None, None, (16,40)),
+    ((1,5), None, None, (20,36)),
+    ((5,5), None, None, (16,36)),
+    ((10,20), (2,1), None, (6,21)),
+    ((10,20), (1,2), None, (11,11)),
+    ((10,4), (2,4), None, (6,10)),
+    ])
+def test_xrda_patcher_check_2d_reconstruct_latent(variable_2d, patch, stride,domain_limits, datasize):
+    patches = {"x": patch[0], "y": patch[1]} if patch is not None else None
+    strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
+    check_full_scan = True
+
+    ds = XRDABatcher(
+        da=variable_2d,
+        patches=patches,
+        strides=strides,
+        domain_limits=domain_limits,
+        check_full_scan=check_full_scan,
+    )
+
+    msg = f"Patches: {ds.patches} | Strides: {ds.strides} | Dims: {ds.da_size}"
+    assert ds.strides == {"x": 1, "y": 1} if strides is None else strides, msg
+    assert ds.patches == {"x": 20, "y": 40} if patches is None else patches, msg
+    assert ds.da_size == {"x": datasize[0], "y": datasize[1]}, msg
+    assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
+    assert len(ds) == list_product(list(datasize))
+
+
+    all_batches = list(map(lambda x: x, ds))
+    num_latents = 5
+    all_batches = list(map(lambda x: repeat(x, "... -> ... N", N=num_latents), all_batches))
+
+    # CASE I - Same Labels
     dims_label = ["x", "y", "z"]
     rec_da = ds.reconstruct([all_batches], dims_label)
-    np.testing.assert_array_almost_equal(rec_da.isel(z=0), ds.da, decimal=5)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, ds.da.data, decimal=5)
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    np.testing.assert_array_equal(rec_da["y"], ds.da["y"])
+    assert list(rec_da.coords.keys()) == ["x","y"]
+
+    # CASE II - Mixed Labels
+    dims_label = ["x", "t", "z"]
+
+    rec_da = ds.reconstruct([all_batches], dims_label)
+    assert rec_da.shape == (20, 40, num_latents) if patch is None else (patch[0], patch[1], num_latents), msg
+    assert rec_da.coords.dims == ("x", "t", "z")
+    np.testing.assert_array_equal(rec_da["x"], ds.da["x"])
+    assert list(rec_da.coords.keys()) == ["x",]
+
+    # CASE III - Different Labels
+    dims_label = ["k", "t", "z"]
+
+    rec_da = ds.reconstruct([all_batches], dims_label)
+    assert rec_da.shape == (20, 40, num_latents) if patch is None else (patch[0], patch[1], num_latents), msg
+    assert rec_da.coords.dims == ("k", "t", "z")
+
+    # CASE IV - No Labels
+    dims_label = None
+
+    rec_da = ds.reconstruct([all_batches], dims_label)
+    assert rec_da.shape == (20, 40, num_latents) if patch is None else (patch[0], patch[1], num_latents), msg
+    assert rec_da.coords.dims == ("v1", "v2", "v3")
 

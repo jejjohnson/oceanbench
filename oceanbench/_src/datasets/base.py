@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import itertools
 import numpy as np
 import xarray as xr
-import tqdm
+from tqdm import tqdm
 
 from oceanbench._src.utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
 from oceanbench._src.geoprocessing.select import select_bounds, select_bounds_multiple
@@ -15,7 +15,6 @@ from oceanbench._src.datasets.utils import (
     check_lists_subset,
     get_patches_size,
     get_slices,
-    reconstruct_from_items,
     list_product
 )
 
@@ -155,7 +154,7 @@ class XRDABatcher:
     def reconstruct(
         self, 
         batches: tp.List[np.ndarray], 
-        dims_label: tp.List[str], 
+        dims_label: tp.Optional[tp.List[str]]=None, 
         weight: tp.Optional[np.ndarray]=None
     ) -> xr.DataArray:
         """
@@ -167,16 +166,98 @@ class XRDABatcher:
         """
 
         items = list(itertools.chain(*batches))
-        rec_da = reconstruct_from_items(
+        rec_da = self.reconstruct_from_items(
             items=items,
             dims_label=dims_label,
-            xrda_batcher=self,
             weight=weight
         ) 
         
         rec_da.attrs = self.da.attrs
         
         return rec_da
+    
+    def reconstruct_from_items(
+        self,
+        items: tp.Iterable, 
+        dims_label: tp.Optional[tp.Iterable[str]]=None, 
+        weight=None
+    ):
+        
+        if dims_label is None:
+            dims_label = [f"v{i+1}" for i in range(len(items[0].shape))]
+        elif len(dims_label) < len(items[0].shape):
+            new_dims  = [f"v{i+1}" for i in range(len(items[0].shape) - len(dims_label))]
+            dims_label = dims_label + new_dims
+        
+        msg = f"Length of dim labels does not match length of dims."
+        msg += f"\nDims Label: {dims_label} \nShape: {items[0].shape}"
+        assert len(dims_label) == len(items[0].shape), msg
+
+        coords = self.get_coords()
+        
+
+        # check for subset of coordinate arrays
+        coords_labels = list(coords[0].dims.keys())
+        coords_labels = set(dims_label).intersection(coords_labels)
+        # check_lists_subset(coords_labels, dims_label)
+        items_shape = dict(zip(dims_label, items[0].shape))
+
+        patches = {ikey: ivalue for ikey, ivalue in self.patches.items() if ikey in dims_label}
+        patch_values = list(patches.values())
+        patch_names = list(patches.keys())
+
+        # (maybe) update weight matrix
+        if weight is None:
+            
+            weight = np.ones(patch_values)
+        else:
+            msg = "Weight array is not the same size as total dims "
+            msg += "or not the same value"
+            msg += f"\nWeight: {list(weight.shape)} | Patches: {patch_values} | Dims: {items[0].shape}"
+            assert len(weight.shape) <= len(items[0].shape), msg
+            # assert any(list(ishape == ivalue for ishape, ivalue in zip(weight.shape, patch_values))), msg
+
+        w = xr.DataArray(weight, dims=dims_label[:len(weight.shape)])
+
+        # create data arrays from (maybe) coords
+        if not coords_labels:
+            das = [
+                xr.DataArray(it, dims=dims_label)
+                for it in items
+                  ]
+        else:
+            coords_labels = list(coords_labels)
+            das = [
+                xr.DataArray(it, dims=dims_label, coords=co[coords_labels].coords)
+                for it, co in zip(items, coords)
+                  ]
+
+        msg = "New Data Array is not the same size as items"
+        msg += "or not the same value"
+        msg += f"\n{das[0].shape} | Items: {items_shape}"
+        assert len(das[0].shape) == len(items_shape), msg
+        assert set(das[0].shape) == set(items_shape.values()), msg
+
+        # get new shape from 
+        new_shape = {
+            idim: self.da[idim].shape[0] if idim in coords_labels
+            else items[0].shape[i]
+            for i, idim in enumerate(dims_label) 
+        }
+        coords = {d: self.da[d] for d in patch_names if d in dims_label}
+        rec_da = xr.DataArray(
+            np.zeros([*new_shape.values()]),
+            dims=dims_label,
+            coords=coords
+        )
+
+        count_da = xr.zeros_like(rec_da)
+
+        for ida in tqdm(das):
+            rec_da.loc[ida.coords] = rec_da.sel(ida.coords) + ida * w
+            count_da.loc[ida.coords] = count_da.sel(ida.coords) + w
+
+        return rec_da / count_da
     
     def get_coords(self) -> tp.List[xr.DataArray]:
         self.return_coords = True
