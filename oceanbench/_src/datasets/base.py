@@ -170,7 +170,7 @@ class XRDABatcher:
         rec_da = reconstruct_from_items(
             items=items,
             dims_label=dims_label,
-            torch_xrds=self,
+            xrda_batcher=self,
             weight=weight
         ) 
         

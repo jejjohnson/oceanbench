@@ -102,7 +102,10 @@ def update_dict_keys(source: Dict[str, int], new: Dict[str, int], default: bool=
 
     for ikey in source.keys():
         if ikey not in new.keys():
-            update[ikey] = source[ikey]
+            if default:
+                update[ikey] = source[ikey]
+            else:
+                update[ikey] = 1
         else:
             update[ikey] = new[ikey]
                 
@@ -138,7 +141,7 @@ def get_patches_size(dims: Dict[str, int], patches: Dict[str, int], strides: Dic
     patches = update_dict_keys(dims, patches, default=True)
     strides = update_dict_keys(dims, strides, default=False)
     
-    dim_size = {}
+    dim_size = OrderedDict()
     
     for idim in patches:
         dim_size[idim] = max((dims[idim] - patches[idim]) // strides[idim] + 1, 0)
