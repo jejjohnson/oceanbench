@@ -17,9 +17,6 @@ dependencies:
   - pyinterp
   - xesmf==0.7.0
   - pytest
-  - cpuonly
-  - pytorch==1.13
-  - torchvision
   - tqdm
   - pip:
       - pyrootutils

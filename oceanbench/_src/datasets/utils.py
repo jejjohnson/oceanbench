@@ -4,40 +4,6 @@ import xarray as xr
 import numpy as np
 from functools import reduce
 from tqdm import tqdm
-# from oceanbench._src.datasets.base import XArrayDataset
-
-
-# class DAPatchParams(NamedTuple):
-#     patches: Dict[str, int]
-#     strides: Dict[str, int]
-#     da_dims: Dict[str, int]
-#     da_size: Dict[str, int]
-    
-#     def __init__(self, 
-#                  da: xr.DataArray,
-#                  patches: Optional[Dict[str, int]],
-#                  strides: Optional[Dict[str, int]],
-#                 ):
-        
-#         self.da_dims = get_dims_xrda(da)
-        
-#         self.da_size, self.patches, self.strides = get_patches_size(
-#             dims=self.da_dims,
-#             patches=patches if patches is not None else {},
-#             strides=strides if strides is not None else {},
-#         )
-    
-#     def get_da_slice(self, idx, da: xr.DataArray) -> xr.DataArray:
-        
-#         slices = get_slices(idx, 
-#                           da_size=self.da_size, 
-#                           patches=self.patches, 
-#                           strides=self.strides
-#                          )
-#         return da.isel(**slices)
-    
-#     def num_items(self):
-#         return list_product(self.da_size.values)
 
 
 def check_lists_equal(list_1: List, list_2: List):
@@ -87,17 +53,7 @@ def update_dict_keys(source: Dict[str, int], new: Dict[str, int], default: bool=
         >>> update
         {"x": 100, "y": 1}
     """
-#     if default:
-#         update = OrderedDict()
-        
-#         for ikey in source.keys():
-#             if ikey not in new.keys():
-#                 update[ikey] = source[ikey]
-#             else:
-#                 update[ikey] = new[ikey]
-                
-#         # update = {f"{ikey}": source[ikey] for ikey in source.keys() if ikey not in list(new.keys())}
-#     else:
+
     update = OrderedDict()
 
     for ikey in source.keys():
@@ -108,10 +64,6 @@ def update_dict_keys(source: Dict[str, int], new: Dict[str, int], default: bool=
                 update[ikey] = 1
         else:
             update[ikey] = new[ikey]
-                
-        # update = {f"{ikey}": 1 for ikey in source.keys() if ikey not in list(new.keys())}
-
-    # update = {**new, **update}
 
     msg = f"Dict keys not same...: \n{source.keys()}\n{update.keys()}"
 
@@ -223,7 +175,6 @@ def reconstruct_from_items(
     count_da = xr.zeros_like(rec_da)
     
     for ida in tqdm(das):
-        icoord = ida.coords
         rec_da.loc[ida.coords] = rec_da.sel(ida.coords) + ida * w
         count_da.loc[ida.coords] = count_da.sel(ida.coords) + w
         
