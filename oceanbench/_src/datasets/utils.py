@@ -1,5 +1,4 @@
-from typing import List, Dict, Tuple, NamedTuple, Optional, Iterable
-from collections import OrderedDict
+from typing import List, Dict, Tuple, NamedTuple, Optional, Iterable, OrderedDict
 import xarray as xr
 import numpy as np
 from functools import reduce
@@ -20,21 +19,24 @@ def get_dims_xrda(da: xr.DataArray) -> Dict[str, int]:
     return OrderedDict(zip(da.dims, da.shape))
 
 
-def update_dict_xdims(da: xr.DataArray, dims: Dict={}, default_size: bool=True) -> Dict:
+def update_dict_xdims(da: xr.DataArray, dims: Dict={}, default_size: bool=True) -> OrderedDict:
 
-    if default_size:
-        update_dims = {f"{idim}":da[idim].shape[0] for idim in da.dims if idim not in list(dims.keys())}
-    else:
-        update_dims = {f"{idim}":1 for idim in da.dims if idim not in list(dims.keys())}
-    
-    dims = {**dims, **update_dims}
-    
-    # check_lists_equal(list(da.dims), list(dims.keys()))
-    assert set(da.dims) == dims.keys()
-    return dims
+    update = OrderedDict()
+
+    for idim in da.dims:
+        if idim not in list(dims.keys()):
+            if default_size:
+                update[idim] = da[idim].shape[0]
+            else:
+                update[idim] = 1
+        else:
+            update[idim] = dims[idim]
+
+    assert set(da.dims) == update.keys()
+    return update
 
 
-def update_dict_keys(source: Dict[str, int], new: Dict[str, int], default: bool=True) -> Dict[str, int]:
+def update_dict_keys(source: Dict[str, int], new: Dict[str, int], default: bool=True) -> OrderedDict[str, int]:
     """Updates new dictionary with keys from source
     
     Args:
@@ -72,7 +74,7 @@ def update_dict_keys(source: Dict[str, int], new: Dict[str, int], default: bool=
     return update
 
 
-def get_xrda_size(da: xr.DataArray, patches: Dict[str, int], strides: Dict[str, int]) -> Dict[str, int]:
+def get_xrda_size(da: xr.DataArray, patches: Dict[str, int], strides: Dict[str, int]) -> OrderedDict[str, int]:
     
     da_dims = get_dims_xrda(da)
     
@@ -88,7 +90,7 @@ def get_xrda_size(da: xr.DataArray, patches: Dict[str, int], strides: Dict[str, 
 
 
 def get_patches_size(dims: Dict[str, int], patches: Dict[str, int], strides: Dict[str, int]
-                     ) -> Tuple[Dict[str, int], Dict[str, int], Dict[str, int]]:
+                     ) -> Tuple[OrderedDict[str, int], OrderedDict[str, int], OrderedDict[str, int]]:
 
     patches = update_dict_keys(dims, patches, default=True)
     strides = update_dict_keys(dims, strides, default=False)
@@ -101,7 +103,7 @@ def get_patches_size(dims: Dict[str, int], patches: Dict[str, int], strides: Dic
     return dim_size, patches, strides
 
 
-def get_slices(idx: int, da_size: Dict[str, int], patches: Dict[str, int], strides: Dict[str, int]) -> Dict[str, slice]:
+def get_slices(idx: int, da_size: Dict[str, int], patches: Dict[str, int], strides: Dict[str, int]) -> OrderedDict[str, slice]:
     slices = {
         dim: slice(strides[dim] * idx,
                    strides[dim] * idx + patches[dim]) for dim, idx in zip(

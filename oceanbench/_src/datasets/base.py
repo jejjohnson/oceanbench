@@ -61,14 +61,14 @@ class XRDABatcher:
             return_coords (bool): Option to return coords during the iterations
 
             da (xr.DataArray): xarray datarray to be referenced during the iterations
-            patch_dims (Dict): dict of da dimension to size of a patch
+            patch_dims (OrderedDict): dict of da dimension to size of a patch
                 (defaults to the same dimension as dataset stride per dimension)
-            strides (Dict): dict of dims to stride size
+            strides (OrderedDict): dict of dims to stride size
                 (defaults to one stride per dimension)
-            domain_limits (Dict): dict of da dimension to slices of domain
+            domain_limits (OrderedDict): dict of da dimension to slices of domain
                 to select for patch extractions
-            ds_size (Dict): the dictionary of dimensions for the slicing
-            da_dims (Dict): the dictionary of the original dimensions
+            ds_size (OrderedDict): the dictionary of dimensions for the slicing
+            da_dims (OrderedDict): the dictionary of the original dimensions
         """
         if domain_limits is not None:
             da_dims = get_dims_xrda(da)
