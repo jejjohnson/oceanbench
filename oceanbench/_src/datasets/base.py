@@ -144,7 +144,7 @@ class XRDABatcher:
     def reconstruct(
         self, 
         batches: tp.List[np.ndarray], 
-        dims_label: tp.Optional[tp.List[str]]=None, 
+        dims_labels: tp.Optional[tp.List[str]]=None, 
         weight: tp.Optional[np.ndarray]=None
     ) -> xr.DataArray:
         """
@@ -158,7 +158,7 @@ class XRDABatcher:
         items = list(itertools.chain(*batches))
         rec_da = self.reconstruct_from_items(
             items=items,
-            dims_label=dims_label,
+            dims_labels=dims_labels,
             weight=weight
         ) 
         
@@ -169,32 +169,60 @@ class XRDABatcher:
     def reconstruct_from_items(
         self,
         items: tp.Iterable, 
-        dims_label: tp.Optional[tp.Iterable[str]]=None, 
+        dims_labels: tp.Optional[tp.Iterable[str]]=None, 
         weight=None
     ):
         
-        if dims_label is None:
-            dims_label = [f"v{i+1}" for i in range(len(items[0].shape))]
-        elif len(dims_label) < len(items[0].shape):
-            new_dims  = [f"v{i+1}" for i in range(len(items[0].shape) - len(dims_label))]
-            dims_label = dims_label + new_dims
+        item_shape = items[0].shape
+        num_items = len(item_shape)
         
-        msg = f"Length of dim labels does not match length of dims."
-        msg += f"\nDims Label: {dims_label} \nShape: {items[0].shape}"
-        assert len(dims_label) == len(items[0].shape), msg
-
+        # get coordinate labels
         coords = self.get_coords()
-        
-
-        # check for subset of coordinate arrays
         coords_labels = list(coords[0].dims.keys())
-        coords_labels = set(dims_label).intersection(coords_labels)
-        # check_lists_subset(coords_labels, dims_label)
-        items_shape = dict(zip(dims_label, items[0].shape))
+        
+        # assume the items are the same as the coordinates
+        if dims_labels is None:
+            dims_labels = [coords_labels[i] for i in range(len(coords_labels))]
+        
+        num_dim_labels = len(dims_labels)
 
-        patches = {ikey: ivalue for ikey, ivalue in self.patches.items() if ikey in dims_label}
+        # add any extra dimensions not specified
+        if num_dim_labels < num_items:
+            new_dims  = [f"v{i+1}" for i in range(num_items - num_dim_labels)]
+            dims_labels = dims_labels + new_dims
+            num_dim_labels = len(dims_labels)
+
+        # check user specified dimensions
+        msg = f"Length of dim labels does not match length of dims."
+        msg += f"\nDims Label: {dims_labels} \nShape: {item_shape}"
+        msg += f"\nNum Labels: {num_dim_labels} \nNum Items: {num_items}"
+        assert num_dim_labels == num_items, msg
+
+        
+        # check for subset of coordinate arrays
+        coords_labels = set(dims_labels).intersection(coords_labels)
+
+
+        # check_lists_subset(coords_labels, dims_labels)
+        all_items_shape = dict(zip(dims_labels, item_shape))
+
+        patches = {ikey: ivalue for ikey, ivalue in self.patches.items() if ikey in dims_labels}
         patch_values = list(patches.values())
         patch_names = list(patches.keys())
+        
+        msg = "No Coordinates to merge..."
+        msg += f"\nDims: {dims_labels}"
+        msg += f"\nCoords: {list(coords[0].dims.keys())}"
+        msg += f"\nPatches: {self.patches.keys()}"
+        assert len(coords_labels) > 0, msg
+
+        msg = "Mismatch between coords and patches..."
+        msg += f"\nDims: {dims_labels}"
+        msg += f"\nCoords: {list(coords[0].dims.keys())}"
+        msg += f"\nPatches: {self.patches.keys()}"
+
+        assert len(coords_labels) == len(patch_names), msg
+
 
         # (maybe) update weight matrix
         if weight is None:
@@ -204,40 +232,34 @@ class XRDABatcher:
             msg = "Weight array is not the same size as total dims "
             msg += "or not the same value"
             msg += f"\nWeight: {list(weight.shape)} | Patches: {patch_values} | Dims: {items[0].shape}"
-            assert len(weight.shape) <= len(items[0].shape), msg
-            # assert any(list(ishape == ivalue for ishape, ivalue in zip(weight.shape, patch_values))), msg
+            
+            assert len(weight.shape) ==  len(patch_values), msg
 
-        w = xr.DataArray(weight, dims=dims_label[:len(weight.shape)])
+        w = xr.DataArray(weight, dims=patch_names)
 
-        # create data arrays from (maybe) coords
-        if not coords_labels:
-            das = [
-                xr.DataArray(it, dims=dims_label)
-                for it in items
-                  ]
-        else:
-            coords_labels = list(coords_labels)
-            das = [
-                xr.DataArray(it, dims=dims_label, coords=co[coords_labels].coords)
-                for it, co in zip(items, coords)
-                  ]
+
+        # create data arrays from coords
+        das = [
+            xr.DataArray(it, dims=dims_labels, coords=co[coords_labels].coords)
+            for it, co in zip(items, coords)
+                ]
 
         msg = "New Data Array is not the same size as items"
         msg += "or not the same value"
-        msg += f"\n{das[0].shape} | Items: {items_shape}"
-        assert len(das[0].shape) == len(items_shape), msg
-        assert set(das[0].shape) == set(items_shape.values()), msg
+        msg += f"\n{das[0].shape} | Items: {all_items_shape}"
+        assert len(das[0].shape) == len(all_items_shape), msg
+        assert set(das[0].shape) == set(all_items_shape.values()), msg
 
         # get new shape from 
         new_shape = {
             idim: self.da[idim].shape[0] if idim in coords_labels
-            else items[0].shape[i]
-            for i, idim in enumerate(dims_label) 
+            else item_shape[i]
+            for i, idim in enumerate(dims_labels) 
         }
-        coords = {d: self.da[d] for d in patch_names if d in dims_label}
+        coords = {d: self.da[d] for d in patch_names if d in dims_labels}
         rec_da = xr.DataArray(
             np.zeros([*new_shape.values()]),
-            dims=dims_label,
+            dims=dims_labels,
             coords=coords
         )
 
