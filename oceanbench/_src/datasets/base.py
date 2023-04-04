@@ -4,14 +4,11 @@ import itertools
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
-
 from oceanbench._src.utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
 from oceanbench._src.geoprocessing.select import select_bounds, select_bounds_multiple
 from oceanbench._src.utils.custom_dtypes import Bounds
 from oceanbench._src.datasets.utils import (
     get_dims_xrda,
-    check_lists_equal,
-    update_dict_xdims,
     check_lists_subset,
     get_patches_size,
     get_slices,
@@ -19,7 +16,6 @@ from oceanbench._src.datasets.utils import (
 )
 
 
-@dataclass
 class XRDABatcher:
     """
     A dataclass for xarray.DataArray with on the fly slicing.
@@ -30,12 +26,6 @@ class XRDABatcher:
         - have for each dim of patch_dim (size(dim) - patch_dim(dim)) divisible by stride(dim)
     the batches passed to self.reconstruct should:
     """
-    da: xr.DataArray
-    patches: tp.Dict[str, int]
-    strides: tp.Dict[str, int]
-    da_dims: tp.Dict[str, int]
-    da_size: tp.Dict[str, int]
-    return_coords: bool = False
     
     def __init__(
             self, 
@@ -76,6 +66,7 @@ class XRDABatcher:
             da = da.sel(**domain_limits)
         
         self.da = da
+
         self.da_dims = get_dims_xrda(da)
         
         self.da_size, self.patches, self.strides = get_patches_size(
@@ -83,6 +74,7 @@ class XRDABatcher:
             patches=patches if patches is not None else {},
             strides=strides if strides is not None else {},
         )
+        
         if check_full_scan:
             for dim in self.patches:
                 if (self.da_dims[dim] - self.patches[dim]) % self.strides[dim] != 0:
@@ -136,10 +128,13 @@ class XRDABatcher:
         
         item = item.transpose(*self.coord_names)
         
-        if self.return_coords:
-            return item.coords.to_dataset()
-                    
-        return item.data.astype(np.float32)
+        return item
+    
+    def get_coords(self) -> tp.List[xr.DataArray]:
+        coords = []
+        for i in range(len(self)):
+            coords.append(self[i].coords.to_dataset()[list(self.patches)])
+        return coords
     
     def reconstruct(
         self, 
@@ -155,7 +150,7 @@ class XRDABatcher:
         overlapping patches will be averaged with weighting
         """
 
-        items = list(itertools.chain(*batches))
+        items = list(itertools.chain(*[batches]))
         rec_da = self.reconstruct_from_items(
             items=items,
             dims_labels=dims_labels,
@@ -168,10 +163,10 @@ class XRDABatcher:
     
     def reconstruct_from_items(
         self,
-        items: tp.Iterable, 
+        items: tp.Iterable,
         dims_labels: tp.Optional[tp.Iterable[str]]=None, 
         weight=None
-    ):
+    ) -> xr.DataArray:
         
         item_shape = items[0].shape
         num_items = len(item_shape)
@@ -197,11 +192,9 @@ class XRDABatcher:
         msg += f"\nDims Label: {dims_labels} \nShape: {item_shape}"
         msg += f"\nNum Labels: {num_dim_labels} \nNum Items: {num_items}"
         assert num_dim_labels == num_items, msg
-
         
         # check for subset of coordinate arrays
         coords_labels = set(dims_labels).intersection(coords_labels)
-
 
         # check_lists_subset(coords_labels, dims_labels)
         all_items_shape = dict(zip(dims_labels, item_shape))
@@ -271,12 +264,3 @@ class XRDABatcher:
 
         return rec_da / count_da
     
-    def get_coords(self) -> tp.List[xr.DataArray]:
-        self.return_coords = True
-        coords = []
-        try:
-            for i in range(len(self)):
-                coords.append(self[i])
-        finally:
-            self.return_coords = False
-            return coords
