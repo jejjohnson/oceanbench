@@ -9,8 +9,7 @@ from oceanbench._src.datasets.utils import (
     get_dims_xrda,
     check_lists_subset,
     get_patches_size,
-    get_slices,
-    list_product
+    get_slices
 )
 
 
@@ -107,7 +106,7 @@ class XRDABatcher:
         return list(self.da_dims.keys())
     
     def __len__(self):
-        return list_product(list(self.da_size.values()))
+        return np.prod(list(self.da_size.values()))
     
     def __iter__(self):
         for i in range(len(self)):

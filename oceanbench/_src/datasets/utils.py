@@ -20,7 +20,31 @@ def get_dims_xrda(da: xr.DataArray) -> Dict[str, int]:
 
 
 def update_dict_xdims(da: xr.DataArray, dims: Dict={}, default_size: bool=True) -> OrderedDict:
+    """Updates a dims dictionary based on an xr.DataArray.
+    This is useful when ensuring the dims dictionary has the same
+    keys (and maybe values) as the dims in the xr.DataArray.
+    If a key is present in the xr.DataArray but not the dims dict,
+    the default_size says whether to set the value of said key to the
+    xr.DataArray or we set it to 1. In the patch framework, an
+    unspecified key value should have the same dimensions as the
+    xr.DataArray. However, for strides, an unspecified key value
+    should be 1. Any keys in the dims dict that are NOT present
+    in the xr.DataArray are discarded.
 
+    Args:
+        da (xr.DataArray): the xr.DataArray with the dimensions
+        dims (Optional[Dict]): a dictionary of dims. Defaults to {}.
+        default_size (Optional[bool]): determines which value to choose
+          if the xr.DataArray has a dimension that isn't in the dims
+          dictionary. True means that we use the value from the
+          xr.DataArray and False means we set it to 1.
+          Defaults to True.
+
+    Returns:
+        dims (OrderedDict): An ordered dictionary with all the keys
+          (and maybe values) as the xr.DataArray dims and any extra keys
+          specified in the dims.
+    """
     update = OrderedDict()
 
     for idim in da.dims:
@@ -111,10 +135,3 @@ def get_slices(idx: int, da_size: Dict[str, int], patches: Dict[str, int], strid
         )
     }
     return slices
-
-
-def list_product(items: List[int]) -> int:
-    return reduce((lambda x, y: x * y), [1] + items)
-
-
-

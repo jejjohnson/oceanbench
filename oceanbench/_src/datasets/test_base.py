@@ -4,7 +4,6 @@ from .base import XRDABatcher
 import numpy as np
 from xarray_dataclasses import Data, Name, Coord, asdataarray
 from dataclasses import dataclass
-from oceanbench._src.datasets.utils import list_product
 from einops import repeat
 
 
@@ -302,7 +301,7 @@ def test_xrda_patcher_2d(variable_2d, patch, stride,domain_limits, datasize):
     assert ds.patches == {"x": 20, "y": 40} if patches is None else patches, msg
     assert ds.da_size == {"x": datasize[0], "y": datasize[1]}, msg
     assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
-    assert len(ds) == list_product(list(datasize))
+    assert len(ds) == np.prod(list(datasize))
 
 
 @pytest.mark.parametrize(
