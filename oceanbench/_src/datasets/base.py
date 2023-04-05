@@ -49,12 +49,10 @@ class XRDABatcher:
                 
         Attributes:
             da (xr.DataArray): xarray datarray to be referenced during the iterations
-            patch_dims (OrderedDict): dict of da dimension to size of a patch
+            patches (OrderedDict): dict of da dimension to size of a patch
                 (defaults to the same dimension as dataset stride per dimension)
             strides (OrderedDict): dict of dims to stride size
                 (defaults to one stride per dimension)
-            domain_limits (OrderedDict): dict of da dimension to slices of domain
-                to select for patch extractions
             ds_size (OrderedDict): the dictionary of dimensions for the slicing
             da_dims (OrderedDict): the dictionary of the original dimensions
         """
@@ -232,7 +230,7 @@ class XRDABatcher:
 
         if weight is None:
             weight = np.ones(patch_values)
-            
+
         else:
             msg = "Weight array is not the same size as total dims "
             msg += "or not the same value"
