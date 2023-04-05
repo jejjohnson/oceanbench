@@ -1,7 +1,7 @@
 name: oceanbench
 channels:
+  - pytorch
   - conda-forge
-  - pyviz
 dependencies:
   - python=3.10
   - pip
@@ -15,5 +15,11 @@ dependencies:
   - bottleneck
   - scipy
   - pyinterp
-  - xesmf
+  - xesmf==0.7.0
   - pytest
+  - tqdm
+  - pip:
+      - pyrootutils
+      - xarray-dataclasses
+      - autoroot
+      - einops

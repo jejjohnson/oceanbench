@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import oceanbench._src.geoprocessing.gridding as gridding
 
+
 @pytest.fixture()
 def ssh_attrs():
     return dict( units='m', long_name='Sea Surface Height',)
@@ -123,5 +124,4 @@ def test_regular_grid_to_regular_grid(simple_grid_ds_12H_05, simple_grid_ds_24H_
     msk = np.isfinite(values)
     assert msk.sum()>0, "should have finite values"
     np.testing.assert_almost_equal(values[msk], 1.), "Gridding ones should make ones"
-
 
