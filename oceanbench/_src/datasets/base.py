@@ -4,9 +4,7 @@ import itertools
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
-from oceanbench._src.utils.exceptions import IncompleteScanConfiguration, DangerousDimOrdering
-from oceanbench._src.geoprocessing.select import select_bounds, select_bounds_multiple
-from oceanbench._src.utils.custom_dtypes import Bounds
+from oceanbench._src.utils.exceptions import IncompleteScanConfiguration
 from oceanbench._src.datasets.utils import (
     get_dims_xrda,
     check_lists_subset,
@@ -18,13 +16,15 @@ from oceanbench._src.datasets.utils import (
 
 class XRDABatcher:
     """
-    A dataclass for xarray.DataArray with on the fly slicing.
+    A dataclass for xarray.DataArray with on the fly slicing and arbitrary
+    dimension reconstruction.
+
     ### Usage: ####
     If you want to be able to reconstruct the input
     the input xr.DataArray should:
         - have coordinates
         - have for each dim of patch_dim (size(dim) - patch_dim(dim)) divisible by stride(dim)
-    the batches passed to self.reconstruct should:
+        (optional warning)
     """
     
     def __init__(
@@ -48,8 +48,6 @@ class XRDABatcher:
                 not scanned by the patch size stride combination
                 
         Attributes:
-            return_coords (bool): Option to return coords during the iterations
-
             da (xr.DataArray): xarray datarray to be referenced during the iterations
             patch_dims (OrderedDict): dict of da dimension to size of a patch
                 (defaults to the same dimension as dataset stride per dimension)
@@ -83,7 +81,9 @@ class XRDABatcher:
                     msg += f"\nPatch_size along this dim {self.patches[dim]} "
                     msg += f"\nStride along this dim {self.strides[dim]} "
                     msg += f"\n[shape - patch_size] should be divisible by stride: "
-                    msg += f"{(self.da_dims[dim] - self.patches[dim]) % self.strides[dim]}"
+                    msg += f"{self.da_dims[dim]} - {self.patches[dim]} % {self.strides[dim]} "
+                    soln = (self.da_dims[dim] - self.patches[dim]) / self.strides[dim]
+                    msg += f"= {soln}"
                     raise IncompleteScanConfiguration(msg)
         
     def __repr__(self) -> str:
@@ -118,19 +118,18 @@ class XRDABatcher:
     def __getitem__(self, item):
 
         slices = get_slices(
-            idx=item, 
-            da_size=self.da_size, 
-            patches=self.patches, 
+            idx=item,
+            da_size=self.da_size,
+            patches=self.patches,
             strides=self.strides
         )
-        
-        item = self.da.isel(**slices)
-        
-        item = item.transpose(*self.coord_names)
-        
-        return item
+                        
+        return self.da.isel(**slices)
     
     def get_coords(self) -> tp.List[xr.DataArray]:
+        """"Returns a list of xr.DataArray's with the
+        coordinate values that correspond to each item.
+        """
         coords = []
         for i in range(len(self)):
             coords.append(self[i].coords.to_dataset()[list(self.patches)])
@@ -142,14 +141,27 @@ class XRDABatcher:
         dims_labels: tp.Optional[tp.List[str]]=None, 
         weight: tp.Optional[np.ndarray]=None
     ) -> xr.DataArray:
-        """
-        takes as input a list of np.ndarray of dimensions (b, *, *patch_dims)
-        return a stitched xarray.DataArray with the coords of patch_dims
-    batches: list of torch tensor correspondin to batches without shuffle
-        weight: tensor of size patch_dims corresponding to the weight of a prediction depending on the position on the patch (default to ones everywhere)
-        overlapping patches will be averaged with weighting
-        """
+        """Reconstructs based on a list of patches, e.g. the output of
+        a dataloader.
 
+        Args:
+            batches (List[np.ndarray]): a list of np.ndarrays with arbitrary dimensions where
+                at least one dimension matches the patch dimensions
+            dims_label (List[str]): a list of dimension names for the patches. If explicit, it
+                will match all names that correspond with the patch dims. If missing, it will
+                infer based on the shapes (use with caution). Any extra patch dims will be added
+                dimensions for the reconstructed xr.DataArray.
+            weight (np.ndarray): the tensor which is the same size as the patch dimensions requested
+                to be reconstructed. If not specified and the dims_label is specific, it will be
+                constructed based on the matching dimensions specified. If not specified and the
+                dims_label is not specified, it will be inferred based on the first N dimensions
+                that correspond with the patch dimensions. The default is that all overlapping
+                patches will be averaged with ones.
+
+        Returns:
+            rec_da (xr.DataArray): the reconstructed xr.DataArray that corresponds to
+                to the original array of the corresponding requested coordinates.
+        """
         items = list(itertools.chain(*[batches]))
         rec_da = self.reconstruct_from_items(
             items=items,
@@ -191,6 +203,7 @@ class XRDABatcher:
         msg = f"Length of dim labels does not match length of dims."
         msg += f"\nDims Label: {dims_labels} \nShape: {item_shape}"
         msg += f"\nNum Labels: {num_dim_labels} \nNum Items: {num_items}"
+
         assert num_dim_labels == num_items, msg
         
         # check for subset of coordinate arrays
@@ -207,6 +220,7 @@ class XRDABatcher:
         msg += f"\nDims: {dims_labels}"
         msg += f"\nCoords: {list(coords[0].dims.keys())}"
         msg += f"\nPatches: {self.patches.keys()}"
+
         assert len(coords_labels) > 0, msg
 
         msg = "Mismatch between coords and patches..."
@@ -216,20 +230,17 @@ class XRDABatcher:
 
         assert len(coords_labels) == len(patch_names), msg
 
-
-        # (maybe) update weight matrix
         if weight is None:
-            
             weight = np.ones(patch_values)
+            
         else:
             msg = "Weight array is not the same size as total dims "
             msg += "or not the same value"
-            msg += f"\nWeight: {list(weight.shape)} | Patches: {patch_values} | Dims: {items[0].shape}"
+            msg += f"\nWeight: {list(weight.shape)} | Patches: {patch_values} | Dims: {item_shape}"
             
-            assert len(weight.shape) ==  len(patch_values), msg
+            assert len(weight.shape) == len(patch_values), msg
 
         w = xr.DataArray(weight, dims=patch_names)
-
 
         # create data arrays from coords
         das = [
@@ -240,6 +251,7 @@ class XRDABatcher:
         msg = "New Data Array is not the same size as items"
         msg += "or not the same value"
         msg += f"\n{das[0].shape} | Items: {all_items_shape}"
+
         assert len(das[0].shape) == len(all_items_shape), msg
         assert set(das[0].shape) == set(all_items_shape.values()), msg
 

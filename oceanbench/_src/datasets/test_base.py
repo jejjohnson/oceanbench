@@ -1,13 +1,12 @@
-from typing import Literal, Tuple
-import itertools as it
+from typing import Literal
 import pytest
 from .base import XRDABatcher
-import pandas as pd
 import numpy as np
 from xarray_dataclasses import Data, Name, Coord, asdataarray
 from dataclasses import dataclass
 from oceanbench._src.datasets.utils import list_product
 from einops import repeat
+
 
 RNG = np.random.RandomState(seed=123)
 
@@ -44,6 +43,7 @@ class Variable3D:
 def axis_1d():
     return np.arange(-10, 10, 1)
 
+
 @pytest.fixture
 def axis_2d(axis_1d):
     axis2 = np.arange(-20, 20, 1)
@@ -71,6 +71,7 @@ def variable_2d(axis_2d):
     var = Variable2D(ones, axis1, axis2)
     return asdataarray(var)
 
+
 @pytest.fixture
 def variable_3d(axis_3d):
     axis1, axis2, axis3 = axis_3d
@@ -78,8 +79,6 @@ def variable_3d(axis_3d):
     var = Variable3D(ones, axis1, axis2, axis3)
     return asdataarray(var)
 
-
-# TODO: Test Transformations
 
 @pytest.mark.parametrize(
         "patch,stride,domain_limits,datasize",
@@ -269,8 +268,6 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     assert rec_da.dims == tuple(["x", "z"])
 
 
-
-
 @pytest.mark.parametrize(
         "patch,stride,domain_limits,datasize",
         [
@@ -306,7 +303,6 @@ def test_xrda_patcher_2d(variable_2d, patch, stride,domain_limits, datasize):
     assert ds.da_size == {"x": datasize[0], "y": datasize[1]}, msg
     assert ds[0].shape == (patch[0], patch[1]) if patch is not None else (1, 1), msg
     assert len(ds) == list_product(list(datasize))
-
 
 
 @pytest.mark.parametrize(
@@ -636,8 +632,3 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["y", "z", "x"])
-
-
-
-
-

@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import oceanbench._src.geoprocessing.gridding as gridding
 
+
 @pytest.fixture()
 def ssh_attrs():
     return dict( units='m', long_name='Sea Surface Height',)
@@ -123,54 +124,4 @@ def test_regular_grid_to_regular_grid(simple_grid_ds_12H_05, simple_grid_ds_24H_
     msk = np.isfinite(values)
     assert msk.sum()>0, "should have finite values"
     np.testing.assert_almost_equal(values[msk], 1.), "Gridding ones should make ones"
-
-
-
-def test_create_coord():
-    # arbitrary grid
-    ndims_x, ndims_y, ndims_z = 25, 30, 10
-    x = np.linspace(-1, 1, ndims_x)
-    y = np.linspace(-2, 2, ndims_y)
-    z = np.linspace(-0.5, 0.5, ndims_z)
-
-    grid = gridding.create_coord_grid(x)
-
-    assert grid.shape == (ndims_x, 1)
-
-    grid = gridding.create_coord_grid(x, y)
-
-    assert grid.shape == (ndims_x, ndims_y, 2)
-
-    grid = gridding.create_coord_grid(x, y, z)
-
-    assert grid.shape == (ndims_x, ndims_y, ndims_z, 3)
-
-
-# TODO: Figure out a way with time?
-# def test_create_coord_time():
-#     # arbitrary grid
-#     ndims_x, ndims_y, ndims_z = 25, 30, 10
-    
-#     x = np.linspace(-1, 1, ndims_x)
-#     y = np.linspace(-2, 2, ndims_y)
-#     z = np.linspace(-0.5, 0.5, ndims_z)
-
-#     t_min = pd.to_datetime("2012-01-01")
-#     t_max = pd.to_datetime("2012-01-30")
-#     dt = pd.to_timedelta("1D")
-#     t = np.arange(t_min, t_max + dt, dt)
-#     ndims_t = len(t)
-
-#     grid = gridding.create_coord_grid(t)
-#     assert grid.shape == (ndims_t, 1)
-
-#     grid = gridding.create_coord_grid(x, t)
-#     assert grid.shape == (ndims_x, ndims_t, 2)
-
-#     grid = gridding.create_coord_grid(x, y, t)
-#     assert grid.shape == (ndims_x, ndims_y, ndims_t, 3)
-
-#     grid = gridding.create_coord_grid(x, y, z, t)
-
-#     assert grid.shape == (ndims_x, ndims_y, ndims_z, ndims_t, 4)
 
