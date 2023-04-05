@@ -1,6 +1,5 @@
 name: oceanbench
 channels:
-  - pytorch
   - conda-forge
 dependencies:
   - python=3.10
