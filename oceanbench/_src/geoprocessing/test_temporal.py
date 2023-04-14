@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
-from .temporal import time_rescale, time_unrescale
+from .temporal import time_rescale
 
 
 def test_time_rescale():

@@ -6,6 +6,7 @@ dependencies:
   - pip
   - matplotlib
   - cartopy
+  - metpy
   - pyinterp
   - xarray
   - zarr
