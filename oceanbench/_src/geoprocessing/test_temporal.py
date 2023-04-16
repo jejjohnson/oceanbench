@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
-from .temporal import time_rescale
+import pint
+from .temporal import time_rescale, UNITS
 
 
 def test_time_rescale():
@@ -9,6 +10,7 @@ def test_time_rescale():
     tmin, tmax = np.datetime64("2013-01-01"), np.datetime64("2013-01-31")
     freq_dt = 1
     freq_unit = "D"
+    units = UNITS[freq_unit]
     
     dt = np.timedelta64(freq_dt, freq_unit)
 
@@ -21,7 +23,7 @@ def test_time_rescale():
     
     np.testing.assert_array_equal(da["time"].values, np.arange(0, 31, 1))
     assert da["time"].shape[0] == 31
-    assert da["time"].attrs["units"] == "d"
+    assert da["time"].attrs["units"] == pint.Quantity(units)
     
     
 # def test_time_unrescale():

@@ -2,6 +2,7 @@ import numpy as np
 import xarray as xr
 from metpy.calc import lat_lon_grid_deltas
 from metpy.units import units
+import pint_xarray
 
 
 def transform_360_to_180(coord: np.ndarray) -> np.ndarray:
@@ -14,7 +15,7 @@ def transform_360_to_180(coord: np.ndarray) -> np.ndarray:
     Returns:
         coord (np.ndarray): the output array of coordinates
     """
-    return (coord % 360) - 180
+    return (coord + 180) % 360 - 180
 
 
 def transform_180_to_360(coord: np.ndarray) -> np.ndarray:
@@ -44,24 +45,36 @@ def latlon_deg2m(ds: xr.Dataset, mean: bool=True) -> xr.Dataset:
     """
     ds = ds.copy()
     
-    out = lat_lon_grid_deltas(ds.lon * units.degree, ds.lat * units.degree)
     
+    lon_attrs = ds["lon"].attrs
+    lat_attrs = ds["lat"].attrs
+    
+    out = lat_lon_grid_deltas(ds.lon * units.degree, ds.lat * units.degree)
+        
     dx = out[0][:, 0]
     dy = out[1][0, :]
     
     num_dx = len(dx)
     num_dy = len(dy)
     
+    
     if mean:
-        ds["lon"] = np.arange(0, num_dx) * np.mean(dx)
-        ds["lat"] = np.arange(0, num_dy) * np.mean(dy)
+        lat = np.arange(0, num_dx) * np.mean(dx)
+        lon = np.arange(0, num_dy) * np.mean(dy)
     else:
         dx0, dy0 = dx[0], dy[0]
-        ds["lon"] = np.cumsum(dx) - dx0
-        ds["lat"]  = np.cumsum(dy) - dy0
+        lat = np.cumsum(dx) - dx0
+        lon = np.cumsum(dy) - dy0
+    
+    lon_attrs.pop("units", None)
+    lat_attrs.pop("units", None)
         
+    ds["lon"] = lon
+    ds["lat"] = lat
+    ds["lon"].attrs = lon_attrs
+    ds["lat"].attrs = lat_attrs
     
-    ds["lon"].attrs["units"] = "m"
-    ds["lat"].attrs["units"] = "m"
-    
+    ds = ds.pint.quantify(
+        {"lon": "meter", "lat": "meter"}
+    )
     return ds

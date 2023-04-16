@@ -1,5 +1,6 @@
 import numpy as np
 import xarray as xr
+import pint
 from .spatial import transform_180_to_360, transform_360_to_180, latlon_deg2m
 
 
@@ -46,8 +47,8 @@ def test_latlon_deg2m():
     assert da["lat"].min() == 0
     
     # check attributes
-    assert da["lon"].attrs["units"] == "m"
-    assert da["lat"].attrs["units"] == "m"
+    assert da["lon"].attrs["units"] == pint.Unit("meter")
+    assert da["lat"].attrs["units"] == pint.Unit("meter")
     
     
 def test_latlon_deg2m_mean():
@@ -66,8 +67,8 @@ def test_latlon_deg2m_mean():
     assert da["lat"].min() == 0
     
     # check attributes
-    assert da["lon"].attrs["units"] == "m"
-    assert da["lat"].attrs["units"] == "m"
+    assert da["lon"].attrs["units"] == pint.Unit("meter")
+    assert da["lat"].attrs["units"] == pint.Unit("meter")
     
     
     

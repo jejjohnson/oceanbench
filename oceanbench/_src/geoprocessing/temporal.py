@@ -2,6 +2,21 @@ from typing import Optional, Union
 import numpy as np
 import xarray as xr
 import pandas as pd
+import pint_xarray
+
+UNITS = {
+    "ns":"nanoseconds",
+    "us": "microseconds",
+    "ms": "milliseconds",
+    "s": "seconds", 
+    "m": "minutes", 
+    "h": "hours", 
+    "D": "days", 
+    "W":"weeks",
+    "M": "months",
+    "Y": "years"
+}
+
 
 
 def time_rescale(
@@ -28,6 +43,9 @@ def time_rescale(
     
     ds = ds.copy()
     
+    assert freq_unit in list(UNITS.keys())
+    
+    
     if t0 is None:
         t0 = ds["time"].min()
     
@@ -36,7 +54,7 @@ def time_rescale(
     
     ds["time"] = ((ds["time"] - t0 ) / np.timedelta64(freq_dt, freq_unit)).astype(np.float32)
     
-    ds["time"].attrs["units"] = freq_unit.lower()
+    ds = ds.pint.quantify({"time": UNITS[freq_unit]})
     
     return ds
 
