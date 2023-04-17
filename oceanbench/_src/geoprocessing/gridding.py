@@ -63,7 +63,7 @@ def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None):
     return tgt_ds
 
 
-def grid_to_regular_grid(src_grid_ds, tgt_grid_ds):
+def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool=True):
     """
         src_grid_ds: xr.Dataset with regular lat, lon coordinates (uniform or curvilinear)
         tgt_grid_ds: xr.Dataset with  uniform lat, lon coordinates
@@ -73,7 +73,7 @@ def grid_to_regular_grid(src_grid_ds, tgt_grid_ds):
                     (time coordinates remains unchanged)
     """
     reggridder = xe.Regridder(src_grid_ds, tgt_grid_ds, "bilinear", unmapped_to_nan=True)
-    return reggridder(src_grid_ds, keep_attrs=True)
+    return reggridder(src_grid_ds, keep_attrs=keep_attrs)
 
 
 def interp_da(da, tgt_coords):
