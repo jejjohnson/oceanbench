@@ -168,24 +168,6 @@ def shear_strain(ds, variables: List[str]=["u", "v"]):
     return ds
 
 
-def shear_strain(ds, variables: List[str]=["u", "v"]):
-    """Sometimes called:
-    * stretching deformation
-    
-    """
-    
-    ds = ds.copy()
-    
-    ds["shear_strain"] = geocalc.shearing_deformation(
-        v=ds[variables[0]], u=ds[variables[1]], 
-        latitude=ds.lat, longitude=ds.lon
-    )
-    
-    ds["shear_strain"].attrs["long_name"] = "Shear Strain"
-    ds["shear_strain"].attrs["standard_name"] = "shear_strain"
-    
-    return ds
-
 
 def tensor_strain(ds, variables: List[str]=["u", "v"]):
     """Sometimes called:

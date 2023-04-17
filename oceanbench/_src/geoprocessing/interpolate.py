@@ -14,8 +14,7 @@ def fillnans(
         
     for idim in dims:
         ds = ds.interpolate_na(dim=idim, method=method, **kwargs)
-        ds = ds.interpolate_na(dim=idim, method=method, **kwargs)
-    
+        
     return ds
 
 

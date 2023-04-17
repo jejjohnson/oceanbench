@@ -147,7 +147,7 @@ def test_psd_spacetime_score():
     
     ds_ref = get_ssh_data()
     ds_model = ds_ref.copy()
-    ds_model["ssh"] = ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter
+    ds_model["ssh"] = ds_model["ssh"] + 1.0 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter
     
     # CASE I - non-average dimensions
     ds_psd = psd_spacetime_score(
