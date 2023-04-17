@@ -17,6 +17,7 @@ dependencies:
   - pyinterp
   - xesmf==0.7.0
   - xrft
+  - numpy_groupies
   - pint-xarray
   - pytest
   - tqdm
