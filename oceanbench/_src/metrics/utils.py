@@ -1,6 +1,7 @@
 from typing import Union, List, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
 
 
 def find_intercept_1D(

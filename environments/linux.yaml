@@ -17,7 +17,7 @@ dependencies:
   - pyinterp
   - xesmf==0.7.0
   - xrft
-  - pint_xarray
+  - pint-xarray
   - pytest
   - tqdm
   - pip:
