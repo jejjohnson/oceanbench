@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import xarray as xr
 from oceanbench._src.preprocessing.mean import xr_cond_average
 from typing import List
@@ -68,27 +68,31 @@ def psd_isotropic_error(
     da_ref: xr.DataArray, 
     variable: str,
     psd_dims: List[str],
-    avg_dims: List[str],
+    avg_dims: Optional[List[str]]=None,
 ) -> xr.DataArray:
     psd_error = psd_isotropic(ds=da_ref - da, variable=variable, dims=psd_dims)
-    return xr_cond_average(psd_error, dims=avg_dims, drop=True)
+    if avg_dims is not None:
+        psd_error =  xr_cond_average(psd_error, dims=avg_dims, drop=True)
+    return psd_error
 
 def psd_spacetime_error(
     da: xr.DataArray,
     da_ref: xr.DataArray,
     variable: str,
     psd_dims: List[str],
-    avg_dims: List[str],
+    avg_dims: Optional[List[str]]=None,
 ) -> xr.DataArray:
     psd_error = psd_spacetime(ds=da_ref - da, variable=variable, dims=psd_dims)
-    return xr_cond_average(psd_error, dims=avg_dims, drop=True)
+    if avg_dims is not None:
+        psd_error = xr_cond_average(psd_error, dims=avg_dims, drop=True)
+    return psd_error
 
 def psd_isotropic_score(
     da: xr.DataArray, 
     da_ref: xr.DataArray, 
     variable: str,
     psd_dims: List[str],
-    avg_dims: List[str],
+    avg_dims: List[str]=None,
 ) -> xr.DataArray:
 
     
@@ -98,10 +102,10 @@ def psd_isotropic_score(
     )
     
     # reference signal
-    psd_ref = xr_cond_average(
-        psd_isotropic(ds=da_ref, variable=variable, dims=psd_dims),
-        dims=avg_dims
-    )
+    psd_ref = psd_isotropic(ds=da_ref, variable=variable, dims=psd_dims)
+    
+    if avg_dims is not None:
+        psd_ref = xr_cond_average(psd_ref,dims=avg_dims)
     
     if score[variable].shape != psd_ref[variable].shape:
         psd_ref = psd_ref.interp_like(score)
@@ -118,7 +122,7 @@ def psd_spacetime_score(
     da_ref: xr.DataArray, 
     variable: str,
     psd_dims: List[str],
-    avg_dims: List[str],
+    avg_dims: List[str]=None,
 ) -> xr.DataArray:
 
     
@@ -128,10 +132,10 @@ def psd_spacetime_score(
     )
     
     # reference signal
-    psd_ref = xr_cond_average(
-        psd_spacetime(ds=da_ref, variable=variable, dims=psd_dims),
-        dims=avg_dims
-    )
+    psd_ref = psd_spacetime(ds=da_ref, variable=variable, dims=psd_dims)
+    
+    if avg_dims is not None:
+        psd_ref = xr_cond_average(psd_ref,dims=avg_dims)
     
     if score[variable].shape != psd_ref[variable].shape:
         psd_ref = psd_ref.interp_like(score)
