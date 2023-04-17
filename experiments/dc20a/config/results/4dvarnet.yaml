@@ -1,0 +1,3 @@
+data: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet/2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadirswot_GF_GF.nc"
+variable: "ssh"
+name: "4dvarnet"

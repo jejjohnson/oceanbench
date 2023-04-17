@@ -1,0 +1,44 @@
+fill_nans:
+    _target_: "oceanbench._src.geoprocessing.interpolate.fillnans"
+    _partial_: True
+    dims: ["lat", "lon"]
+    method: "slinear"
+    fill_value: "extrapolate"
+
+rescale_space: 
+    _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
+    _partial_: True
+    mean: True
+    
+rescale_time:
+    _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
+    _partial_: True
+    t0: "2012-10-22"
+    freq_dt: 1
+    freq_unit: "D"
+    
+psd_isotropic_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
+    _partial_: True
+    variable: "ssh"
+    psd_dims: ["lon", "lat"]
+    avg_dims: ["time"]
+    
+psd_spacetime_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
+    _partial_: True
+    variable: "ssh"
+    psd_dims: ["time", "lon"]
+    avg_dims: ["lat"]
+    
+nrmse_spacetime:
+    _target_: "oceanbench._src.metrics.stats.nrmse_da"
+    _partial_: True
+    variable: "ssh"
+    dim: ["lat", "lon", "time"]
+    
+nrmse_space:
+    _target_: "oceanbench._src.metrics.stats.nrmse_da"
+    _partial_: True
+    variable: "ssh"
+    dim: ["lat", "lon"]
