@@ -17,7 +17,7 @@ def to_dim(ds, v):
     return ds.swap_dims({ds[v].dims[0]: v})
 
 
-def grid_da(da, binning):
+def grid_da(da, binning, var):
     """
     da: xr.DataArray (with lon and lat coordinates
     binning: pyinterp.Binning
@@ -25,15 +25,16 @@ def grid_da(da, binning):
     Return: tuple (dim_names, binned_da_values)
     """
     binning.clear()
-    values = np.ravel(da.values)
-    lons = np.ravel(da.values)
-    lats = np.ravel(da.values)
+    values = np.ravel(da[var].values)
+    lons = np.ravel(da.lon.values)
+    lats = np.ravel(da.lat.values)
     msk = np.isfinite(values)
     binning.push(lons[msk], lats[msk], values[msk])
-    return (('time', 'lat', 'lon'), binning.variable('mean').T[None, ...])
+    variable = binning.variable('mean').T[None, ...]
+    
+    return (('time', 'lat', 'lon'), variable)
 
-
-def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None):
+def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None, t_res=None):
     """
         coord_based_ds: xr.Dataset with time, lat, lon coordinates
         target_grid_ds: xr.Dataset with  uniform time, lat, lon coordinates
@@ -47,20 +48,24 @@ def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None):
         data_vars = set(coord_based_ds.variables) - {'time', 'lat', 'lon'}
 
     ds = to_dim(coord_based_ds, 'time')
-    t_res = target_grid_ds.time.diff('time').values.mean()
-    binning = pyinterp.Binning2D(pyinterp.Axis(target_grid_ds.lon.values), pyinterp.Axis(target_grid_ds.lat.values))
-
+    if t_res is None:
+        t_res = target_grid_ds.time.diff('time').values.mean()#/2
+    binning = pyinterp.Binning2D(
+        pyinterp.Axis(target_grid_ds.lon.values), 
+        pyinterp.Axis(target_grid_ds.lat.values)
+    )
     grid_dses = []
     for t in target_grid_ds.time:
         tds = ds.isel(time=(ds.time > (t - t_res/2)) & (ds.time <= (t + t_res/2)))
         grid_dses.append(
            xr.Dataset(
-               {v: grid_da(tds[v], binning) for v in data_vars},
+               {v: grid_da(tds, binning, v) for v in data_vars},
                {'time': [t.values], 'lat': np.array(binning.y), 'lon': np.array(binning.x)}
             ).astype('float32', casting='same_kind')
         )
     tgt_ds = xr.concat(grid_dses, dim='time')
     return tgt_ds
+
 
 
 def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool=True):
