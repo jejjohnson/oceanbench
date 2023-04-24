@@ -14,7 +14,7 @@ def main(cfg):
     
     if cfg.stage == "preprocess":
         logger.info(f"Starting preprocessing stage...!")
-        evaluation.main(cfg)
+        preprocess.main(cfg)
         
     elif cfg.stage == "evaluation":
         logger.info(f"Starting evaluation stage...!")

@@ -5,6 +5,7 @@ defaults:
     - reference: default.yaml
     - results: duacs.yaml
     - evaluation: default.yaml
+    - preprocess: alongtrack.yaml
     
     
 stage: "evaluation"
