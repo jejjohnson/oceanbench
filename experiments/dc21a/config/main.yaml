@@ -1,0 +1,12 @@
+# @package _global_
+
+defaults:
+    - _self_
+    - results: duacs.yaml
+    - evaluation: default.yaml
+    - preprocess: alongtrack.yaml
+    - postprocess: default.yaml
+    
+    
+stage: "evaluation"
+experiment: "dc21a"

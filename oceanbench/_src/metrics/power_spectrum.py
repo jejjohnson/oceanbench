@@ -6,6 +6,7 @@ import xrft
 import xarray as xr
 from functools import reduce
 import pint_xarray
+import scipy
 
 
 def psd_spacetime(
@@ -60,6 +61,99 @@ def psd_isotropic(
     
     
     return psd_signal
+
+
+def psd_welch(
+    da: xr.DataArray,
+    variable: str,
+    delta_x: float,
+    nperseg=None,
+    **kwargs
+) -> xr.DataArray:
+    
+    da = da.copy()
+    
+    wavenumber, psd = scipy.signal.welch(
+        da[variable].values.flatten(),
+        fs=1./delta_x,
+        nperseg=nperseg,
+        scaling=kwargs.pop("scaling", "density"),
+        noverlap=kwargs.pop("noverlap", 0)
+    )
+    
+    ds = xr.DataArray(
+        data=psd,
+        coords={"wavenumber": wavenumber},
+        name=variable
+    )
+    
+    
+    return ds.to_dataset()
+
+
+def psd_welch_error(
+    da: xr.DataArray,
+    variable: str,
+    variable_ref: str, 
+    delta_x: float,
+    nperseg=None,
+    **kwargs
+) -> xr.DataArray:
+    
+    da = da.copy()
+        
+    wavenumber, psd = scipy.signal.welch(
+        da[variable].values.flatten() - da[variable_ref].values.flatten(),
+        fs=1./delta_x,
+        nperseg=nperseg,
+        scaling=kwargs.pop("scaling", "density"),
+        noverlap=kwargs.pop("noverlap", 0)
+    )
+    
+    da = xr.DataArray(
+        data=psd,
+        coords={"wavenumber": wavenumber},
+        name="error"
+    )
+    return da.to_dataset()
+
+
+def psd_welch_score(
+    da: xr.DataArray,
+    variable: str,
+    variable_ref: str, 
+    delta_x: float,
+    nperseg=None,
+    **kwargs
+) -> xr.DataArray:
+    
+    da = da.copy()
+        
+    
+    # error
+    ds = psd_welch_error(
+        da=da, variable=variable,
+        variable_ref=variable_ref, 
+        delta_x=delta_x,
+        nperseg=nperseg,
+        **kwargs
+    )
+    
+    # differ
+    _, psd = scipy.signal.welch(
+        da[variable_ref].values.flatten(),
+        fs=1./delta_x,
+        nperseg=nperseg,
+        scaling=kwargs.pop("scaling", "density"),
+        noverlap=kwargs.pop("noverlap", 0)
+    )
+    
+    ds["score"] = (("wavenumber"), 1 - ds["error"].values / psd)
+    
+    return ds
+
+
+
 
 
 

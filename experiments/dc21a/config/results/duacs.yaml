@@ -1,0 +1,3 @@
+data: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/results/OSE_ssh_mapping_DUACS.nc"
+variable: "ssh"
+name: "duacs"

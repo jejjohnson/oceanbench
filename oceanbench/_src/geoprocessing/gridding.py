@@ -81,7 +81,7 @@ def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool=True):
     return reggridder(src_grid_ds, keep_attrs=keep_attrs)
 
 
-def interp_da(da, tgt_coords):
+def interp_da(da, tgt_coords, variable):
     """
     da: xr.DataArray with uniform time, lat, lon coordinates
     tgt_coords: dict[str: np.array] Mapping from dimension names to the coordinates to interpolate.
@@ -91,8 +91,18 @@ def interp_da(da, tgt_coords):
 
     Perform bilinear interpolation spatially followed by a linear interpolation temporally
     """
-    interpolator = pyinterp.backends.xarray.Grid3D(da)
-    return interpolator.trivariate(tgt_coords)
+    x_axis = pyinterp.Axis(da.lon[:].values, is_circle=False)
+    y_axis = pyinterp.Axis(da.lat[:].values)
+    t_axis = pyinterp.TemporalAxis(da.time[:].values)
+    da = da[variable].transpose("lon", "lat", "time")
+    grid = pyinterp.Grid3D(x_axis, y_axis, t_axis, da.data)
+    return pyinterp.trivariate(
+        grid,
+        tgt_coords["lon"],
+        tgt_coords["lat"],
+        t_axis.safe_cast(tgt_coords["time"]),
+        bounds_error=False
+    )
 
 
 def grid_to_coord_based(src_grid_ds, tgt_coord_based_ds, data_vars=None):
@@ -120,6 +130,6 @@ def grid_to_coord_based(src_grid_ds, tgt_coord_based_ds, data_vars=None):
         time=np.ravel(tgt_coord_based_ds.time.transpose(*ref.dims).values),
     )
     return xr.Dataset(
-        {v: (ref.dims, np.reshape(interp_da(src_grid_ds[v], coords), ref.shape), src_grid_ds[v].attrs) for v in data_vars},
+        {v: (ref.dims, np.reshape(interp_da(src_grid_ds, coords, v), ref.shape), src_grid_ds[v].attrs) for v in data_vars},
         tgt_coord_based_ds.coords
     )

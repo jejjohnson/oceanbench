@@ -136,7 +136,7 @@ def main(cfg):
         cfg.evaluation.psd_isotropic_score
     )(da=da, da_ref=da_ref)
     space_rs = find_intercept_1D(
-        y=1./da_psd_score_iso.ssh.freq_r.values,
+        y=1./(da_psd_score_iso.ssh.freq_r.values+1e-10),
         x=da_psd_score_iso.ssh.values,
         level=0.5
     )

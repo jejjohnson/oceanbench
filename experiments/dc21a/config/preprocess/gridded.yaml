@@ -1,0 +1,33 @@
+lat:
+    _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    _partial_: True
+    variable: "lat"
+    min_val: 32.
+    max_val: 44.
+    
+lon:
+    _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    _partial_: True
+    variable: "lon"
+    min_val: -66.
+    max_val: -54.
+    
+time:
+    _target_: "builtins.slice"
+    _args_: ["2017-01-01", "2018-01-01"]
+
+
+nadir:
+    data:
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_alg_phy_l3_20161201-20180131_285-315_23-53.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_h2g_phy_l3_20161201-20180131_285-315_23-53.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_j2g_phy_l3_20161201-20180131_285-315_23-53.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_j2n_phy_l3_20161201-20180131_285-315_23-53.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_j3_phy_l3_20161201-20180131_285-315_23-53.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_s3a_phy_l3_20161201-20180131_285-315_23-53.nc"
+    variable: "sla_unfiltered"
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/staging/ml_ready/alongtrack.nc"
+
+
+grid:
+  

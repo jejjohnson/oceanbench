@@ -7,10 +7,11 @@ from scipy.interpolate import interp1d
 def find_intercept_1D(
     x: np.ndarray, 
     y: np.ndarray, 
-    level: float=0.5
+    level: float=0.5,
+    **kwargs
 ) -> np.ndarray:
 
-    f = interp1d(x, y)
+    f = interp1d(x, y, **kwargs)
 
     try:
         ynew = f(level)
