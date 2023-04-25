@@ -23,7 +23,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-pyinterp = ">=2022"
+pyinterp = ">=2022.9.1"
 xarray = ">=2022.3"
 zarr = "^2.14.2"
 dask = "^2023.4.0"
