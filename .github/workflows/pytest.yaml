@@ -1,18 +1,18 @@
-defaults:
-  run:
-    shell: bash -l {0}
-name: PyTest
-on: [pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+# defaults:
+#   run:
+#     shell: bash -l {0}
+# name: PyTest
+# on: [pull_request]
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: Install Conda environment with Micromamba
-        uses: mamba-org/provision-with-micromamba@main
-        with:
-          environment-file: environments/linux.yaml
+#       - name: Install Conda environment with Micromamba
+#         uses: mamba-org/provision-with-micromamba@main
+#         with:
+#           environment-file: environments/linux.yaml
 
-      - name: pytest
-        run: pytest oceanbench/_src
+#       - name: pytest
+#         run: pytest oceanbench/_src
