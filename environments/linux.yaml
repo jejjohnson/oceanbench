@@ -6,7 +6,6 @@ dependencies:
   - pip
   - matplotlib
   - cartopy
-  - pyinterp
   - xarray
   - zarr
   - dask
@@ -14,8 +13,9 @@ dependencies:
   - bottleneck
   - scipy
   - pyinterp
-  - xesmf==0.7.0
+  - xesmf>=0.7.0
   - pytest
+  - dvc
   - tqdm
   - pip:
       - pyrootutils
