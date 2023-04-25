@@ -33,7 +33,7 @@ dvc = "^2.55.0"
 scipy = "^1.10.1"
 xesmf = "^0.7.1"
 xarray-dataclasses = "^1.5.0"
-cmake = "^3.26.3"
+cmake = ">=3.18.0,<3.19.0"
 
 
 [tool.poetry.group.dev.dependencies]
