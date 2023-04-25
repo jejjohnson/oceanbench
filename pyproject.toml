@@ -77,7 +77,7 @@ testpaths = ["oceanbench"]
 
 [tool.ruff]
 select = ["E", "F", "I001"]
-ignore = ["E402", "E721", "E731", "E741", "F722"]
+ignore = ["E402", "E721", "E731", "E741", "F722", "F821"]
 ignore-init-module-imports = true
 
 
