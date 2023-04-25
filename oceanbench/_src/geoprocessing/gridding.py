@@ -17,17 +17,18 @@ def to_dim(ds, v):
     return ds.swap_dims({ds[v].dims[0]: v})
 
 
-def grid_da(da, binning):
+def grid_da(da, binning, variable: str):
     """
     da: xr.DataArray (with lon and lat coordinates
     binning: pyinterp.Binning
+    variable (str): the variable
 
     Return: tuple (dim_names, binned_da_values)
     """
     binning.clear()
-    values = np.ravel(da.values)
-    lons = np.ravel(da.values)
-    lats = np.ravel(da.values)
+    values = np.ravel(da[variable].values)
+    lons = np.ravel(da.lon.values)
+    lats = np.ravel(da.lat.values)
     msk = np.isfinite(values)
     binning.push(lons[msk], lats[msk], values[msk])
     return (('time', 'lat', 'lon'), binning.variable('mean').T[None, ...])
@@ -55,7 +56,7 @@ def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None):
         tds = ds.isel(time=(ds.time > (t - t_res/2)) & (ds.time <= (t + t_res/2)))
         grid_dses.append(
            xr.Dataset(
-               {v: grid_da(tds[v], binning) for v in data_vars},
+               {v: grid_da(tds, binning, v) for v in data_vars},
                {'time': [t.values], 'lat': np.array(binning.y), 'lon': np.array(binning.x)}
             ).astype('float32', casting='same_kind')
         )

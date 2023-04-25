@@ -8,7 +8,6 @@ dependencies:
   - cartopy
   - arviz
   - metpy
-  - pyinterp
   - xarray
   - zarr
   - dask
@@ -16,11 +15,12 @@ dependencies:
   - bottleneck
   - scipy
   - pyinterp
-  - xesmf==0.7.0
   - xrft
   - numpy_groupies
   - pint-xarray
+  - xesmf>=0.7.0
   - pytest
+  - dvc
   - tqdm
   - pip:
       - pyrootutils
