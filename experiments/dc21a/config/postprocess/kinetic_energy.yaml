@@ -1,0 +1,11 @@
+lat: ${postprocess.default.lat}
+    
+lon: ${postprocess.default.lon}
+    
+time: ${postprocess.default.time}
+
+nadir: ${postprocess.default.nadir}
+
+physical_var:
+    _target_: 
+    variable: "ke"

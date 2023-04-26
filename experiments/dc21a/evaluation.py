@@ -98,6 +98,19 @@ def main(cfg):
             "λx [degree]",
         ]
     )
+
+    save_path = Path(cfg.metrics_csv).joinpath("leaderboard.csv")
+
+    logger.info(f"Saving Results: \n{save_path}")
+
+    if cfg.overwrite_results or not save_path.is_file():
+        logger.info(f"Overwriting...")
+        Leaderboard.to_csv(save_path, mode="w", header=True)
+    else:
+        logger.info(f"Creating new file...")
+        header = False  if save_path.is_file() else False
+        Leaderboard.to_csv(save_path, mode="a", header=header)
+        
     
     print(Leaderboard.T)
 

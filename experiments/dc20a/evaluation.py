@@ -5,6 +5,7 @@ from pathlib import Path
 from omegaconf import OmegaConf
 import viz
 import preprocess
+import postprocess
 import utils
 
 import xarray as xr
@@ -85,6 +86,7 @@ def main(cfg):
     da_ref = open_ssh_reference(cfg.reference.data)
     da = open_ssh_results(cfg.results.data, cfg.results.variable)
     results = list()
+    results.append(cfg.results.experiment.upper())
     results.append(cfg.results.name.upper())
     
     # CORRECT NAMES
@@ -108,16 +110,28 @@ def main(cfg):
     da = add_units(da)
     da_ref = add_units(da_ref)
     
+
+
+    # CALCULATING PHYSICAL VARIABLE
+    logger.info(f"Calculating physical variable...")
+    logger.info(f"{cfg.postprocess.name.upper()}")
+    da = postprocess.calculate_physical_quantities(da, cfg.postprocess.name)
+    da_ref = postprocess.calculate_physical_quantities(da_ref, cfg.postprocess.name)
+    results.append(cfg.postprocess.name.upper())
+    variable = cfg.postprocess.variable
+    
     # RESCALING
     logger.info(f"Rescaling Space...")
     da = hydra.utils.instantiate(cfg.evaluation.rescale_space)(da)
     da_ref = hydra.utils.instantiate(cfg.evaluation.rescale_space)(da_ref)
     
     logger.info(f"Rescaling Time...")
+
     da = hydra.utils.instantiate(cfg.evaluation.rescale_time)(da)
     da_ref = hydra.utils.instantiate(cfg.evaluation.rescale_time)(da_ref)
+
     
-    
+    # CALCULATING STATS
     logger.info(f"Calculating nrmse...")
     nrmse_mu = hydra.utils.instantiate(cfg.evaluation.nrmse_spacetime)(da=da, da_ref=da_ref)
     results.append(nrmse_mu.values)
@@ -136,8 +150,8 @@ def main(cfg):
         cfg.evaluation.psd_isotropic_score
     )(da=da, da_ref=da_ref)
     space_rs = find_intercept_1D(
-        y=1./(da_psd_score_iso.ssh.freq_r.values+1e-10),
-        x=da_psd_score_iso.ssh.values,
+        y=1./(da_psd_score_iso[variable].freq_r.values+1e-10),
+        x=da_psd_score_iso[variable].values,
         level=0.5
     )
     results.append(space_rs/1e3)
@@ -153,9 +167,9 @@ def main(cfg):
     # PSD (SPACETIME) SCORE
     logger.info(f"Calculating SpaceTime PSD...")
     lon_rs, time_rs = find_intercept_2D(
-        x=1./da_psd_score_st.ssh.freq_lon.values,
-        y=1./da_psd_score_st.ssh.freq_time.values, 
-        z=da_psd_score_st.ssh.values,
+        x=1./da_psd_score_st[variable].freq_lon.values,
+        y=1./da_psd_score_st[variable].freq_time.values, 
+        z=da_psd_score_st[variable].values,
         levels=0.5
     )
     results.append(lon_rs/1e3)
@@ -168,10 +182,10 @@ def main(cfg):
     
     data = [results]
     
-    Leaderboard = pd.DataFrame(
-        data,
-        columns = [
+    columns = [
+            "Experiment",
             "Method", 
+            "Variable",
             "µ(RMSE)",
             "σ(RMSE)",
             "iso λx [km]",
@@ -180,7 +194,22 @@ def main(cfg):
             "λx [degree]",
             "λt [days]",
         ]
-    )
+    Leaderboard = pd.DataFrame(data, columns=columns)
+
+
+    save_path = Path(cfg.metrics_csv).joinpath(f"{cfg.csv_name}.csv")
+
+    logger.info(f"Saving Results: \n{save_path}")
+
+    if cfg.overwrite_results or not save_path.is_file():
+        logger.info(f"Overwriting...")
+        Leaderboard.to_csv(save_path, mode="w", header=True)
+    else:
+        logger.info(f"Creating new file...")
+        header = False  if save_path.is_file() else False
+        Leaderboard.to_csv(save_path, mode="a", header=header)
+        
+    
     
     print(Leaderboard.T)
     

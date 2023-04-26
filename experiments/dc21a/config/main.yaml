@@ -10,3 +10,6 @@ defaults:
     
 stage: "evaluation"
 experiment: "dc21a"
+metrics_csv: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/results"
+csv_name: "leaderboard"
+overwrite_results: False

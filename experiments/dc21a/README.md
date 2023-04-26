@@ -1,6 +1,23 @@
 # Data Challenge 2021a - Sea Surface Height OSE
 
 
+## Example Results 
+
+This uses a custom `.yaml` file where we can run the evaluation script.
+
+```bash
+python main.py stage=evaluation results=duacs ++overwrite_results=True
+```
+
+## Current LeaderBoard 
+
+This provides the current leaderboard with these specific metrics for all of the evaluation datasets.
+
+```bash
+bash scripts/metrics.sh
+```
+
+
 ## Results
 
 

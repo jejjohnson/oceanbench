@@ -1,0 +1,4 @@
+data: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/NerF/ffn_nadir.nc"
+variable: "ssh"
+name: "nerf_ffn"
+experiment: "nadir4"

@@ -1,3 +1,4 @@
 data: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/DUACS/ssh_DUACS_swot_4nadir.nc"
 variable: "ssh_obs"
 name: "duacs"
+experiment: "swot1nadir5"

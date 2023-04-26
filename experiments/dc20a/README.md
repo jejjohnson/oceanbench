@@ -1,6 +1,28 @@
 
 
-# Previous Results
+# Results
+
+## Example Results 
+
+This uses a custom `.yaml` file where we can run the evaluation script.
+
+```bash
+python main.py stage=evaluation results=duacs_swot ++overwrite_results=True postprocess=relative_vorticity
+```
+
+```bash
+python main.py stage=evaluation results=nerf_ffn_nadir ++overwrite_results=True postprocess=sea_surface_height ++csv_name=results_nerf
+```
+
+## Current LeaderBoard 
+
+This provides the current leaderboard with these specific metrics for all of the evaluation datasets.
+
+```bash
+bash scripts/metrics.sh
+```
+
+## Previous Results
 
 Below we have some of the previous results
 

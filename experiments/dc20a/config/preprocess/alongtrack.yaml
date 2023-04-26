@@ -24,7 +24,7 @@ nadir4:
     - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_geosat2.nc"
     - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_topex-poseidon_interleaved.nc"
     variable: "ssh_model"
-    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/nadir5.nc"
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/nadir4.nc"
         
 nadir5:
     data:
@@ -50,5 +50,5 @@ swot:
     variable: "ssh_model"
     saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/swot.nc"
     
-swotnadir:
+swot1nadir5:
     saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/swot1nadir5.nc"

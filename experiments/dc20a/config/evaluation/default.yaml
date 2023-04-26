@@ -20,25 +20,25 @@ rescale_time:
 psd_isotropic_score:
     _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
     _partial_: True
-    variable: "ssh"
+    variable: ${postprocess.variable}
     psd_dims: ["lon", "lat"]
     avg_dims: ["time"]
     
 psd_spacetime_score:
     _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
     _partial_: True
-    variable: "ssh"
+    variable: ${postprocess.variable}
     psd_dims: ["time", "lon"]
     avg_dims: ["lat"]
     
 nrmse_spacetime:
     _target_: "oceanbench._src.metrics.stats.nrmse_da"
     _partial_: True
-    variable: "ssh"
+    variable: ${postprocess.variable}
     dim: ["lat", "lon", "time"]
     
 nrmse_space:
     _target_: "oceanbench._src.metrics.stats.nrmse_da"
     _partial_: True
-    variable: "ssh"
+    variable: ${postprocess.variable}
     dim: ["lat", "lon"]

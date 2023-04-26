@@ -1,3 +1,4 @@
 data: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/BFNQG/2020a_SSH_mapping_NATL60_BFN_Steady_State_QG1L_swot_en_j1_tpn_g2.nc"
 variable: "gssh"
 name: "bfnqg"
+experiment: "swot1nadir5"

@@ -3,9 +3,13 @@
 defaults:
     - _self_
     - reference: default.yaml
-    - results: duacs.yaml
+    - results: duacs_swot.yaml
     - evaluation: default.yaml
     - preprocess: alongtrack.yaml
+    - postprocess: sea_surface_height.yaml
     
     
 stage: "evaluation"
+experiment: "dc20a"
+metrics_csv: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/"
+overwrite_results: False

@@ -1,0 +1,4 @@
+data: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/DYMOST/2020a_SSH_mapping_NATL60_DYMOST_Dynamic_en_j1_tpn_g2.nc"
+variable: "gssh"
+name: "dymost"
+experiment: "nadir4"
