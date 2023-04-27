@@ -1,0 +1,4 @@
+data: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/NerF/nerf_ffn_swot_dc20a.nc"
+variable: "ssh"
+name: "nerf_ffn"
+experiment: "swot1nadir5"

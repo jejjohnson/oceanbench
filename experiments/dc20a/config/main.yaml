@@ -12,4 +12,5 @@ defaults:
 stage: "evaluation"
 experiment: "dc20a"
 metrics_csv: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/"
+csv_name: "leaderboard"
 overwrite_results: False

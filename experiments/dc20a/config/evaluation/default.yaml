@@ -13,7 +13,7 @@ rescale_space:
 rescale_time:
     _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
     _partial_: True
-    t0: "2012-10-22"
+    t0: "2012-10-01"
     freq_dt: 1
     freq_unit: "D"
     
