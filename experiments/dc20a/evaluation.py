@@ -38,8 +38,15 @@ def open_ssh_results(file, variable):
     return da
 
 def open_ssh_reference(file, variable="gssh"):
-    da = xr.open_dataset(file, decode_times=False)
+
+    # da = xr.open_dataset(file, decode_times=False)
+    print(file)
+    da = xr.open_mfdataset(file, combine='nested', concat_dim='time', parallel=True)
+
+    print(da)
     da["time"] = pd.to_datetime(da.time)
+
+    da = da.rename({variable: "ssh"})
     
     da = da.sortby("time")
     da = da.sel(
@@ -56,7 +63,6 @@ def correct_names(da):
     da["ssh"].attrs["long_name"] = "Sea Surface Height"
     da["ssh"].attrs["standard_name"] = "sea_surface_height"
 
-    da["lat"] = da.lat.pint.quantify("degrees_north")
     da["lat"].attrs["long_name"] = "Latitude"
     da["lat"].attrs["standard_name"] = "latitude"
 
@@ -82,15 +88,48 @@ def add_units(da):
 def main(cfg):
     
     # OPEN DATASETS
-    logger.info(f"Loading datasets...")
-    da_ref = open_ssh_reference(cfg.reference.data)
+    logger.debug(f"Creating preprocessing function...")
+    def preprocess_reference(da):
+
+        da = da.rename({cfg.reference.variable: "ssh"})
+
+        if cfg.reference.coarsen:
+            da = da.coarsen(**cfg.reference.coarsen)
+
+        da = correct_names(da)
+        da = da.sel(
+            time=slice("2012-10-22", "2012-12-01"),
+            lon=slice(-64.975, -55.007),
+            lat=slice(33.025, 42.9917),
+            drop=True
+        )
+        try:
+            da = da.resample(time="1D").mean()
+        except IndexError:
+            pass
+
+        return da
+
+    logger.info(f"Loading reference dataset...")
+    da_ref = xr.open_mfdataset(
+        cfg.reference.data, 
+        preprocess=preprocess_reference,
+        combine="nested",
+        concat_dim="time",
+        parallel=False
+    )
+
+    logger.debug(f"Loaded data | Sorting by time...")
+    da_ref = da_ref.sortby("time").compute()
+
+    logger.info(f"Loading ssh map dataset...")
     da = open_ssh_results(cfg.results.data, cfg.results.variable)
     results = list()
     results.append(cfg.results.experiment.upper())
     results.append(cfg.results.name.upper())
     
     # CORRECT NAMES
-    logger.info(f"Correcting labels...")
+    logger.debug(f"Correcting labels...")
     da_ref = correct_names(da_ref)
     da = correct_names(da)
     
@@ -107,6 +146,7 @@ def main(cfg):
     da_ref = hydra.utils.instantiate(cfg.evaluation.fill_nans)(da_ref)
     
     # ADD UNITS
+    logger.debug(f"Adding units...")
     da = add_units(da)
     da_ref = add_units(da_ref)
     
@@ -126,7 +166,6 @@ def main(cfg):
     da_ref = hydra.utils.instantiate(cfg.evaluation.rescale_space)(da_ref)
     
     logger.info(f"Rescaling Time...")
-
     da = hydra.utils.instantiate(cfg.evaluation.rescale_time)(da)
     da_ref = hydra.utils.instantiate(cfg.evaluation.rescale_time)(da_ref)
 

@@ -25,6 +25,8 @@ def main(cfg):
         da = hydra.utils.instantiate(cfg.preprocess.lat)(da)
         da = hydra.utils.instantiate(cfg.preprocess.lon)(da)
         da = da.drop_dims("cycle")
+
+        da = da[["lon", "lat", "ssh"]]
         
         return da
 
@@ -45,10 +47,13 @@ def main(cfg):
     out_nadir = xr.open_mfdataset(
         cfg.preprocess.nadir4.data, preprocess=preprocess_nadir, combine="nested", engine="netcdf4", concat_dim="time"
     )
+
     
     logger.info(f"Saving NADIR 4 Dataset...")
     out_nadir.to_netcdf(cfg.preprocess.nadir4.saved_model)
     logger.info(f"Done...!")
+
+    print(out_nadir)
 
 
     # OPEN NADIR 5 Datasets
@@ -57,10 +62,13 @@ def main(cfg):
     out_nadir = xr.open_mfdataset(
         cfg.preprocess.nadir5.data, preprocess=preprocess_nadir, combine="nested", engine="netcdf4", concat_dim="time"
     )
+
     
     logger.info(f"Saving NADIR 5 Dataset...")
     out_nadir.to_netcdf(cfg.preprocess.nadir5.saved_model)
     logger.info(f"Done...!")
+
+    print(out_nadir)
     
     
     
@@ -81,6 +89,8 @@ def main(cfg):
         da = hydra.utils.instantiate(cfg.preprocess.lon)(da)
         
         da = da.sortby("time")
+
+        da = da[["lon", "lat", "ssh"]]
         
         return da
     
@@ -90,6 +100,9 @@ def main(cfg):
     out_swot = xr.open_mfdataset(
         cfg.preprocess.swot.data, preprocess=preprocess_swot, combine="nested", engine="netcdf4", concat_dim="time"
     )
+
+
+    print(out_swot)
     
     logger.info(f"Saving SWOT Dataset...")
     out_swot.to_netcdf(cfg.preprocess.swot.saved_model)
@@ -99,6 +112,8 @@ def main(cfg):
     logger.info(f"Creating combined dataset...")
     ds_swotnadir = xr.concat([out_nadir, out_swot], dim="time")
     ds_swotnadir = ds_swotnadir.sortby("time")
+
+    print(ds_swotnadir)
     
     logger.info(f"Saving SWOT1NADIR5 Dataset...")
     ds_swotnadir.to_netcdf(cfg.preprocess.swot1nadir5.saved_model)

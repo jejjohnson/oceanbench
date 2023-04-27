@@ -11,7 +11,18 @@ python main.py stage=evaluation results=duacs_swot ++overwrite_results=True post
 ```
 
 ```bash
-python main.py stage=evaluation results=nerf_ffn_nadir ++overwrite_results=True postprocess=sea_surface_height ++csv_name=results_nerf
+# MLP | NADIR
+python main.py stage=evaluation results=nerf_mlp_nadir ++overwrite_results=True postprocess=sea_surface_height ++csv_name=results_nerf
+# MLP | SWOTNADIR
+python main.py stage=evaluation results=nerf_mlp_swot ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# FFN - NADIR
+python main.py stage=evaluation results=nerf_ffn_nadir ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# FFN - SWOTNADIR
+python main.py stage=evaluation results=nerf_ffn_swot ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# SIREN - NADIR
+python main.py stage=evaluation results=nerf_siren_nadir ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# SIREN - SWOTNADIR
+python main.py stage=evaluation results=nerf_siren_swot ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
 ```
 
 ## Current LeaderBoard 
