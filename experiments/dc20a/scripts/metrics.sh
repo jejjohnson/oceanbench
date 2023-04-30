@@ -93,7 +93,7 @@ done
 # NERF (FFN)
 # ####################################
 
-echo "Starting SIREN Results..."
+echo "Starting FFN Results..."
 for i in ${VARIABLES[@]}
 do
    echo "Starting FFN | NADIR | $i Results..."
