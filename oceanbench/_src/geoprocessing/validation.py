@@ -44,16 +44,14 @@ def validate_latlon(ds: xr.Dataset) -> xr.Dataset:
 def decode_cf_time(
     ds: xr.Dataset, units: Optional[str] = "seconds since 2012-10-01"
 ) -> xr.Dataset:
-    """Decode time variable in
-
-    [TODO:description]
+    """Decode time variable in cf format
 
     Args:
-        ds: [TODO:description]
-        units: [TODO:description]
+        ds: input dataset
+        units: cf time units
 
     Returns:
-        [TODO:description]
+        Decoded Dataset
     """
     ds = ds.copy()
     if units is not None:
@@ -68,10 +66,10 @@ def validate_time(ds: xr.Dataset) -> xr.Dataset:
     return ds
 
 
-def validate_ssh(ds: xr.Dataset) -> xr.Dataset:
-    """ """
+def validate_ssh(ds: xr.Dataset, variable: str = 'ssh') -> xr.Dataset:
+    """ Assign ssh attributes to variable """
     ds = ds.copy()
-    ds["ssh"] = ds.ssh.assign_attrs(
+    ds[variable] = ds.ssh.assign_attrs(
         units="m",
         standard_name="sea_surface_height",
         long_name="Sea Surface Height",
@@ -79,7 +77,8 @@ def validate_ssh(ds: xr.Dataset) -> xr.Dataset:
     return ds
 
 
-def check_time_lat_lon(ds: xr.Dataset) -> xr.Dataset:
+def check_time_lat_lon(ds: xr.Dataset) -> None:
+    """Raise AssertError if dataset is not correctly formatted"""
     assert {"lat", "lon", "time"} < set(ds.variables)
     xr.testing.assert_identical(ds[["lat", "lon"]], validate_latlon(ds)[["lat", "lon"]])
     xr.testing.assert_identical(ds["time"], validate_latlon(ds)["time"])
