@@ -103,7 +103,7 @@ def test_grid_to_coord_based(simple_grid_ds_12H_05, simple_coord_based_ds_1d):
     values = trackified.ssh.values
     msk = np.isfinite(values)
     assert msk.sum()>0, "should have finite values"
-    np.testing.assert_almost_equal(values[msk], 1.), "Gridding ones should make ones"
+    np.testing.assert_almost_equal(values[msk], 1.)
 
 
 def test_regular_grid_to_regular_grid(simple_grid_ds_12H_05, simple_grid_ds_24H_01):

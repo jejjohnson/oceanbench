@@ -18,6 +18,7 @@ dependencies:
   - dvc
   - tqdm
   - pip:
+      - hydra-core
       - pyrootutils
       - xarray-dataclasses
       - autoroot
