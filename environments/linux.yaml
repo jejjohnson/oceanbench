@@ -1,12 +1,11 @@
+name: oceanbench
 channels:
   - conda-forge
-  - pyviz
 dependencies:
   - python=3.10
   - pip
   - matplotlib
   - cartopy
-  - pyinterp
   - xarray
   - zarr
   - dask
@@ -14,7 +13,13 @@ dependencies:
   - bottleneck
   - scipy
   - pyinterp
-  - xesmf
+  - xesmf>=0.7.0
   - pytest
+  - dvc
+  - tqdm
   - pip:
-    - hydra-core
+      - hydra-core
+      - pyrootutils
+      - xarray-dataclasses
+      - autoroot
+      - einops

@@ -1,0 +1,24 @@
+name: oceanbench
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - matplotlib
+  - cartopy
+  - pyinterp
+  - xarray
+  - zarr
+  - dask
+  - netCDF4
+  - bottleneck
+  - scipy
+  - pyinterp
+  - xesmf==0.7.0
+  - pytest
+  - tqdm
+  - pip:
+      - pyrootutils
+      - xarray-dataclasses
+      - autoroot
+      - einops
