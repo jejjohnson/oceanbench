@@ -1,51 +1,85 @@
+from typing import Optional
 import pandas as pd
 import xarray as xr
 
 
-def validate_latlon(da):
-    new_da = da.copy()
-    new_da["lon"] = (da.lon + 180) % 360 - 180
-    new_da["lon"] = new_da.lon.assign_attrs(
-        **{**dict(units="degrees_east",
-        standard_name="longitude",
-        long_name="Longitude",),
-        **da.lon.attrs}
+def validate_latlon(ds: xr.Dataset) -> xr.Dataset:
+    """Format lat and lon variables
+
+    Set units, ranges and names
+
+    Args:
+        ds: input data
+
+    Returns:
+        formatted data
+    """
+    new_ds = ds.copy()
+    new_ds["lon"] = (ds.lon + 180) % 360 - 180
+    new_ds["lon"] = new_ds.lon.assign_attrs(
+        **{
+            **dict(
+                units="degrees_east",
+                standard_name="longitude",
+                long_name="Longitude",
+            ),
+            **ds.lon.attrs,
+        }
     )
 
-    new_da["lat"] = (da.lat + 90) % 180 - 90
-    new_da["lat"] = new_da.lat.assign_attrs(
-        **{**dict(units="degrees_north",
-        standard_name="latitude",
-        long_name="Latitude",),
-        **da.lat.attrs,}
+    new_ds["lat"] = (ds.lat + 90) % 180 - 90
+    new_ds["lat"] = new_ds.lat.assign_attrs(
+        **{
+            **dict(
+                units="degrees_north",
+                standard_name="latitude",
+                long_name="Latitude",
+            ),
+            **ds.lat,
+        }
     )
-    return new_da
+    return new_ds
 
 
-def decode_cf_time(da, units='seconds since 2012-10-01'):
-    da = da.copy()
+def decode_cf_time(
+    ds: xr.Dataset, units: Optional[str] = "seconds since 2012-10-01"
+) -> xr.Dataset:
+    """Decode time variable in
+
+    [TODO:description]
+
+    Args:
+        ds: [TODO:description]
+        units: [TODO:description]
+
+    Returns:
+        [TODO:description]
+    """
+    ds = ds.copy()
     if units is not None:
-        da["time"] = da.time.assign_attrs(units=units)
-    return xr.decode_cf(da)
+        ds["time"] = ds.time.assign_attrs(units=units)
+    return xr.decode_cf(ds)
 
 
-def validate_time(da):
-    da = da.copy()
-    da["time"] = pd.to_datetime(da.time)
-    return da
+def validate_time(ds: xr.Dataset) -> xr.Dataset:
+    """Convert time to pandas datetime"""
+    ds = ds.copy()
+    ds["time"] = pd.to_datetime(ds.time)
+    return ds
 
 
-def validate_ssh(da):
-    da = da.copy()
-    da["ssh"] = da.ssh.assign_attrs(
+def validate_ssh(ds: xr.Dataset) -> xr.Dataset:
+    """ """
+    ds = ds.copy()
+    ds["ssh"] = ds.ssh.assign_attrs(
         units="m",
         standard_name="sea_surface_height",
         long_name="Sea Surface Height",
     )
-    return da
+    return ds
 
 
-def check_time_lat_lon(da):
-    assert {"lat", "lon", "time"} < set(da.variables)
-    xr.testing.assert_identical(da[["lat", "lon"]], validate_latlon(da)[["lat", "lon"]])
-    xr.testing.assert_identical(da["time"], validate_latlon(da)["time"])
+def check_time_lat_lon(ds: xr.Dataset) -> xr.Dataset:
+    assert {"lat", "lon", "time"} < set(ds.variables)
+    xr.testing.assert_identical(ds[["lat", "lon"]], validate_latlon(ds)[["lat", "lon"]])
+    xr.testing.assert_identical(ds["time"], validate_latlon(ds)["time"])
