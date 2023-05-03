@@ -226,6 +226,21 @@ def coriolis_normalized(
     variable: str,
     f0: Optional[float] = None,
 ):
+    """This function normalizes an arbitrary variable
+    with the Corilios parameter. This is common for the strain
+    and the vorticity.
+
+    Equation:
+        f = variable/2Ω sinθ
+
+    Args:
+        ds (xr.Dataset): the xr.Dataset with the variable
+        variables (List[str]): the variable name to use for the variable
+        f0 (Array|float): the coriolis parameter
+
+    Returns:
+        ds (xr.Dataset): the xr.Dataset with the normalized variable
+    """
     ds = ds.copy()
 
     if f0 is None:
