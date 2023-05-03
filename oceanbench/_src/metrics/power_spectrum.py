@@ -17,10 +17,11 @@ def psd_spacetime(
 )-> xr.Dataset:
     
     name = f"{variable}_psd"
+
     
     # compute PSD err and PSD signal
     psd_signal = xrft.power_spectrum(
-        ds[variable],
+        ds[variable].pint.dequantify(),
         dim=dims,
         scaling=kwargs.get("scaling", "density"),
         detrend=kwargs.get("detrend", "linear"),
@@ -44,7 +45,7 @@ def psd_isotropic(
     
     # compute PSD err and PSD signal
     psd_signal = xrft.isotropic_power_spectrum(
-        ds[variable],
+        ds[variable].pint.dequantify(),
         dim=dims,
         scaling=kwargs.get("scaling", "density"),
         detrend=kwargs.get("detrend", "linear"),
@@ -74,7 +75,7 @@ def psd_welch(
     da = da.copy()
     
     wavenumber, psd = scipy.signal.welch(
-        da[variable].values.flatten(),
+        da[variable].pint.dequantify().values.flatten(),
         fs=1./delta_x,
         nperseg=nperseg,
         scaling=kwargs.pop("scaling", "density"),
@@ -103,7 +104,7 @@ def psd_welch_error(
     da = da.copy()
         
     wavenumber, psd = scipy.signal.welch(
-        da[variable].values.flatten() - da[variable_ref].values.flatten(),
+        da[variable].pint.dequantify().values.flatten() - da[variable_ref].values.flatten(),
         fs=1./delta_x,
         nperseg=nperseg,
         scaling=kwargs.pop("scaling", "density"),
@@ -163,8 +164,9 @@ def psd_isotropic_error(
     variable: str,
     psd_dims: List[str],
     avg_dims: Optional[List[str]]=None,
+    **kwargs
 ) -> xr.DataArray:
-    psd_error = psd_isotropic(ds=da_ref - da, variable=variable, dims=psd_dims)
+    psd_error = psd_isotropic(ds=da_ref - da, variable=variable, dims=psd_dims, **kwargs)
     if avg_dims is not None:
         psd_error =  xr_cond_average(psd_error, dims=avg_dims, drop=True)
     return psd_error
@@ -175,8 +177,9 @@ def psd_spacetime_error(
     variable: str,
     psd_dims: List[str],
     avg_dims: Optional[List[str]]=None,
+    **kwargs
 ) -> xr.DataArray:
-    psd_error = psd_spacetime(ds=da_ref - da, variable=variable, dims=psd_dims)
+    psd_error = psd_spacetime(ds=da_ref - da, variable=variable, dims=psd_dims, **kwargs)
     if avg_dims is not None:
         psd_error = xr_cond_average(psd_error, dims=avg_dims, drop=True)
     return psd_error
@@ -187,16 +190,17 @@ def psd_isotropic_score(
     variable: str,
     psd_dims: List[str],
     avg_dims: List[str]=None,
+    **kwargs
 ) -> xr.DataArray:
 
     
     # error
     score = psd_isotropic_error(
-        da=da, da_ref=da_ref, variable=variable, psd_dims=psd_dims, avg_dims=avg_dims
+        da=da, da_ref=da_ref, variable=variable, psd_dims=psd_dims, avg_dims=avg_dims, **kwargs
     )
     
     # reference signal
-    psd_ref = psd_isotropic(ds=da_ref, variable=variable, dims=psd_dims)
+    psd_ref = psd_isotropic(ds=da_ref, variable=variable, dims=psd_dims, **kwargs)
     
     if avg_dims is not None:
         psd_ref = xr_cond_average(psd_ref,dims=avg_dims)
@@ -217,16 +221,17 @@ def psd_spacetime_score(
     variable: str,
     psd_dims: List[str],
     avg_dims: List[str]=None,
+    **kwargs
 ) -> xr.DataArray:
 
     
     # error
     score = psd_spacetime_error(
-        da=da, da_ref=da_ref, variable=variable, psd_dims=psd_dims, avg_dims=avg_dims
+        da=da, da_ref=da_ref, variable=variable, psd_dims=psd_dims, avg_dims=avg_dims, **kwargs
     )
     
     # reference signal
-    psd_ref = psd_spacetime(ds=da_ref, variable=variable, dims=psd_dims)
+    psd_ref = psd_spacetime(ds=da_ref, variable=variable, dims=psd_dims, **kwargs)
     
     if avg_dims is not None:
         psd_ref = xr_cond_average(psd_ref,dims=avg_dims)
