@@ -19,10 +19,12 @@ dependencies:
   - numpy_groupies
   - pint-xarray
   - xesmf>=0.7.0
+  - pint-xarray
   - pytest
   - dvc
   - tqdm
   - pip:
+      - hydra-core
       - pyrootutils
       - xarray-dataclasses
       - autoroot

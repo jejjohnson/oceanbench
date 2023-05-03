@@ -57,6 +57,26 @@ We use `pytorch-lightning` to handle our datasets, dataloaders and data modules.
 
 ## Installation Guide
 
+
+### pip
+
+We can directly install it via pip from the
+
+```bash
+pip install "git+https://github.com/jejjohnson/oceanbench.git"
+```
+
+### Cloning
+
+We can also clone the git repository
+
+```bash
+git clone https://github.com/jejjohnson/jaxsw.git
+cd jaxsw
+```
+
+#### Conda Environment (RECOMMENDED)
+
 We use conda/mamba as our package manager. To install from the provided environment files
 run the following command.
 
@@ -65,3 +85,22 @@ mamba env create -n environments/linux.yaml
 ```
 
 **Note**: we also have a `macos.yaml` file for MACOS users as well.
+
+#### poetry
+
+The easiest way to get started is to simply use the poetry package which installs all necessary dev packages as well
+
+```bash
+poetry install
+```
+
+#### pip
+
+We can also install via `pip` as well
+
+```bash
+pip install .
+```
+
+
+
