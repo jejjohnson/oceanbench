@@ -13,7 +13,6 @@ resample_aggregate:
     _target_: "xarray.core.resample.DatasetResample.mean"
     _partial_: True
 
-
 fill_nans:
     _target_: "oceanbench._src.geoprocessing.interpolate.fillnans"
     _partial_: True
