@@ -2,6 +2,7 @@ import numpy as np
 import xarray as xr
 from metpy.calc import lat_lon_grid_deltas
 from metpy.units import units
+import pint_xarray
 
 
 def transform_360_to_180(coord: np.ndarray) -> np.ndarray:
