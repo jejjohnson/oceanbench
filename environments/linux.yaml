@@ -15,7 +15,7 @@ dependencies:
   - scipy
   - pyinterp
   - xesmf>=0.7.0
-  - pint_xarray
+  - pint-xarray
   - pytest
   - dvc
   - tqdm
