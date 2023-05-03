@@ -15,6 +15,7 @@ def validate_latlon(ds: xr.Dataset) -> xr.Dataset:
         formatted data
     """
     new_ds = ds.copy()
+
     new_ds["lon"] = (ds.lon + 180) % 360 - 180
     new_ds["lon"] = new_ds.lon.assign_attrs(
         **{
@@ -27,6 +28,7 @@ def validate_latlon(ds: xr.Dataset) -> xr.Dataset:
         }
     )
 
+
     new_ds["lat"] = (ds.lat + 90) % 180 - 90
     new_ds["lat"] = new_ds.lat.assign_attrs(
         **{
@@ -35,9 +37,10 @@ def validate_latlon(ds: xr.Dataset) -> xr.Dataset:
                 standard_name="latitude",
                 long_name="Latitude",
             ),
-            **ds.lat,
+            **ds.lat.attrs,
         }
     )
+
     return new_ds
 
 

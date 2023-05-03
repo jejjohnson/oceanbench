@@ -17,14 +17,14 @@ def xr_cond_average(
         ds (xr.Dataset): the xr.Dataset with averaged non frequency dimensions
     """
     
-    # get all frequency-domain dimensions
+    # get all dims to be conditioned on
     cond_dims = [idim for idim in list(ds.dims) if idim not in dims]
     
-    # create condition for frequency-domain
+    # create condition 
     if len(cond_dims) > 1:
         cond = reduce(lambda x,y: (ds[x]>0.0) & (ds[y]>0.0), cond_dims)
     else:
         cond = ds[cond_dims[0]] > 0.0
         
-    # take mean of real dimensions
+    # take mean of remaining dims
     return ds.mean(dim=dims).where(cond, drop=drop)
