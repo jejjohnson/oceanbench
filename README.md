@@ -71,8 +71,8 @@ pip install "git+https://github.com/jejjohnson/oceanbench.git"
 We can also clone the git repository
 
 ```bash
-git clone https://github.com/jejjohnson/jaxsw.git
-cd jaxsw
+git clone https://github.com/jejjohnson/oceanbench.git
+cd oceanbench
 ```
 
 #### Conda Environment (RECOMMENDED)
