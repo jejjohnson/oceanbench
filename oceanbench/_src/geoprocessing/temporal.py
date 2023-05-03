@@ -4,24 +4,11 @@ import xarray as xr
 import pandas as pd
 import pint_xarray
 
-UNITS = {
-    "ns": "nanoseconds",
-    "us": "microseconds",
-    "ms": "milliseconds",
-    "s": "seconds",
-    "m": "minutes",
-    "h": "hours",
-    "D": "days",
-    "W": "weeks",
-    "M": "months",
-    "Y": "years",
-}
-
 
 def time_rescale(
     ds: xr.Dataset,
     freq_dt: int = 1,
-    freq_unit: str = "D",
+    freq_unit: str = "seconds",
     t0: Optional[Union[str, np.datetime64]] = None,
 ) -> xr.Dataset:
     """Rescales time dimensions of np.datetim64 to an output frequency.
@@ -42,19 +29,17 @@ def time_rescale(
 
     ds = ds.copy()
 
-    assert freq_unit in list(UNITS.keys())
-
     if t0 is None:
         t0 = ds["time"].min()
 
     if isinstance(t0, str):
         t0 = np.datetime64(t0)
 
-    ds["time"] = ((ds["time"] - t0) / np.timedelta64(freq_dt, freq_unit)).astype(
+    ds["time"] = ((ds["time"] - t0) / pd.to_timedelta(freq_dt, unit=freq_unit)).astype(
         np.float32
     )
 
-    ds = ds.pint.quantify({"time": UNITS[freq_unit]})
+    ds = ds.pint.quantify({"time": freq_unit})
 
     return ds
 
