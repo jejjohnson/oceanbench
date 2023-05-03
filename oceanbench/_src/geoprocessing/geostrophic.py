@@ -37,7 +37,6 @@ def streamfunction(
         f0 = geocalc.coriolis_parameter(latitude=np.deg2rad(ds.lat)).mean()
     else:
         f0 = Quantity(f0, "1/s")
-
     if g is None:
         g = GRAVITY
     else:

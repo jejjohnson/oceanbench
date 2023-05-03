@@ -1,0 +1,11 @@
+psd_isotropic_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic"
+    _partial_: True
+    variable: "ssh"
+    dims: ["lon", "lat"]
+    
+psd_isotropic_average:
+    _target_: "oceanbench._src.preprocessing.mean.xr_cond_average"
+    _partial_: True
+    dims: ["time"]
+    drop: True

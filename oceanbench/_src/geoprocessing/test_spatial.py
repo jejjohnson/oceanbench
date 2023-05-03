@@ -46,8 +46,8 @@ def test_latlon_deg2m():
     assert da["lat"].min() == 0
     
     # check attributes
-    assert da["lon"].attrs["units"] == "m"
-    assert da["lat"].attrs["units"] == "m"
+    assert da["lon"].attrs["units"] == "meter"
+    assert da["lat"].attrs["units"] == "meter"
     
     
 def test_latlon_deg2m_mean():
@@ -66,8 +66,8 @@ def test_latlon_deg2m_mean():
     assert da["lat"].min() == 0
     
     # check attributes
-    assert da["lon"].attrs["units"] == "m"
-    assert da["lat"].attrs["units"] == "m"
+    assert da["lon"].attrs["units"] == "meter"
+    assert da["lat"].attrs["units"] == "meter"
     
     
     

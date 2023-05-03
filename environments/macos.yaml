@@ -6,6 +6,7 @@ dependencies:
   - pip
   - matplotlib
   - cartopy
+  - arviz
   - metpy
   - pyinterp
   - xarray
@@ -16,6 +17,8 @@ dependencies:
   - scipy
   - pyinterp
   - xesmf==0.7.0
+  - xrft
+  - numpy_groupies
   - pint-xarray
   - pytest
   - tqdm
@@ -24,3 +27,4 @@ dependencies:
       - xarray-dataclasses
       - autoroot
       - einops
+      - corner

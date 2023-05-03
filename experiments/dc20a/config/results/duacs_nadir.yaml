@@ -1,0 +1,20 @@
+name: "duacs"
+experiment: "swot1nadir5"
+data:
+  _target_: oceanbench._src.data.pipe
+  inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/DUACS/2020a_SSH_mapping_NATL60_DUACS_en_j1_tpn_g2.nc"
+  fns:
+    - {_target_: "xarray.open_dataset", decode_times: True, _partial_: True}
+    # RENAME
+    - {_target_: "xarray.Dataset.rename", name_dict: {"gssh": "ssh"}, _partial_: True}
+    # VALIDATE COORDINATES
+    - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+    - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
+    - {_target_: "oceanbench._src.geoprocessing.validation.decode_cf_time", units: "seconds since 2012-10-01", _partial_: True}
+    - {_target_: "oceanbench._src.geoprocessing.validation.validate_ssh", _partial_: True}
+    # RESAMPLE - Daily | Aggregate Mean
+    - ${evaluation.resample_method}
+    - ${evaluation.resample_aggregate}
+    # SELECT REGION | TIME
+    - {_target_: "xarray.Dataset.sel", indexers: "${domain}", _partial_: True}
+    - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}
