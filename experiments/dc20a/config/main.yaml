@@ -2,6 +2,7 @@
 
 defaults:
     - _self_
+    - domain: evaluation.yaml
     - reference: default.yaml
     - results: duacs.yaml
     - evaluation: default.yaml

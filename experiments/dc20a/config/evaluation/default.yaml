@@ -1,3 +1,19 @@
+domain:
+  lat: {_target_: "builtins.slice", _args_: [32., 44.]}
+  lon: {_target_: "builtins.slice", _args_: [-66., -54.]}
+  time: {_target_: "builtins.slice", _args_: ["2012-10-22", "2012-12-02"]}
+
+resample_method:
+    _target_: "xarray.Dataset.resample"
+    _partial_: True
+    indexer:
+        time: "1D"
+
+resample_aggregate:
+    _target_: "xarray.core.resample.DatasetResample.mean"
+    _partial_: True
+
+
 fill_nans:
     _target_: "oceanbench._src.geoprocessing.interpolate.fillnans"
     _partial_: True
@@ -13,9 +29,9 @@ rescale_space:
 rescale_time:
     _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
     _partial_: True
-    t0: "2012-10-22"
+    t0: "2012-10-22T12:00:00"
     freq_dt: 1
-    freq_unit: "D"
+    freq_unit: "day"
     
 psd_isotropic_score:
     _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
@@ -23,6 +39,12 @@ psd_isotropic_score:
     variable: "ssh"
     psd_dims: ["lon", "lat"]
     avg_dims: ["time"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
     
 psd_spacetime_score:
     _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
@@ -30,6 +52,12 @@ psd_spacetime_score:
     variable: "ssh"
     psd_dims: ["time", "lon"]
     avg_dims: ["lat"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
     
 nrmse_spacetime:
     _target_: "oceanbench._src.metrics.stats.nrmse_da"
