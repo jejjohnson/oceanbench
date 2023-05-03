@@ -14,9 +14,9 @@ resample_aggregate:
     _partial_: True
 
 fill_nans:
-    _target_: "oceanbench._src.geoprocessing.interpolate.fillnans"
+    _target_: "xarray.Dataset.interpolate_na"
     _partial_: True
-    dims: ["lat", "lon"]
+    dim: ["lat", "lon"]
     method: "slinear"
     fill_value: "extrapolate"
 
