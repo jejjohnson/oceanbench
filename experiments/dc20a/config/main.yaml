@@ -1,16 +1,14 @@
 # @package _global_
 
 defaults:
-    - _self_
-    - reference: default.yaml
-    - results: duacs_swot.yaml
-    - evaluation: default.yaml
-    - preprocess: alongtrack.yaml
-    - postprocess: sea_surface_height.yaml
-    
-    
-stage: "evaluation"
+  - _self_
+  - reference: default.yaml
+  - results: duacs_swotnadir.yaml
+  - evaluation: default.yaml
+  - postprocess: sea_surface_height.yaml
+
 experiment: "dc20a"
+stage: "evaluation"
 metrics_csv: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/"
 csv_name: "leaderboard"
 overwrite_results: False
