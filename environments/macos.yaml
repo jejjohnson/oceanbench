@@ -6,6 +6,7 @@ dependencies:
   - pip
   - matplotlib
   - cartopy
+  - metpy
   - pyinterp
   - xarray
   - zarr
@@ -15,6 +16,7 @@ dependencies:
   - scipy
   - pyinterp
   - xesmf==0.7.0
+  - pint-xarray
   - pytest
   - tqdm
   - pip:

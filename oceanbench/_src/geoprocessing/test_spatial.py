@@ -1,6 +1,6 @@
-import pytest
 import numpy as np
-from .spatial import transform_180_to_360, transform_360_to_180
+import xarray as xr
+from .spatial import transform_180_to_360, transform_360_to_180, latlon_deg2m
 
 
 def test_transform_180_to_360_bounds():
@@ -29,3 +29,46 @@ def test_transform_360_to_180_bounds():
 
     assert new_coords.min() >= -180
     assert new_coords.max() <= 180
+
+def test_latlon_deg2m():
+    
+    lon_coords = np.linspace(-65, -54, 50)
+    lat_coords = np.linspace(32, 44, 50)
+    
+    da = xr.Dataset()
+    da["lon"] = lon_coords
+    da["lat"] = lat_coords
+    
+    da = latlon_deg2m(da, mean=False)
+    
+    # check minval is 0
+    assert da["lon"].min() == 0
+    assert da["lat"].min() == 0
+    
+    # check attributes
+    assert da["lon"].attrs["units"] == "m"
+    assert da["lat"].attrs["units"] == "m"
+    
+    
+def test_latlon_deg2m_mean():
+    
+    lon_coords = np.linspace(-65, -54, 50)
+    lat_coords = np.linspace(32, 44, 50)
+    
+    da = xr.Dataset()
+    da["lon"] = lon_coords
+    da["lat"] = lat_coords
+    
+    da = latlon_deg2m(da, mean=True)
+    
+    # check minval is 0
+    assert da["lon"].min() == 0
+    assert da["lat"].min() == 0
+    
+    # check attributes
+    assert da["lon"].attrs["units"] == "m"
+    assert da["lat"].attrs["units"] == "m"
+    
+    
+    
+    
