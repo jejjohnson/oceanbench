@@ -4,13 +4,14 @@ from loguru import logger
 from pathlib import Path
 from omegaconf import OmegaConf
 import evaluation
+import preprocess
 
 
 @hydra.main(config_path="config", config_name="main", version_base="1.2")
 def main(cfg):
     if cfg.stage == "preprocess":
         logger.info(f"Starting preprocessing stage...!")
-        raise NotImplementedError()
+        preprocess.main(cfg)
 
     elif cfg.stage == "evaluation":
         logger.info(f"Starting evaluation stage...!")

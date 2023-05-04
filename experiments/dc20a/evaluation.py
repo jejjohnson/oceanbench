@@ -28,20 +28,22 @@ def add_units(da):
 @hydra.main(config_path="config", config_name="main", version_base="1.2")
 def main(cfg):
     # OPEN DATASETS
-    logger.info(f"Loading reference datasets...")
-    ds_ref = hydra.utils.instantiate(cfg.reference.data).compute()
     logger.info(f"Loading results datasets...")
     ds = hydra.utils.instantiate(cfg.results.data).compute()
+    logger.info(f"Loading reference datasets...")
+    ds_ref = hydra.utils.instantiate(cfg.reference.data).compute()
+
 
     results = list()
     results.append(cfg.results.name.upper())
+    results.append(cfg.results.experiment.upper())
 
     # REGRIDDING
     logger.info(f"Regridding...")
     ds = grid_to_regular_grid(
         src_grid_ds=ds.pint.dequantify(),
         tgt_grid_ds=ds_ref.pint.dequantify(),
-        keep_attrs=False,
+        keep_attrs=True,
     )
     ds["time"] = ds_ref["time"]
 
@@ -64,6 +66,8 @@ def main(cfg):
     logger.info(f"Rescaling Time...")
     ds = hydra.utils.instantiate(cfg.evaluation.rescale_time)(ds)
     ds_ref = hydra.utils.instantiate(cfg.evaluation.rescale_time)(ds_ref)
+
+    ds["time"] = ds_ref["time"]
 
     # CALCULATING STATISTICS
     logger.info(f"Calculating nrmse...")
@@ -126,6 +130,7 @@ def main(cfg):
         data,
         columns=[
             "Method",
+            "Experiment",
             "µ(RMSE)",
             "σ(RMSE)",
             "iso λx [km]",
