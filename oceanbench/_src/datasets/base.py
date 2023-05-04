@@ -133,16 +133,16 @@ class XRDABatcher:
         return coords
     
     def reconstruct(
-        self, 
-        batches: tp.List[np.ndarray], 
-        dims_labels: tp.Optional[tp.List[str]]=None, 
-        weight: tp.Optional[np.ndarray]=None
+        self,
+        items: tp.Iterable,
+        dims_labels: tp.Optional[tp.Iterable[str]]=None, 
+        weight=None
     ) -> xr.DataArray:
         """Reconstructs based on a list of patches, e.g. the output of
         a dataloader.
 
         Args:
-            batches (List[np.ndarray]): a list of np.ndarrays with arbitrary dimensions where
+            items (List[np.ndarray]): a list of np.ndarrays with arbitrary dimensions where
                 at least one dimension matches the patch dimensions
             dims_label (List[str]): a list of dimension names for the patches. If explicit, it
                 will match all names that correspond with the patch dims. If missing, it will
@@ -159,23 +159,6 @@ class XRDABatcher:
             rec_da (xr.DataArray): the reconstructed xr.DataArray that corresponds to
                 to the original array of the corresponding requested coordinates.
         """
-        items = list(itertools.chain(*batches))
-        rec_da = self.reconstruct_from_items(
-            items=items,
-            dims_labels=dims_labels,
-            weight=weight
-        ) 
-        
-        rec_da.attrs = self.da.attrs
-        
-        return rec_da
-    
-    def reconstruct_from_items(
-        self,
-        items: tp.Iterable,
-        dims_labels: tp.Optional[tp.Iterable[str]]=None, 
-        weight=None
-    ) -> xr.DataArray:
         
         item_shape = items[0].shape
         num_items = len(item_shape)
@@ -271,5 +254,6 @@ class XRDABatcher:
             rec_da.loc[da_co] = rec_da.sel(da_co) + ida * w
             count_da.loc[da_co] = count_da.sel(da_co) + w
 
+        rec_da.attrs = self.da.attrs
         return rec_da / count_da
     
