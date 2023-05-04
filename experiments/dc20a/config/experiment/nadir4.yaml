@@ -1,7 +1,11 @@
-name: "natl60"
+name: "nadir4"
 data:
   _target_: "xarray.open_mfdataset"
-  paths: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/test/dc_ref/NATL60-CJM165_GULFSTREAM*"
+  paths:
+    - ${data.jason}
+    - ${data.envisat}
+    - ${data.geosat}
+    - ${data.topex_poseidon}
   combine: "nested"
   concat_dim: "time"
   decode_times: True
@@ -10,16 +14,15 @@ data:
     _target_: "oceanbench._src.data.pipe"
     _partial_: True
     fns:
-      # RENAME
-      - {_target_: "xarray.Dataset.rename", name_dict: {"sossheig": "ssh"}, _partial_: True}
+      # # RENAME
+      - {_target_: "xarray.Dataset.rename", name_dict: {"ssh_model": "ssh"}, _partial_: True}
       # VALIDATE COORDINATES
       - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
       - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
-      - {_target_: "oceanbench._src.geoprocessing.validation.decode_cf_time", units: "seconds since 2012-10-01", _partial_: True}
       - {_target_: "oceanbench._src.geoprocessing.validation.validate_ssh", _partial_: True}
-      # RESAMPLE - Daily | Aggregate Mean
-      - ${evaluation.resample_method}
-      - ${evaluation.resample_aggregate}
       # SELECT REGION | TIME
-      - ${preprocess.select}
+      - "${preprocess.select_time}"
+      - {_target_: "xarray.Dataset.compute", _partial_: True}
+      - "${preprocess.select_lon_where}"
+      - "${preprocess.select_lat_where}"
       - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}

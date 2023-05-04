@@ -29,5 +29,5 @@ data:
         _partial_: True,
       }
     # SELECT REGION | TIME
-    - { _target_: "xarray.Dataset.sel", indexers: "${domain}", _partial_: True }
+    - ${preprocess.select}
     - { _target_: "xarray.Dataset.sortby", variables: "time", _partial_: True }
