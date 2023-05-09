@@ -135,23 +135,23 @@ def test_xrda_patcher_1d_reconstruct(patch, stride):
     strides = {"x": stride} if stride is not None else None
     check_full_scan = True
 
-    xrda_batches = XRDABatcher(
+    xrda_batcher = XRDABatcher(
         da=da,
         patches=patches,
         strides=strides,
         check_full_scan=check_full_scan
     )
 
-    # aggregate all batches
-    all_batches = list(map(lambda x: x.data, xrda_batches))
+    # collect all items
+    all_items = list(map(lambda x: x.data, xrda_batcher))
 
     # =================================
     # CASE I - No Weight | No Label
     # =================================
     dims_labels = None
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple("x")
 
@@ -160,8 +160,8 @@ def test_xrda_patcher_1d_reconstruct(patch, stride):
     # ====================================
     dims_labels = ["x"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple("x")
 
@@ -169,9 +169,9 @@ def test_xrda_patcher_1d_reconstruct(patch, stride):
     # CASE III - Weight | No Label
     # ====================================
     dims_labels = None
-    weight = np.ones((xrda_batches.patches["x"],)) 
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"],)) 
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple("x")
 
@@ -179,9 +179,9 @@ def test_xrda_patcher_1d_reconstruct(patch, stride):
     # CASE IV - Weight | Exact Label
     # ====================================
     dims_labels = ["x"]
-    weight = np.ones((xrda_batches.patches["x"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple("x")
 
@@ -210,7 +210,7 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     strides = {"x": stride} if stride is not None else None
     check_full_scan = True
 
-    xrda_batches = XRDABatcher(
+    xrda_batcher = XRDABatcher(
         da=da,
         patches=patches,
         strides=strides,
@@ -221,17 +221,17 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     ######################################
     # LATENT SPACES
     ######################################
-    # aggregate all batches
-    all_batches = list(map(lambda x: x.data, xrda_batches))
-    all_batches = list(map(lambda x: repeat(x, "... -> ... N", N=5), all_batches)) 
+    # aggregate all items
+    all_items = list(map(lambda x: x.data, xrda_batcher))
+    all_items = list(map(lambda x: repeat(x, "... -> ... N", N=5), all_items)) 
     
     # =================================
     # CASE I - No Weight | No Label
     # =================================
     dims_labels = None
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "v1"])
 
@@ -241,8 +241,8 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["x", "z"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "z"])
 
@@ -250,9 +250,9 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     # CASE III - Weight | No Label
     # ====================================
     dims_labels = None
-    weight = np.ones((xrda_batches.patches["x"],)) 
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"],)) 
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "v1"])
 
@@ -260,9 +260,9 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     # CASE IV - Weight | Exact Label
     # ====================================
     dims_labels = ["x", "z"]
-    weight = np.ones((xrda_batches.patches["x"],)) 
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"],)) 
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "z"])
 
@@ -329,15 +329,15 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
     check_full_scan = True
 
-    xrda_batches = XRDABatcher(
+    xrda_batcher = XRDABatcher(
         da=da,
         patches=patches,
         strides=strides,
         check_full_scan=check_full_scan
     )
 
-    # aggregate all batches
-    all_batches = list(map(lambda x: x.data, xrda_batches))
+    # aggregate all items
+    all_items = list(map(lambda x: x.data, xrda_batcher))
 
     ###################################
     # EXACT LABELS
@@ -348,8 +348,8 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # =================================
     dims_labels = None
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y"])
 
@@ -358,8 +358,8 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # ====================================
     dims_labels = ["x", "y"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y"])
 
@@ -367,9 +367,9 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # CASE III - Weight | No Label
     # ====================================
     dims_labels = None
-    weight = np.ones((xrda_batches.patches["x"], xrda_batches.patches["y"])) 
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"], xrda_batcher.patches["y"])) 
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y"])
 
@@ -377,9 +377,9 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # CASE IV - Weight | Exact Label
     # ====================================
     dims_labels = ["x", "y"]
-    weight = np.ones((xrda_batches.patches["x"], xrda_batches.patches["y"]))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"], xrda_batcher.patches["y"]))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y"])
 
@@ -391,8 +391,8 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # CASE V - Weight | Mixed Label I
     # ====================================
     dims_labels = ["x"]
-    weight = np.ones((xrda_batches.patches["x"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["x"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "v1"])
 
@@ -400,8 +400,8 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # CASE VI - Weight | Mixed Label II
     # ====================================
     dims_labels = ["y"]
-    weight = np.ones((xrda_batches.patches["y"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["y"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["y", "v1"])
 
@@ -410,7 +410,7 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # ====================================
     dims_labels = ["x"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "v1"])
 
@@ -419,7 +419,7 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     # ====================================
     dims_labels = ["y"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["y", "v1"])
 
@@ -449,16 +449,16 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
     check_full_scan = True
 
-    xrda_batches = XRDABatcher(
+    xrda_batcher = XRDABatcher(
         da=da,
         patches=patches,
         strides=strides,
         check_full_scan=check_full_scan
     )
 
-    # aggregate all batches
-    all_batches = list(map(lambda x: x.data, xrda_batches))
-    all_batches = list(map(lambda x: repeat(x, "... -> ... N", N=5), all_batches)) 
+    # aggregate all items
+    all_items = list(map(lambda x: x.data, xrda_batcher))
+    all_items = list(map(lambda x: repeat(x, "... -> ... N", N=5), all_items)) 
 
     ###################################
     # EXACT LABELS
@@ -469,8 +469,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # =================================
     dims_labels = None
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y", "v1"])
 
@@ -479,8 +479,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["x", "y", "z"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batches.da)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y", "z"])
 
@@ -488,9 +488,9 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 3 - Weight | No Label
     # ====================================
     dims_labels = None
-    weight = np.ones((xrda_batches.patches["x"], xrda_batches.patches["y"])) 
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"], xrda_batcher.patches["y"])) 
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(v1=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y", "v1"])
 
@@ -498,9 +498,9 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 4 - Weight | Exact Label
     # ====================================
     dims_labels = ["x", "y", "z"]
-    weight = np.ones((xrda_batches.patches["x"], xrda_batches.patches["y"]))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
-    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batches.da)
+    weight = np.ones((xrda_batcher.patches["x"], xrda_batcher.patches["y"]))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
+    np.testing.assert_array_almost_equal(rec_da.isel(z=0).data, xrda_batcher.da)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["x", "y", "z"])
 
@@ -512,8 +512,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 1 - Weight | Mixed Label 1
     # ====================================
     dims_labels = ["x"]
-    weight = np.ones((xrda_batches.patches["x"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["x"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "v1", "v2"])
 
@@ -521,8 +521,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 1 - Weight | Mixed Label 2
     # ====================================
     dims_labels = ["y"]
-    weight = np.ones((xrda_batches.patches["y"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["y"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["y", "v1", "v2"])
 
@@ -530,8 +530,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 1 - Weight | Mixed Label 3
     # ====================================
     dims_labels = ["x" , "z"]
-    weight = np.ones((xrda_batches.patches["x"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["x"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "z", "v1"])
 
@@ -539,8 +539,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 1 - Weight | Mixed Label 4
     # ====================================
     dims_labels = ["y", "z"]
-    weight = np.ones((xrda_batches.patches["y"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["y"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["y", "z", "v1"])
 
@@ -548,8 +548,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 1 - Weight | Mixed Label 5
     # ====================================
     dims_labels = ["z" , "x"]
-    weight = np.ones((xrda_batches.patches["x"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["x"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["z", "x", "v1"])
 
@@ -557,8 +557,8 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # CASE 1 - Weight | Mixed Label 6
     # ====================================
     dims_labels = ["z", "y"]
-    weight = np.ones((xrda_batches.patches["y"],))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["y"],))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["z", "y", "v1"])
 
@@ -567,7 +567,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["x",]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "v1", "v2"])
 
@@ -576,7 +576,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["y"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["y", "v1", "v2"])
 
@@ -586,7 +586,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["x", "z"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["x", "z", "v1"])
 
@@ -596,7 +596,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["y", "z"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["y", "z", "v1"])
 
@@ -606,7 +606,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["z", "x"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x"]
     assert rec_da.dims == tuple(["z", "x", "v1"])
 
@@ -616,7 +616,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # ====================================
     dims_labels = ["z", "y"]
     weight = None
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["y"]
     assert rec_da.dims == tuple(["z", "y", "v1"])
 
@@ -625,9 +625,9 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     # RESHAPED LABELS
     ###################################
 
-    all_batches = list(map(lambda x: repeat(x, "x y z -> y z x"), all_batches)) 
+    all_items = list(map(lambda x: repeat(x, "x y z -> y z x"), all_items)) 
     dims_labels = ["y", "z", "x"]
-    weight = np.ones((xrda_batches.patches["y"], xrda_batches.patches["x"]))
-    rec_da = xrda_batches.reconstruct(all_batches, dims_labels=dims_labels, weight=weight)
+    weight = np.ones((xrda_batcher.patches["y"], xrda_batcher.patches["x"]))
+    rec_da = xrda_batcher.reconstruct(all_items, dims_labels=dims_labels, weight=weight)
     assert list(rec_da.coords.keys()) == ["x", "y"]
     assert rec_da.dims == tuple(["y", "z", "x"])
