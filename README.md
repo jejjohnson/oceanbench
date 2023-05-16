@@ -102,5 +102,24 @@ We can also install via `pip` as well
 pip install .
 ```
 
+---
+## Conversion between `.ipynb` and `.py`
+
+Above examples are stored in [jbook/content](jbook/content) directory in the myst.md (`md`) format. Checkout [jupytext
+using-cli](https://jupytext.readthedocs.io/en/latest/using-cli.html) for more
+info.
+
+* To convert `example.md` to `example.ipynb`, run:
+
+```bash
+jupytext --to notebook example.md
+```
+
+* To convert `example.ipynb` to `example.md`, run:
+
+```bash
+jupytext --to myst example.ipynb
+```
+
 
 

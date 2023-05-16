@@ -1,0 +1,8 @@
+jupyter-book
+matplotlib
+numpy
+ghp-import
+sphinxcontrib-mermaid
+sphinx-proof
+jupytext
+myst-parser
