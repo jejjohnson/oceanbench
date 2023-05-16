@@ -151,3 +151,4 @@ notebooks/*.gif
 \.idea/
 .DS_Store
 .vscode/settings.json
+\jbook/_build/
