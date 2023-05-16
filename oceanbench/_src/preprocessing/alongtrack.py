@@ -2,7 +2,7 @@ import xarray as xr
 import numpy as np
 
 def alongtrack_ssh(ds: xr.Dataset, variable: str="ssh") -> xr.Dataset:
-    ds["ssh"] = ds["sla_unfiltered"] + ds["mdt"] - ds["lwe"]
+    ds["ssh"] = ds["sla_filtered"] + ds["mdt"] - ds["lwe"]
     return ds
 
 def remove_swath_dimension(ds: xr.Dataset, name: str="nC") -> xr.Dataset:

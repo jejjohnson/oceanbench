@@ -1,20 +1,28 @@
+nadir_preprocess_chain:
+    # VALIDATE COORDINATES
+    - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+
+rename:
+    _target_: "xarray.Dataset.rename"
+    _partial_: True
+    
 lat:
     _target_: "oceanbench._src.geoprocessing.subset.where_slice"
     _partial_: True
     variable: "lat"
-    min_val: 33.025
-    max_val: 42.9917
+    min_val: 32.
+    max_val: 44.
     
 lon:
     _target_: "oceanbench._src.geoprocessing.subset.where_slice"
     _partial_: True
     variable: "lon"
-    min_val: -64.975
-    max_val: -55.007
+    min_val: -66.
+    max_val: -54.
     
 time:
     _target_: "builtins.slice"
-    _args_: ["2017-01-01", "2018-01-01"]
+    _args_: ["2012-10-01", "2013-10-01"]
 
 
 nadir:
