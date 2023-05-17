@@ -1,4 +1,4 @@
-# OceanBench: Sea Surface Height Edition
+# OceanBench: Sea Surface Height Edition [IN PROGRESS!]
 
 Primary Devs:
 * J. Emmanuel Johnson
