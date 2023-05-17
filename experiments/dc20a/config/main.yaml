@@ -10,6 +10,7 @@ defaults:
   - postprocess: sea_surface_height.yaml
   - experiment: nadir4.yaml
   - preprocess: default.yaml
+  - grid: default.yaml
 
 data_challenge: "dc20a"
 stage: "evaluation"

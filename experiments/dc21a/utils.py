@@ -98,9 +98,7 @@ def open_ssh_results(file, variable, preprocess):
 def ts_stats(da, cfg, variable: str, variable_interp: str):
 
     # resample time series
-    da = hydra.utils.instantiate(cfg.evaluation.rescale_time)(da).pint.dequantify()
-
-    vcount = da[variable].count()
+    da = hydra.utils.instantiate(cfg.postprocess.rescale_time)(da).pint.dequantify()
 
     # calculate statistics
     rmse = np.sqrt(((da[variable] - da[variable_interp])**2).mean())
@@ -108,11 +106,8 @@ def ts_stats(da, cfg, variable: str, variable_interp: str):
     rmse_alongtrack = np.sqrt((da[variable]**2).mean())
 
     rmse_score = 1. - rmse/rmse_alongtrack
-    nb_min_obs = 10
-    rmse_score = np.ma.masked_where(vcount.values < nb_min_obs, rmse_score)
 
-    mean_rmse = np.ma.mean(np.ma.masked_invalid(rmse_score))
-    std_rmse = np.ma.std(np.ma.masked_invalid(rmse_score))
+    std_rmse = np.sqrt(((da[variable] - da[variable_interp])**2).std())
 
 
-    return mean_rmse, std_rmse
+    return rmse_score.values, rmse.values, std_rmse.values

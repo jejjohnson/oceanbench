@@ -1,7 +1,74 @@
+name: "swot1nadir5"
 data:
-  - ${data.jason}
-  - ${data.envisat}
-  - ${data.geosat}
-  - ${data.topex_poseidon}
-  - ${data.swot_nadir}
-  - ${data.swot_karin}
+  _target_: "xarray.concat"
+  objs:
+    - ${experiment.nadir5}
+    - ${experiment.swot1}
+  dim: "time"
+
+
+
+swot1:
+  _target_: "xarray.open_mfdataset"
+  paths:
+    - ${data.swot_karin}
+  combine: "nested"
+  concat_dim: "time"
+  decode_times: True
+  engine: "netcdf4"
+  preprocess:
+    _target_: "oceanbench._src.data.pipe"
+    _partial_: True
+    fns:
+      # # RENAME
+      - {_target_: "xarray.Dataset.rename", name_dict: {"ssh_model": "ssh"}, _partial_: True}
+      # - ${experiment.subset_variables}
+      # VALIDATE COORDINATES
+      - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+      - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
+      - {_target_: "oceanbench._src.geoprocessing.validation.validate_ssh", _partial_: True}
+      # CREATE ALONGTRACK
+      - "${preprocess.remove_swath_dimension}"
+      # SELECT REGION | TIME
+      - "${preprocess.select_time}"
+      - {_target_: "xarray.Dataset.compute", _partial_: True}
+      - "${preprocess.select_lon_where}"
+      - "${preprocess.select_lat_where}"
+      - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}
+      - {_target_: "oceanbench._src.geoprocessing.subset.select_variables", variables: ["ssh", "lon", "lat", "time"], _partial_: True}
+
+nadir5:
+  _target_: "xarray.open_mfdataset"
+  paths:
+    - ${data.jason}
+    - ${data.envisat}
+    - ${data.geosat}
+    - ${data.topex_poseidon}
+    - ${data.swot_nadir}
+  combine: "nested"
+  concat_dim: "time"
+  decode_times: True
+  engine: "netcdf4"
+  preprocess:
+    _target_: "oceanbench._src.data.pipe"
+    _partial_: True
+    fns:
+      # # RENAME
+      - {_target_: "xarray.Dataset.rename", name_dict: {"ssh_model": "ssh"}, _partial_: True}
+      # - ${experiment.subset_variables}
+      # VALIDATE COORDINATES
+      - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+      - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
+      - {_target_: "oceanbench._src.geoprocessing.validation.validate_ssh", _partial_: True}
+      # SELECT REGION | TIME
+      - "${preprocess.select_time}"
+      - {_target_: "xarray.Dataset.compute", _partial_: True}
+      - "${preprocess.select_lon_where}"
+      - "${preprocess.select_lat_where}"
+      - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}
+      - {_target_: "oceanbench._src.geoprocessing.subset.select_variables", variables: ["ssh", "lon", "lat", "time"], _partial_: True}
+
+subset_variables:
+  _target_: "oceanbench._src.geoprocessing.subset.select_variables"
+  _partial_: True
+  variables: ["ssh", "lon", "lat", "time"]

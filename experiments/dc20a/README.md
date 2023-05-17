@@ -1,4 +1,24 @@
+# PreProcessing
 
+## AlongTrack Processing
+
+```bash
+# NADIR4 | ALONGTRACK
+python main.py stage=preprocess experiment=nadir4
+# SWOT1 | ALONGTRACK
+python main.py stage=preprocess experiment=swot1
+```
+
+## Gridded Pre-Processing
+
+```bash
+# NADIR4 | GRIDDED
+python main.py stage=preprocess experiment=nadir4 grid=natl60
+# SWOT1 | GRIDDED
+python main.py stage=preprocess experiment=swot1 grid=natl60
+```
+
+---
 
 # Results
 

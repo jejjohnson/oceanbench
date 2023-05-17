@@ -1,9 +1,9 @@
 lat:
-  min_val: 33.025
-  max_val: 42.9917
+  min_val: 32.0
+  max_val: 44.0
 lon:
-  min_val: -64.975
-  max_val: -55.007
+  min_val: -66.0
+  max_val: -54.0
 time:
   min_val: "2017-01-01"
   max_val: "2018-01-01"

@@ -1,7 +1,34 @@
 # Data Challenge 2021a - Sea Surface Height OSE
 
+This is the experiment repository for the 2021 OSE data challenge over the GulfStream using real observations from altimetry tracks.
 
-## Example Results 
+---
+## Preprocessing
+
+**ALONGTRACK**
+
+Here is an example with an alongtrack preprocessing pipeline
+
+```bash
+# ALONGTRACK | SUBSET DOMAIN | 1 day | 1/5 degree resolution
+python main.py stage=preprocess
+# ALONGTRACK | FULL DOMAIN | 12 hours | 1/20 degree resolution
+python main.py stage=preprocess domain=all
+```
+
+**GRIDDED**
+
+Here is an example with a gridded preprocessing pipeline
+
+```bash
+# GRIDDED | SUBSET DOMAIN | 1 day | 1/5 degree resolution
+python main.py stage=preprocess grid=duacs
+# GRIDDED | FULL DOMAIN | 12 hours | 1/20 degree resolution
+python main.py stage=preprocess domain=all grid=natl60
+```
+
+---
+## Results 
 
 This uses a custom `.yaml` file where we can run the evaluation script.
 

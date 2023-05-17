@@ -5,6 +5,7 @@ from loguru import logger
 from omegaconf import OmegaConf
 from oceanbench._src.geoprocessing.spatial import transform_360_to_180
 from omegaconf.errors import ConfigAttributeError
+from pathlib import Path
 
 
 @hydra.main(config_path='config', config_name='main', version_base='1.2')
@@ -43,19 +44,23 @@ def main(cfg):
 
         return da
     
-    # OPEN NADIR Datasets
-    logger.info(f"Creating NADIR Dataset...")
-    
-    out_nadir = xr.open_mfdataset(
-        cfg.preprocess.nadir.data, preprocess=preprocess_nadir, combine="nested", engine="netcdf4", concat_dim="time"
-    )
+    # OPEN Datasets
+    logger.info(f"Creating Dataset...")
+    ds = hydra.utils.instantiate(cfg.experiment.data).sortby("time").compute()
+    name = ""
 
-    out_nadir = out_nadir.compute().sortby("time")
+    if cfg.grid.regrid:
+        logger.info(f"Regridding dataset...")
+        ds = hydra.utils.instantiate(cfg.grid.regrid)(ds)
+        name += "gridded"
+    else:
+        name += "alongtrack"
 
-    print(out_nadir)
-
-    logger.info(f"Saving NADIR Dataset...")
-    out_nadir.to_netcdf(cfg.preprocess.nadir.saved_model)
+    logger.info(f"Saving Preprocessed Dataset...")
+    name += "_" + str(cfg.domain.name)
+    save_path = Path(cfg.directories.ml_ready).joinpath(f"{name}.nc")
+    logger.debug(f"Saving @:{save_path}")
+    ds.to_netcdf(save_path)
     logger.info(f"Done...!")
 
 if __name__ == "__main__":

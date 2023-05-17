@@ -9,23 +9,9 @@ resample_aggregate:
   _partial_: True
 
 fill_nans:
-  _target_: "oceanbench._src.data.pipe"
+  _target_: "oceanbench._src.geoprocessing.interpolate.fillnan_gauss_seidel"
   _partial_: True
-  fns:
-    - {
-      _target_: "xarray.Dataset.interpolate_na", 
-      dim: "lat", 
-      method: "slinear",
-      fill_value: "extrapolate",
-      _partial_: True
-      }
-    - {
-      _target_: "xarray.Dataset.interpolate_na", 
-      dim: "lon", 
-      method: "slinear",
-      fill_value: "extrapolate",
-      _partial_: True
-      }
+  variable: "ssh"
 
 rescale_space:
   _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
