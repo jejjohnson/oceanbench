@@ -1,0 +1,63 @@
+nadir_preprocess_chain:
+    # VALIDATE COORDINATES
+    - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+
+swot_preprocess_chain:
+    # VALIDATE COORDINATES
+    - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+
+
+lat:
+    _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    _partial_: True
+    variable: "lat"
+    min_val: 32.
+    max_val: 44.
+    
+lon:
+    _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    _partial_: True
+    variable: "lon"
+    min_val: -66.
+    max_val: -54.
+    
+time:
+    _target_: "builtins.slice"
+    _args_: ["2012-10-01", "2013-10-01"]
+
+
+nadir4:
+    data:
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_jason1.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_envisat.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_geosat2.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_topex-poseidon_interleaved.nc"
+    variable: "ssh_model"
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/nadir4.nc"
+        
+nadir5:
+    data:
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_jason1.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_envisat.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_geosat2.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_topex-poseidon_interleaved.nc"
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_nadir_swot.nc"
+    variable: "ssh_model"
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/nadir5.nc"
+    
+    
+nadir1:
+    data:
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_jason1.nc"
+    variable: "ssh_model"
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/nadir1.nc"
+    
+    
+swot:
+    data:
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/raw/dc_obs/2020a_SSH_mapping_NATL60_karin_swot.nc"
+    variable: "ssh_model"
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/swot.nc"
+    
+swot1nadir5:
+    saved_model: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/swot1nadir5.nc"

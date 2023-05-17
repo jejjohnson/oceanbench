@@ -1,17 +1,34 @@
 name: "4dvarnet"
-experiment: "swot1nadir5"
+experiment: "nadir4"
 data:
   _target_: oceanbench._src.data.pipe
   inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet/2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadir_GF_GF.nc"
   fns:
-    - {_target_: "xarray.open_dataset", decode_times: True, _partial_: True}
+    - { _target_: "xarray.open_dataset", decode_times: True, _partial_: True }
     # RENAME
-    - {_target_: "xarray.Dataset.rename", name_dict: {"ssh": "ssh"}, _partial_: True}
+    - {
+        _target_: "xarray.Dataset.rename",
+        name_dict: { "ssh": "ssh" },
+        _partial_: True,
+      }
     # VALIDATE COORDINATES
-    - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
-    - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
-    - {_target_: "oceanbench._src.geoprocessing.validation.decode_cf_time", units: "seconds since 2012-10-01", _partial_: True}
-    - {_target_: "oceanbench._src.geoprocessing.validation.validate_ssh", _partial_: True}
+    - {
+        _target_: "oceanbench._src.geoprocessing.validation.validate_latlon",
+        _partial_: True,
+      }
+    - {
+        _target_: "oceanbench._src.geoprocessing.validation.validate_time",
+        _partial_: True,
+      }
+    - {
+        _target_: "oceanbench._src.geoprocessing.validation.decode_cf_time",
+        units: "seconds since 2012-10-01",
+        _partial_: True,
+      }
+    - {
+        _target_: "oceanbench._src.geoprocessing.validation.validate_ssh",
+        _partial_: True,
+      }
     # SELECT REGION | TIME
-    - {_target_: "xarray.Dataset.sel", indexers: "${domain}", _partial_: True}
-    - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}
+    - ${preprocess.select}
+    - { _target_: "xarray.Dataset.sortby", variables: "time", _partial_: True }

@@ -31,53 +31,64 @@ def grid_da(da, binning, variable: str):
     lats = np.ravel(da.lat.values)
     msk = np.isfinite(values)
     binning.push(lons[msk], lats[msk], values[msk])
-    return (('time', 'lat', 'lon'), binning.variable('mean').T[None, ...])
+    variable = binning.variable("mean").T[None, ...]
+
+    return (("time", "lat", "lon"), variable)
 
 
-def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None):
+def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None, t_res=None):
     """
-        coord_based_ds: xr.Dataset with time, lat, lon coordinates
-        target_grid_ds: xr.Dataset with  uniform time, lat, lon coordinates
-        data_vars: Optional[Iterable[str]] variables of coord_based_ds to include in return dataset,
-                      if None, use all the variables (other that time, lat, lon)
+    coord_based_ds: xr.Dataset with time, lat, lon coordinates
+    target_grid_ds: xr.Dataset with  uniform time, lat, lon coordinates
+    data_vars: Optional[Iterable[str]] variables of coord_based_ds to include in return dataset,
+                  if None, use all the variables (other that time, lat, lon)
 
-        Return: xr.Dataset a dataset with same dimensions and coordinates as target_grid_ds and averaged 
-                      values of coord_based_ds for each data_vars
+    Return: xr.Dataset a dataset with same dimensions and coordinates as target_grid_ds and averaged
+                  values of coord_based_ds for each data_vars
     """
     if data_vars is None:
-        data_vars = set(coord_based_ds.variables) - {'time', 'lat', 'lon'}
+        data_vars = set(coord_based_ds.variables) - {"time", "lat", "lon"}
 
-    ds = to_dim(coord_based_ds, 'time')
-    t_res = target_grid_ds.time.diff('time').values.mean()
-    binning = pyinterp.Binning2D(pyinterp.Axis(target_grid_ds.lon.values), pyinterp.Axis(target_grid_ds.lat.values))
-
+    ds = to_dim(coord_based_ds, "time")
+    if t_res is None:
+        t_res = target_grid_ds.time.diff("time").values.mean()  # /2
+    binning = pyinterp.Binning2D(
+        pyinterp.Axis(target_grid_ds.lon.values),
+        pyinterp.Axis(target_grid_ds.lat.values),
+    )
     grid_dses = []
     for t in target_grid_ds.time:
-        tds = ds.isel(time=(ds.time > (t - t_res/2)) & (ds.time <= (t + t_res/2)))
+        tds = ds.isel(time=(ds.time > (t - t_res / 2)) & (ds.time <= (t + t_res / 2)))
         grid_dses.append(
-           xr.Dataset(
-               {v: grid_da(tds, binning, v) for v in data_vars},
-               {'time': [t.values], 'lat': np.array(binning.y), 'lon': np.array(binning.x)}
-            ).astype('float32', casting='same_kind')
+            xr.Dataset(
+                {v: grid_da(tds, binning, v) for v in data_vars},
+                {
+                    "time": [t.values],
+                    "lat": np.array(binning.y),
+                    "lon": np.array(binning.x),
+                },
+            ).astype("float32", casting="same_kind")
         )
-    tgt_ds = xr.concat(grid_dses, dim='time')
+    tgt_ds = xr.concat(grid_dses, dim="time")
     return tgt_ds
 
 
-def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool=True):
+def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool = True):
     """
-        src_grid_ds: xr.Dataset with regular lat, lon coordinates (uniform or curvilinear)
-        tgt_grid_ds: xr.Dataset with  uniform lat, lon coordinates
+    src_grid_ds: xr.Dataset with regular lat, lon coordinates (uniform or curvilinear)
+    tgt_grid_ds: xr.Dataset with  uniform lat, lon coordinates
 
-        Return: xr.Dataset a dataset with same lat, lon coordinates as tgt_grid_ds 
-                      and bilinearly interpolated  values of src_grid_ds.
-                    (time coordinates remains unchanged)
+    Return: xr.Dataset a dataset with same lat, lon coordinates as tgt_grid_ds
+                  and bilinearly interpolated  values of src_grid_ds.
+                (time coordinates remains unchanged)
     """
-    reggridder = xe.Regridder(src_grid_ds, tgt_grid_ds, "bilinear", unmapped_to_nan=True)
+    reggridder = xe.Regridder(
+        src_grid_ds, tgt_grid_ds, "bilinear", unmapped_to_nan=True
+    )
     return reggridder(src_grid_ds, keep_attrs=keep_attrs)
 
 
-def interp_da(da, tgt_coords):
+def interp_da(da, tgt_coords, variable):
     """
     da: xr.DataArray with uniform time, lat, lon coordinates
     tgt_coords: dict[str: np.array] Mapping from dimension names to the coordinates to interpolate.
@@ -87,26 +98,37 @@ def interp_da(da, tgt_coords):
 
     Perform bilinear interpolation spatially followed by a linear interpolation temporally
     """
-    interpolator = pyinterp.backends.xarray.Grid3D(da)
-    return interpolator.trivariate(tgt_coords)
+    x_axis = pyinterp.Axis(da.lon[:].values, is_circle=False)
+    y_axis = pyinterp.Axis(da.lat[:].values)
+    t_axis = pyinterp.TemporalAxis(da.time[:].values)
+    da = da[variable].transpose("lon", "lat", "time")
+    grid = pyinterp.Grid3D(x_axis, y_axis, t_axis, da.data)
+    return pyinterp.trivariate(
+        grid,
+        tgt_coords["lon"],
+        tgt_coords["lat"],
+        t_axis.safe_cast(tgt_coords["time"]),
+        bounds_error=False,
+    )
 
 
 def grid_to_coord_based(src_grid_ds, tgt_coord_based_ds, data_vars=None):
     """
-        src_grid_ds: xr.Dataset with uniform time, lat, lon coordinates
-        tgt_coord_based_ds: xr.Dataset with  time, lat, lon coordinates
-        data_vars: Optional[Iterable[str]] variables of src_grid_ds to include in return dataset,
-                      if None, use all the variables with dimensions (time, lat, lon)
+    src_grid_ds: xr.Dataset with uniform time, lat, lon coordinates
+    tgt_coord_based_ds: xr.Dataset with  time, lat, lon coordinates
+    data_vars: Optional[Iterable[str]] variables of src_grid_ds to include in return dataset,
+                  if None, use all the variables with dimensions (time, lat, lon)
 
-        Return: xr.Dataset a dataset with same time, lat, lon coordinates as tgt_coord_based_ds 
-                      and interpolated  values of src_grid_ds.
+    Return: xr.Dataset a dataset with same time, lat, lon coordinates as tgt_coord_based_ds
+                  and interpolated  values of src_grid_ds.
 
-        Perform bilinear interpolation spatially followed by a linear interpolation temporally
+    Perform bilinear interpolation spatially followed by a linear interpolation temporally
     """
     if data_vars is None:
         data_vars = [
-            v for v in src_grid_ds.variables
-            if set(src_grid_ds[v].dims) == {'time', 'lat', 'lon'}
+            v
+            for v in src_grid_ds.variables
+            if set(src_grid_ds[v].dims) == {"time", "lat", "lon"}
         ]
 
     ref = tgt_coord_based_ds.lon
@@ -116,6 +138,13 @@ def grid_to_coord_based(src_grid_ds, tgt_coord_based_ds, data_vars=None):
         time=np.ravel(tgt_coord_based_ds.time.transpose(*ref.dims).values),
     )
     return xr.Dataset(
-        {v: (ref.dims, np.reshape(interp_da(src_grid_ds[v], coords), ref.shape), src_grid_ds[v].attrs) for v in data_vars},
-        tgt_coord_based_ds.coords
+        {
+            v: (
+                ref.dims,
+                np.reshape(interp_da(src_grid_ds, coords, v), ref.shape),
+                src_grid_ds[v].attrs,
+            )
+            for v in data_vars
+        },
+        tgt_coord_based_ds.coords,
     )

@@ -1,0 +1,21 @@
+# @package _global_
+
+defaults:
+    - _self_
+    - directories: default.yaml
+    - data: default.yaml
+    - domain: default.yaml
+    - experiment: default.yaml
+    - results: duacs.yaml
+    - reference: default.yaml
+    - preprocess: default.yaml
+    - postprocess: default.yaml
+    - grid: default.yaml
+    - evaluation: default.yaml
+    
+    
+stage: "evaluation"
+experiment: "dc21a"
+metrics_csv: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/results"
+csv_name: "leaderboard"
+overwrite_results: False

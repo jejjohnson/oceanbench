@@ -90,6 +90,8 @@ def test_coord_based_to_grid(simple_grid_ds_12H_05, simple_coord_based_ds_1d):
 
     
 def test_grid_to_coord_based(simple_grid_ds_12H_05, simple_coord_based_ds_1d):
+    print(simple_grid_ds_12H_05)
+    print(simple_coord_based_ds_1d)
     trackified = gridding.grid_to_coord_based(simple_grid_ds_12H_05, simple_coord_based_ds_1d)
     xr.testing.assert_allclose(
             trackified[['lat', 'lon']],

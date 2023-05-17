@@ -2,15 +2,19 @@ from typing import Union, List, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
+import warnings
 
 
 def find_intercept_1D(
-    x: np.ndarray, 
-    y: np.ndarray, 
-    level: float=0.5
+    x: np.ndarray, y: np.ndarray, level: float = 0.5, **kwargs
 ) -> np.ndarray:
-
-    f = interp1d(x, y)
+    f = interp1d(
+        x, 
+        y,
+        fill_value=kwargs.pop("fill_value", "extrapolate"),
+        kind=kwargs.pop("kind", "slinear"),
+        **kwargs
+        )
 
     try:
         ynew = f(level)
@@ -20,6 +24,7 @@ def find_intercept_1D(
         warnings.warn(text)
         if level < x.min():
             ynew = f(x.min())
+            print("NEEEEE:", ynew)
         else:
             ynew = f(x.max())
 
@@ -27,24 +32,20 @@ def find_intercept_1D(
 
 
 def find_intercept_2D(
-    x: np.ndarray, 
-    y: np.ndarray, 
-    z: np.ndarray, 
-    levels: Union[float, List[float]]=0.5
+    x: np.ndarray, y: np.ndarray, z: np.ndarray, levels: Union[float, List[float]] = 0.5
 ) -> Tuple[float, float]:
-    
     x_shape = x.shape[0]
     y_shape = y.shape[0]
     z = z.reshape((y_shape, x_shape))
-    
+
     if not isinstance(levels, list):
         levels = [levels]
-        
+
     cs = plt.contour(x, y, z, levels=levels)
     try:
         x_level, y_level = cs.collections[0].get_paths()[0].vertices.T
     except IndexError:
         x_level, y_level = np.inf, np.inf
     plt.close()
-        
+
     return np.min(x_level), np.min(y_level)

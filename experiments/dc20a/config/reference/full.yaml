@@ -21,5 +21,5 @@ data:
       - ${evaluation.resample_method}
       - ${evaluation.resample_aggregate}
       # SELECT REGION | TIME
-      - {_target_: "xarray.Dataset.sel", indexers: "${domain}", _partial_: True}
+      - ${preprocess.select}
       - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}

@@ -1,6 +1,59 @@
+# PreProcessing
 
+## AlongTrack Processing
 
-# Previous Results
+```bash
+# NADIR4 | ALONGTRACK
+python main.py stage=preprocess experiment=nadir4
+# SWOT1 | ALONGTRACK
+python main.py stage=preprocess experiment=swot1
+```
+
+## Gridded Pre-Processing
+
+```bash
+# NADIR4 | GRIDDED
+python main.py stage=preprocess experiment=nadir4 grid=natl60
+# SWOT1 | GRIDDED
+python main.py stage=preprocess experiment=swot1 grid=natl60
+```
+
+---
+
+# Results
+
+## Example Results 
+
+This uses a custom `.yaml` file where we can run the evaluation script.
+
+```bash
+python main.py stage=evaluation results=duacs_swot ++overwrite_results=True postprocess=relative_vorticity
+```
+
+```bash
+# MLP | NADIR
+python main.py stage=evaluation results=nerf_mlp_nadir ++overwrite_results=True postprocess=sea_surface_height ++csv_name=results_nerf
+# MLP | SWOTNADIR
+python main.py stage=evaluation results=nerf_mlp_swot ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# FFN - NADIR
+python main.py stage=evaluation results=nerf_ffn_nadir ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# FFN - SWOTNADIR
+python main.py stage=evaluation results=nerf_ffn_swot ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# SIREN - NADIR
+python main.py stage=evaluation results=nerf_siren_nadir ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+# SIREN - SWOTNADIR
+python main.py stage=evaluation results=nerf_siren_swot ++overwrite_results=False postprocess=sea_surface_height ++csv_name=results_nerf
+```
+
+## Current LeaderBoard 
+
+This provides the current leaderboard with these specific metrics for all of the evaluation datasets.
+
+```bash
+bash scripts/metrics.sh
+```
+
+## Previous Results
 
 Below we have some of the previous results
 

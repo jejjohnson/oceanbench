@@ -8,7 +8,12 @@ parts:
     chapters:
       - file: content/geoprocess/gridded_data.md
       - file: content/geoprocess/scaling.md
-      - file: content/geoprocess/physical_variables.md
+      - file: content/geoprocess/physical_variables
+  - caption: AlongTrack
+    chapters:
+      - file: content/alongtrack/AlongTrack
+      - file: content/alongtrack/AlongTrack_SWOT
+      - file: content/alongtrack/AlongTrack_Eval
   - caption: Machine Learning
     chapters:
       - file: content/ml/xrdataset
@@ -17,6 +22,9 @@ parts:
     chapters:
       - file: content/metrics/power_spectrum
       - file: content/metrics/power_spectrum_score
+  - caption: Visualization
+    chapters:
+      - file: content/viz/pixel_densities
   - caption: Data Challenges
     chapters:
       - file: content/data_challenges/dc20a
