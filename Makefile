@@ -59,8 +59,8 @@ test:  ## Test code using pytest.
 ##@ JupyterBook
 	
 jb_build: ## Build Jupyterbook
-	rm -rf jb/_build/
-	jupyter-book build jb --all
+	rm -rf jbook/_build/
+	jupyter-book build jbook --all
 
 jb_clean: ## Clean JupyterBook
-	jupyter-book clean jb
+	jupyter-book clean jbook

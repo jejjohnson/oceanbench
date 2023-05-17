@@ -71,8 +71,8 @@ pip install "git+https://github.com/jejjohnson/oceanbench.git"
 We can also clone the git repository
 
 ```bash
-git clone https://github.com/jejjohnson/jaxsw.git
-cd jaxsw
+git clone https://github.com/jejjohnson/oceanbench.git
+cd oceanbench
 ```
 
 #### Conda Environment (RECOMMENDED)
@@ -100,6 +100,25 @@ We can also install via `pip` as well
 
 ```bash
 pip install .
+```
+
+---
+## Conversion between `.ipynb` and `.py`
+
+Above examples are stored in [jbook/content](jbook/content) directory in the myst.md (`md`) format. Checkout [jupytext
+using-cli](https://jupytext.readthedocs.io/en/latest/using-cli.html) for more
+info.
+
+* To convert `example.md` to `example.ipynb`, run:
+
+```bash
+jupytext --to notebook example.md
+```
+
+* To convert `example.ipynb` to `example.md`, run:
+
+```bash
+jupytext --to myst example.ipynb
 ```
 
 
