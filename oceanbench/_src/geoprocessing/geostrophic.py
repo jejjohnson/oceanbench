@@ -129,7 +129,7 @@ def relative_vorticity(ds, variables: List[str] = ["u", "v"]):
     ds = ds.copy()
 
     ds["vort_r"] = geocalc.vorticity(
-        v=ds[variables[0]], u=ds[variables[1]], latitude=ds.lat, longitude=ds.lon
+        v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
     )
 
     ds["vort_r"].attrs["long_name"] = "Relative Vorticity"
@@ -155,8 +155,9 @@ def absolute_vorticity(ds, variables: List[str] = ["u", "v"]):
         ds (xr.Dataset): the xr.Dataset with the absolute vorticity
             ("vort_a")
     """
+    ds = ds.copy()
     ds["vort_a"] = geocalc.absolute_vorticity(
-        v=ds[variables[0]], u=ds[variables[1]], latitude=ds.lat, longitude=ds.lon
+        v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
     )
 
     ds["vort_a"].attrs["long_name"] = "Absolute Vorticity"
@@ -185,7 +186,7 @@ def divergence(ds, variables: List[str] = ["u", "v"]):
     ds = ds.copy()
 
     ds["div"] = geocalc.divergence(
-        v=ds[variables[0]], u=ds[variables[1]], latitude=ds.lat, longitude=ds.lon
+        v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
     )
 
     ds["div"].attrs["long_name"] = "Divergence"
@@ -273,7 +274,7 @@ def shear_strain(ds, variables: List[str] = ["u", "v"]):
     ds = ds.copy()
 
     ds["shear_strain"] = geocalc.shearing_deformation(
-        v=ds[variables[0]], u=ds[variables[1]], latitude=ds.lat, longitude=ds.lon
+        v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
     )
 
     ds["shear_strain"].attrs["long_name"] = "Shear Strain"
@@ -304,7 +305,7 @@ def tensor_strain(ds, variables: List[str] = ["u", "v"]):
     ds = ds.copy()
 
     ds["tensor_strain"] = geocalc.stretching_deformation(
-        v=ds[variables[0]], u=ds[variables[1]], latitude=ds.lat, longitude=ds.lon
+        v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
     )
 
     ds["tensor_strain"].attrs["long_name"] = "Tensor Strain"
@@ -334,7 +335,7 @@ def strain_magnitude(ds, variables: List[str] = ["u", "v"]):
     ds = ds.copy()
 
     ds["strain"] = geocalc.total_deformation(
-        v=ds[variables[0]], u=ds[variables[1]], latitude=ds.lat, longitude=ds.lon
+        v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
     )
 
     ds["strain"].attrs["long_name"] = "Strain"

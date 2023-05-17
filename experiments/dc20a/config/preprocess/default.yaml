@@ -1,0 +1,49 @@
+select:
+  _target_: "xarray.Dataset.sel"
+  _partial_: True
+  indexers:
+    lon:
+      _target_: "builtins.slice"
+      _args_: ["${domain.lon.min_val}", "${domain.lon.max_val}"]
+    lat:
+      _target_: "builtins.slice"
+      _args_: ["${domain.lat.min_val}", "${domain.lat.max_val}"]
+    time:
+      _target_: "builtins.slice"
+      _args_: ["${domain.time.min_val}", "${domain.time.max_val}"]
+  drop: True
+
+select_lon_where:
+  _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+  _partial_: True
+  variable: "lon"
+  min_val: ${domain.lon.min_val}
+  max_val: ${domain.lon.max_val}
+
+select_lat:
+  _target_: "builtins.slice"
+  _args_: ["${domain.lon.min_val}", "${domain.lon.max_val}"]
+
+select_lat_where:
+  _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+  _partial_: True
+  variable: "lat"
+  min_val: ${domain.lat.min_val}
+  max_val: ${domain.lat.max_val}
+
+select_time:
+  _target_: "xarray.Dataset.sel"
+  _partial_: True
+  indexers:
+    time:
+      _target_: "builtins.slice"
+      _args_: ["${domain.time.min_val}", "${domain.time.max_val}"]
+
+remove_swath_dimension:
+  _target_: "oceanbench._src.preprocessing.alongtrack.remove_swath_dimension"
+  _partial_: True
+  name: "nC"
+
+
+
+  

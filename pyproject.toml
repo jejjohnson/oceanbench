@@ -34,6 +34,10 @@ scipy = "^1.10.1"
 xesmf = "^0.7.1"
 xarray-dataclasses = "^1.5.0"
 cmake = ">=3.18.0,<3.19.0"
+numpy-groupies = "^0.9.20"
+pint-xarray = "^0.3"
+xrft = "^1.0.1"
+metpy = "^1.4.1"
 
 
 [tool.poetry.group.dev.dependencies]

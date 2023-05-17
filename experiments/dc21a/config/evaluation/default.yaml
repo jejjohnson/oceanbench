@@ -1,0 +1,19 @@
+nrmse_spacetime:
+    _target_: "oceanbench._src.metrics.stats.nrmse_ds"
+    _partial_: True
+    target: "ssh_interp"
+    reference: "ssh"
+    dim: ["time"]
+    
+nrmse_space:
+    _target_: "oceanbench._src.metrics.stats.rmse_ds"
+    _partial_: True
+    target: "ssh_interp"
+    reference: "ssh"
+    dim: null
+
+psd_score:
+  _target_: "oceanbench._src.metrics.power_spectrum.psd_welch_score"
+  _partial_: True
+  variable: "ssh_interp"
+  variable_ref: "ssh"

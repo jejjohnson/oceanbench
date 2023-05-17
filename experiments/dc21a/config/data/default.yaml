@@ -1,0 +1,7 @@
+alg: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_alg_phy_l3_20161201-20180131_285-315_23-53.nc"
+h2g: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_h2g_phy_l3_20161201-20180131_285-315_23-53.nc"
+j2g: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_j2g_phy_l3_20161201-20180131_285-315_23-53.nc"
+j2n: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_j2n_phy_l3_20161201-20180131_285-315_23-53.nc"
+j3: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_j3_phy_l3_20161201-20180131_285-315_23-53.nc"
+s2a: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train/dt_gulfstream_s3a_phy_l3_20161201-20180131_285-315_23-53.nc"
+c2: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/test/dt_gulfstream_c2_phy_l3_20161201-20180131_285-315_23-53.nc"

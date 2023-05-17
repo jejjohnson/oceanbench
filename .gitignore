@@ -132,7 +132,7 @@ dmypy.json
 datasets/*
 !datasets/.gitkeep
 *.npz
-outputs/*
+\outputs/*
 \wandb/
 \checkpoints/
 notebooks/*.gif
