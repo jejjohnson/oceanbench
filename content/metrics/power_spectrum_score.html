@@ -138,14 +138,8 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    
-    
-      
-    
-    
-    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
+    <p class="title logo__title">OceanBench</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -322,6 +316,23 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       <li><a href="../../_sources/content/metrics/power_spectrum_score.ipynb" target="_blank"
+   class="btn btn-sm btn-download-notebook-button dropdown-item"
+   title="Download notebook file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="../../_sources/content/metrics/power_spectrum_score.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -331,7 +342,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.ipynb</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -458,7 +469,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div></blockquote>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autoroot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autoroot</span>
 <span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">tp</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -478,45 +489,34 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 <span class="n">sns</span><span class="o">.</span><span class="n">reset_defaults</span><span class="p">()</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="s2">&quot;talk&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
 
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ls<span class="w"> </span>/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadir_GF_GF.nc
-2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadirswot_GF_GF.nc
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!ls /gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet/2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadirswot_GF_GF.nc&quot;</span>
-<span class="c1"># file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/MIOST/2020a_SSH_mapping_NATL60_MIOST_swot_en_j1_tpn_g2.nc&quot;</span>
-<span class="c1"># file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/DUACS/ssh_DUACS_swot_4nadir.nc&quot;</span>
-<span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/BFNQG/2020a_SSH_mapping_NATL60_BFN_Steady_State_QG1L_swot_en_j1_tpn_g2.nc&quot;</span>
-<span class="n">file_ref</span> <span class="o">=</span> <span class="s2">&quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/natl60/NATL60-CJM165_GULFSTREAM_ssh_y2013.1y.nc&quot;</span>
-<span class="o">!</span>ls<span class="w"> </span><span class="nv">$file</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/BFNQG/2020a_SSH_mapping_NATL60_BFN_Steady_State_QG1L_swot_en_j1_tpn_g2.nc
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet/2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadirswot_GF_GF.nc&quot;
+# file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/MIOST/2020a_SSH_mapping_NATL60_MIOST_swot_en_j1_tpn_g2.nc&quot;
+# file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/DUACS/ssh_DUACS_swot_4nadir.nc&quot;
+file = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/BFNQG/2020a_SSH_mapping_NATL60_BFN_Steady_State_QG1L_swot_en_j1_tpn_g2.nc&quot;
+file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/natl60/NATL60-CJM165_GULFSTREAM_ssh_y2013.1y.nc&quot;
+!ls $file
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Domain for analysis: Gulfstream</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Domain for analysis: Gulfstream</span>
 <span class="c1"># time_min = numpy.datetime64(&#39;2012-10-22&#39;)                # domain min time</span>
 <span class="c1"># time_max = numpy.datetime64(&#39;2012-12-03&#39;)                # domain max time</span>
 <span class="c1"># lon_min = -64.975                                        # domain min lon</span>
@@ -529,7 +529,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">open_ssh_results</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh_mod&quot;</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">open_ssh_results</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh_mod&quot;</span><span class="p">):</span>
     
     <span class="n">da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">decode_times</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     
@@ -566,7 +566,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">correct_names</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">correct_names</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
     
     <span class="n">da</span><span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Sea Surface Height&quot;</span>
     <span class="n">da</span><span class="p">[</span><span class="s2">&quot;ssh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sea_surface_height&quot;</span>
@@ -589,7 +589,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da_ref</span> <span class="o">=</span> <span class="n">open_ssh_reference</span><span class="p">(</span><span class="n">file_ref</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da_ref</span> <span class="o">=</span> <span class="n">open_ssh_reference</span><span class="p">(</span><span class="n">file_ref</span><span class="p">)</span>
 <span class="n">da</span> <span class="o">=</span> <span class="n">open_ssh_results</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;gssh&quot;</span><span class="p">)</span>
 
 <span class="n">da_ref</span> <span class="o">=</span> <span class="n">correct_names</span><span class="p">(</span><span class="n">da_ref</span><span class="p">)</span>
@@ -602,14 +602,14 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 <h2>Regridding<a class="headerlink" href="#regridding" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.gridding</span> <span class="kn">import</span> <span class="n">grid_to_regular_grid</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.gridding</span> <span class="kn">import</span> <span class="n">grid_to_regular_grid</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da</span> <span class="o">=</span> <span class="n">grid_to_regular_grid</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da</span> <span class="o">=</span> <span class="n">grid_to_regular_grid</span><span class="p">(</span>
     <span class="n">src_grid_ds</span><span class="o">=</span><span class="n">da</span><span class="o">.</span><span class="n">pint</span><span class="o">.</span><span class="n">dequantify</span><span class="p">(),</span>
     <span class="n">tgt_grid_ds</span><span class="o">=</span><span class="n">da_ref</span><span class="o">.</span><span class="n">pint</span><span class="o">.</span><span class="n">dequantify</span><span class="p">(),</span> <span class="n">keep_attrs</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
@@ -617,521 +617,20 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
-
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body[data-theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-index-preview {
-  grid-column: 2 / 5;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data,
-.xr-index-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data,
-.xr-index-data-in:checked ~ .xr-index-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-index-name div,
-.xr-index-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data,
-.xr-index-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2,
-.xr-no-icon {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:  (time: 42, lat: 199, lon: 199)
-Coordinates:
-  * time     (time) datetime64[ns] 2012-10-22 2012-10-23 ... 2012-12-02
-  * lon      (lon) float64 -64.95 -64.9 -64.85 -64.8 ... -55.15 -55.1 -55.05
-  * lat      (lat) float64 33.05 33.1 33.15 33.2 33.25 ... 42.8 42.85 42.9 42.95
-Data variables:
-    ssh      (time, lat, lon) float64 nan 0.649 0.6539 ... -0.1912 -0.195
-Attributes:
-    regrid_method:  bilinear</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-4f0ded7f-9bf9-4694-96c4-b40328be3669' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-4f0ded7f-9bf9-4694-96c4-b40328be3669' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>time</span>: 42</li><li><span class='xr-has-index'>lat</span>: 199</li><li><span class='xr-has-index'>lon</span>: 199</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-a3f45c46-acb1-47a3-a482-73130f99f41f' class='xr-section-summary-in' type='checkbox'  checked><label for='section-a3f45c46-acb1-47a3-a482-73130f99f41f' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>time</span></div><div class='xr-var-dims'>(time)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>2012-10-22 ... 2012-12-02</div><input id='attrs-2468cba2-daba-4f5e-ac0b-56daa1d28ab8' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-2468cba2-daba-4f5e-ac0b-56daa1d28ab8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-69f580c9-e09c-46ad-97f4-9011cd9fda4d' class='xr-var-data-in' type='checkbox'><label for='data-69f580c9-e09c-46ad-97f4-9011cd9fda4d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;2012-10-22T00:00:00.000000000&#x27;, &#x27;2012-10-23T00:00:00.000000000&#x27;,
-       &#x27;2012-10-24T00:00:00.000000000&#x27;, &#x27;2012-10-25T00:00:00.000000000&#x27;,
-       &#x27;2012-10-26T00:00:00.000000000&#x27;, &#x27;2012-10-27T00:00:00.000000000&#x27;,
-       &#x27;2012-10-28T00:00:00.000000000&#x27;, &#x27;2012-10-29T00:00:00.000000000&#x27;,
-       &#x27;2012-10-30T00:00:00.000000000&#x27;, &#x27;2012-10-31T00:00:00.000000000&#x27;,
-       &#x27;2012-11-01T00:00:00.000000000&#x27;, &#x27;2012-11-02T00:00:00.000000000&#x27;,
-       &#x27;2012-11-03T00:00:00.000000000&#x27;, &#x27;2012-11-04T00:00:00.000000000&#x27;,
-       &#x27;2012-11-05T00:00:00.000000000&#x27;, &#x27;2012-11-06T00:00:00.000000000&#x27;,
-       &#x27;2012-11-07T00:00:00.000000000&#x27;, &#x27;2012-11-08T00:00:00.000000000&#x27;,
-       &#x27;2012-11-09T00:00:00.000000000&#x27;, &#x27;2012-11-10T00:00:00.000000000&#x27;,
-       &#x27;2012-11-11T00:00:00.000000000&#x27;, &#x27;2012-11-12T00:00:00.000000000&#x27;,
-       &#x27;2012-11-13T00:00:00.000000000&#x27;, &#x27;2012-11-14T00:00:00.000000000&#x27;,
-       &#x27;2012-11-15T00:00:00.000000000&#x27;, &#x27;2012-11-16T00:00:00.000000000&#x27;,
-       &#x27;2012-11-17T00:00:00.000000000&#x27;, &#x27;2012-11-18T00:00:00.000000000&#x27;,
-       &#x27;2012-11-19T00:00:00.000000000&#x27;, &#x27;2012-11-20T00:00:00.000000000&#x27;,
-       &#x27;2012-11-21T00:00:00.000000000&#x27;, &#x27;2012-11-22T00:00:00.000000000&#x27;,
-       &#x27;2012-11-23T00:00:00.000000000&#x27;, &#x27;2012-11-24T00:00:00.000000000&#x27;,
-       &#x27;2012-11-25T00:00:00.000000000&#x27;, &#x27;2012-11-26T00:00:00.000000000&#x27;,
-       &#x27;2012-11-27T00:00:00.000000000&#x27;, &#x27;2012-11-28T00:00:00.000000000&#x27;,
-       &#x27;2012-11-29T00:00:00.000000000&#x27;, &#x27;2012-11-30T00:00:00.000000000&#x27;,
-       &#x27;2012-12-01T00:00:00.000000000&#x27;, &#x27;2012-12-02T00:00:00.000000000&#x27;],
-      dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lon</span></div><div class='xr-var-dims'>(lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>-64.95 -64.9 ... -55.1 -55.05</div><input id='attrs-1e017301-21a6-47fa-b0a0-d96ee96d514c' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-1e017301-21a6-47fa-b0a0-d96ee96d514c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-df5c7a5c-da4c-40cb-bab5-ad822b7df57a' class='xr-var-data-in' type='checkbox'><label for='data-df5c7a5c-da4c-40cb-bab5-ad822b7df57a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([-64.95, -64.9 , -64.85, -64.8 , -64.75, -64.7 , -64.65, -64.6 , -64.55,
-       -64.5 , -64.45, -64.4 , -64.35, -64.3 , -64.25, -64.2 , -64.15, -64.1 ,
-       -64.05, -64.  , -63.95, -63.9 , -63.85, -63.8 , -63.75, -63.7 , -63.65,
-       -63.6 , -63.55, -63.5 , -63.45, -63.4 , -63.35, -63.3 , -63.25, -63.2 ,
-       -63.15, -63.1 , -63.05, -63.  , -62.95, -62.9 , -62.85, -62.8 , -62.75,
-       -62.7 , -62.65, -62.6 , -62.55, -62.5 , -62.45, -62.4 , -62.35, -62.3 ,
-       -62.25, -62.2 , -62.15, -62.1 , -62.05, -62.  , -61.95, -61.9 , -61.85,
-       -61.8 , -61.75, -61.7 , -61.65, -61.6 , -61.55, -61.5 , -61.45, -61.4 ,
-       -61.35, -61.3 , -61.25, -61.2 , -61.15, -61.1 , -61.05, -61.  , -60.95,
-       -60.9 , -60.85, -60.8 , -60.75, -60.7 , -60.65, -60.6 , -60.55, -60.5 ,
-       -60.45, -60.4 , -60.35, -60.3 , -60.25, -60.2 , -60.15, -60.1 , -60.05,
-       -60.  , -59.95, -59.9 , -59.85, -59.8 , -59.75, -59.7 , -59.65, -59.6 ,
-       -59.55, -59.5 , -59.45, -59.4 , -59.35, -59.3 , -59.25, -59.2 , -59.15,
-       -59.1 , -59.05, -59.  , -58.95, -58.9 , -58.85, -58.8 , -58.75, -58.7 ,
-       -58.65, -58.6 , -58.55, -58.5 , -58.45, -58.4 , -58.35, -58.3 , -58.25,
-       -58.2 , -58.15, -58.1 , -58.05, -58.  , -57.95, -57.9 , -57.85, -57.8 ,
-       -57.75, -57.7 , -57.65, -57.6 , -57.55, -57.5 , -57.45, -57.4 , -57.35,
-       -57.3 , -57.25, -57.2 , -57.15, -57.1 , -57.05, -57.  , -56.95, -56.9 ,
-       -56.85, -56.8 , -56.75, -56.7 , -56.65, -56.6 , -56.55, -56.5 , -56.45,
-       -56.4 , -56.35, -56.3 , -56.25, -56.2 , -56.15, -56.1 , -56.05, -56.  ,
-       -55.95, -55.9 , -55.85, -55.8 , -55.75, -55.7 , -55.65, -55.6 , -55.55,
-       -55.5 , -55.45, -55.4 , -55.35, -55.3 , -55.25, -55.2 , -55.15, -55.1 ,
-       -55.05])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>lat</span></div><div class='xr-var-dims'>(lat)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>33.05 33.1 33.15 ... 42.9 42.95</div><input id='attrs-7ea3794b-54ce-485d-b9e4-9800d15e6f8a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7ea3794b-54ce-485d-b9e4-9800d15e6f8a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d3aa0716-43ef-4f35-9583-2e3988f26ebb' class='xr-var-data-in' type='checkbox'><label for='data-d3aa0716-43ef-4f35-9583-2e3988f26ebb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Latitude</dd><dt><span>standard_name :</span></dt><dd>latitude</dd><dt><span>units :</span></dt><dd>degrees_north</dd></dl></div><div class='xr-var-data'><pre>array([33.05, 33.1 , 33.15, 33.2 , 33.25, 33.3 , 33.35, 33.4 , 33.45, 33.5 ,
-       33.55, 33.6 , 33.65, 33.7 , 33.75, 33.8 , 33.85, 33.9 , 33.95, 34.  ,
-       34.05, 34.1 , 34.15, 34.2 , 34.25, 34.3 , 34.35, 34.4 , 34.45, 34.5 ,
-       34.55, 34.6 , 34.65, 34.7 , 34.75, 34.8 , 34.85, 34.9 , 34.95, 35.  ,
-       35.05, 35.1 , 35.15, 35.2 , 35.25, 35.3 , 35.35, 35.4 , 35.45, 35.5 ,
-       35.55, 35.6 , 35.65, 35.7 , 35.75, 35.8 , 35.85, 35.9 , 35.95, 36.  ,
-       36.05, 36.1 , 36.15, 36.2 , 36.25, 36.3 , 36.35, 36.4 , 36.45, 36.5 ,
-       36.55, 36.6 , 36.65, 36.7 , 36.75, 36.8 , 36.85, 36.9 , 36.95, 37.  ,
-       37.05, 37.1 , 37.15, 37.2 , 37.25, 37.3 , 37.35, 37.4 , 37.45, 37.5 ,
-       37.55, 37.6 , 37.65, 37.7 , 37.75, 37.8 , 37.85, 37.9 , 37.95, 38.  ,
-       38.05, 38.1 , 38.15, 38.2 , 38.25, 38.3 , 38.35, 38.4 , 38.45, 38.5 ,
-       38.55, 38.6 , 38.65, 38.7 , 38.75, 38.8 , 38.85, 38.9 , 38.95, 39.  ,
-       39.05, 39.1 , 39.15, 39.2 , 39.25, 39.3 , 39.35, 39.4 , 39.45, 39.5 ,
-       39.55, 39.6 , 39.65, 39.7 , 39.75, 39.8 , 39.85, 39.9 , 39.95, 40.  ,
-       40.05, 40.1 , 40.15, 40.2 , 40.25, 40.3 , 40.35, 40.4 , 40.45, 40.5 ,
-       40.55, 40.6 , 40.65, 40.7 , 40.75, 40.8 , 40.85, 40.9 , 40.95, 41.  ,
-       41.05, 41.1 , 41.15, 41.2 , 41.25, 41.3 , 41.35, 41.4 , 41.45, 41.5 ,
-       41.55, 41.6 , 41.65, 41.7 , 41.75, 41.8 , 41.85, 41.9 , 41.95, 42.  ,
-       42.05, 42.1 , 42.15, 42.2 , 42.25, 42.3 , 42.35, 42.4 , 42.45, 42.5 ,
-       42.55, 42.6 , 42.65, 42.7 , 42.75, 42.8 , 42.85, 42.9 , 42.95])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-d5210377-bafb-49ca-868a-8e13e79ba0d5' class='xr-section-summary-in' type='checkbox'  checked><label for='section-d5210377-bafb-49ca-868a-8e13e79ba0d5' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>ssh</span></div><div class='xr-var-dims'>(time, lat, lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>nan 0.649 0.6539 ... -0.1912 -0.195</div><input id='attrs-6926c214-8811-4028-8d4c-12c31f60eb5a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-6926c214-8811-4028-8d4c-12c31f60eb5a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-19321029-2863-44c3-ac7b-2e0838b8fe3f' class='xr-var-data-in' type='checkbox'><label for='data-19321029-2863-44c3-ac7b-2e0838b8fe3f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Sea Surface Height</dd><dt><span>standard_name :</span></dt><dd>sea_surface_height</dd></dl></div><div class='xr-var-data'><pre>array([[[        nan,  0.64896766,  0.65386325, ...,  0.58350691,
-          0.58054009,  0.5771475 ],
-        [        nan,  0.63683988,  0.64172111, ...,  0.58707003,
-          0.58423661,  0.58103026],
-        [        nan,  0.62311971,  0.62795392, ...,  0.58996796,
-          0.58728756,  0.58425511],
-        ...,
-        [        nan,  0.02357409,  0.02562892, ..., -0.02443218,
-         -0.03185256, -0.03908352],
-        [        nan,  0.02267658,  0.02505676, ..., -0.03012799,
-         -0.0371178 , -0.04424323],
-        [        nan,  0.02103319,  0.02363149, ..., -0.03561776,
-         -0.04213252, -0.04896706]],
-
-       [[        nan,  0.65178777,  0.65609471, ...,  0.58648875,
-          0.58347994,  0.58002455],
-        [        nan,  0.6392562 ,  0.64342647, ...,  0.59050142,
-          0.58761805,  0.58433752],
-        [        nan,  0.6255556 ,  0.62960013, ...,  0.59382755,
-          0.59110989,  0.587997  ],
-...
-        [        nan, -0.04131118, -0.04125857, ..., -0.18647453,
-         -0.19053181, -0.19428644],
-        [        nan, -0.04532764, -0.04510061, ..., -0.18623131,
-         -0.19049566, -0.19450762],
-        [        nan, -0.05009588, -0.04985511, ..., -0.18552551,
-         -0.18984843, -0.19394369]],
-
-       [[        nan,  0.39077599,  0.37663627, ...,  0.63326009,
-          0.63590384,  0.63889568],
-        [        nan,  0.39053123,  0.37588796, ...,  0.63738748,
-          0.64028007,  0.64338121],
-        [        nan,  0.39412019,  0.37954071, ...,  0.64221152,
-          0.64538995,  0.64869976],
-        ...,
-        [        nan, -0.0444777 , -0.04395863, ..., -0.18748181,
-         -0.19127553, -0.19472222],
-        [        nan, -0.04885385, -0.04812324, ..., -0.18761555,
-         -0.19161609, -0.19528897],
-        [        nan, -0.05360681, -0.05282102, ..., -0.18717186,
-         -0.19124049, -0.19496832]]])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-0f9bd14d-db89-4b65-968d-22e1fbc2dab1' class='xr-section-summary-in' type='checkbox'  ><label for='section-0f9bd14d-db89-4b65-968d-22e1fbc2dab1' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>time</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-bc6c8096-5bff-4583-8e7d-101e698f7b4a' class='xr-index-data-in' type='checkbox'/><label for='index-bc6c8096-5bff-4583-8e7d-101e698f7b4a' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(DatetimeIndex([&#x27;2012-10-22&#x27;, &#x27;2012-10-23&#x27;, &#x27;2012-10-24&#x27;, &#x27;2012-10-25&#x27;,
-               &#x27;2012-10-26&#x27;, &#x27;2012-10-27&#x27;, &#x27;2012-10-28&#x27;, &#x27;2012-10-29&#x27;,
-               &#x27;2012-10-30&#x27;, &#x27;2012-10-31&#x27;, &#x27;2012-11-01&#x27;, &#x27;2012-11-02&#x27;,
-               &#x27;2012-11-03&#x27;, &#x27;2012-11-04&#x27;, &#x27;2012-11-05&#x27;, &#x27;2012-11-06&#x27;,
-               &#x27;2012-11-07&#x27;, &#x27;2012-11-08&#x27;, &#x27;2012-11-09&#x27;, &#x27;2012-11-10&#x27;,
-               &#x27;2012-11-11&#x27;, &#x27;2012-11-12&#x27;, &#x27;2012-11-13&#x27;, &#x27;2012-11-14&#x27;,
-               &#x27;2012-11-15&#x27;, &#x27;2012-11-16&#x27;, &#x27;2012-11-17&#x27;, &#x27;2012-11-18&#x27;,
-               &#x27;2012-11-19&#x27;, &#x27;2012-11-20&#x27;, &#x27;2012-11-21&#x27;, &#x27;2012-11-22&#x27;,
-               &#x27;2012-11-23&#x27;, &#x27;2012-11-24&#x27;, &#x27;2012-11-25&#x27;, &#x27;2012-11-26&#x27;,
-               &#x27;2012-11-27&#x27;, &#x27;2012-11-28&#x27;, &#x27;2012-11-29&#x27;, &#x27;2012-11-30&#x27;,
-               &#x27;2012-12-01&#x27;, &#x27;2012-12-02&#x27;],
-              dtype=&#x27;datetime64[ns]&#x27;, name=&#x27;time&#x27;, freq=&#x27;D&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>lon</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-eb4cc34f-9c6f-4457-a2df-2943fe66e0a9' class='xr-index-data-in' type='checkbox'/><label for='index-eb4cc34f-9c6f-4457-a2df-2943fe66e0a9' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Float64Index([             -64.95,               -64.9,  -64.85000000000001,
-               -64.80000000000001,  -64.75000000000001,  -64.70000000000002,
-               -64.65000000000002,  -64.60000000000002,  -64.55000000000003,
-               -64.50000000000003,
-              ...
-               -55.50000000000054,  -55.45000000000054, -55.400000000000546,
-               -55.35000000000055,  -55.30000000000055, -55.250000000000554,
-               -55.20000000000056,  -55.15000000000056,  -55.10000000000056,
-              -55.050000000000566],
-             dtype=&#x27;float64&#x27;, name=&#x27;lon&#x27;, length=199))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>lat</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-3586464b-8222-44e1-9322-18621e79947c' class='xr-index-data-in' type='checkbox'/><label for='index-3586464b-8222-44e1-9322-18621e79947c' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Float64Index([             33.05, 33.099999999999994,  33.14999999999999,
-               33.19999999999999, 33.249999999999986,  33.29999999999998,
-               33.34999999999998,  33.39999999999998, 33.449999999999974,
-               33.49999999999997,
-              ...
-               42.49999999999946,  42.54999999999946, 42.599999999999454,
-               42.64999999999945,  42.69999999999945, 42.749999999999446,
-               42.79999999999944,  42.84999999999944,  42.89999999999944,
-              42.949999999999434],
-             dtype=&#x27;float64&#x27;, name=&#x27;lat&#x27;, length=199))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-a6d7cd1a-8a33-4a4d-9a8b-fe9e72e8c7a4' class='xr-section-summary-in' type='checkbox'  checked><label for='section-a6d7cd1a-8a33-4a4d-9a8b-fe9e72e8c7a4' class='xr-section-summary' >Attributes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>regrid_method :</span></dt><dd>bilinear</dd></dl></div></li></ul></div></div></div></div>
 </div>
 <section id="interpolate-nans">
 <h3>Interpolate NANs<a class="headerlink" href="#interpolate-nans" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.interpolate</span> <span class="kn">import</span> <span class="n">fillnan_gauss_seidel</span>
-
-
-<span class="n">da</span> <span class="o">=</span> <span class="n">fillnan_gauss_seidel</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="s2">&quot;ssh&quot;</span><span class="p">)</span>
-<span class="n">da_ref</span> <span class="o">=</span> <span class="n">fillnan_gauss_seidel</span><span class="p">(</span><span class="n">da_ref</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="s2">&quot;ssh&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.interpolate</span> <span class="kn">import</span> <span class="n">fillnans</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da</span> <span class="o">=</span> <span class="n">fillnans</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;slinear&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
+<span class="n">da_ref</span> <span class="o">=</span> <span class="n">fillnans</span><span class="p">(</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;slinear&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1141,7 +640,7 @@ Attributes:
 <h3>Units<a class="headerlink" href="#units" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_units</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_units</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
     <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">pint</span><span class="o">.</span><span class="n">quantify</span><span class="p">(</span>
         <span class="p">{</span><span class="s2">&quot;ssh&quot;</span><span class="p">:</span> <span class="s2">&quot;meter&quot;</span><span class="p">,</span> 
          <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="s2">&quot;degrees_east&quot;</span><span class="p">,</span> 
@@ -1156,7 +655,7 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da</span> <span class="o">=</span> <span class="n">add_units</span><span class="p">(</span><span class="n">da</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da</span> <span class="o">=</span> <span class="n">add_units</span><span class="p">(</span><span class="n">da</span><span class="p">)</span>
 <span class="n">da_ref</span> <span class="o">=</span> <span class="n">add_units</span><span class="p">(</span><span class="n">da_ref</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1172,7 +671,7 @@ Attributes:
 <p>It is often more useful to have things in meters instead of degrees. The units are more meaningful and easier to interpret. So we can do a simple degree to meters transformation included in the library.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.spatial</span> <span class="kn">import</span> <span class="n">latlon_deg2m</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.spatial</span> <span class="kn">import</span> <span class="n">latlon_deg2m</span>
 <span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.temporal</span> <span class="kn">import</span> <span class="n">time_rescale</span>
 </pre></div>
 </div>
@@ -1180,7 +679,7 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="s2">&quot;2012-10-22&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="s2">&quot;2012-10-22&quot;</span>
 <span class="n">freq_dt</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">freq_unit</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span>
 
@@ -1201,7 +700,7 @@ Attributes:
 <h2>Spectral Domain<a class="headerlink" href="#spectral-domain" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rmse_da</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rmse_da</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">((</span><span class="n">da</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">-</span> <span class="n">da_ref</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
 
 
@@ -1218,36 +717,21 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rmse_da</span><span class="p">(</span><span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.03774872796061978
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rmse_da</span><span class="p">(</span><span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">nrmse_da</span><span class="p">(</span><span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.93507747475151
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">nrmse_da</span><span class="p">(</span><span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">nrmse_da</span><span class="p">(</span><span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.014601675884082942
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">nrmse_da</span><span class="p">(</span><span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1257,7 +741,7 @@ Attributes:
 <h3>Isotropic Assumption<a class="headerlink" href="#isotropic-assumption" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics</span> <span class="kn">import</span> <span class="n">power_spectrum</span> <span class="k">as</span> <span class="n">psdcalc</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics</span> <span class="kn">import</span> <span class="n">power_spectrum</span> <span class="k">as</span> <span class="n">psdcalc</span>
 <span class="kn">from</span> <span class="nn">oceanbench._src.preprocessing.mean</span> <span class="kn">import</span> <span class="n">xr_cond_average</span>
 </pre></div>
 </div>
@@ -1265,7 +749,7 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_ref</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_isotropic</span><span class="p">(</span><span class="n">da_ref</span><span class="p">,</span> <span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_ref</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_isotropic</span><span class="p">(</span><span class="n">da_ref</span><span class="p">,</span> <span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">])</span>
 <span class="n">da_psd_ref</span> <span class="o">=</span> <span class="n">xr_cond_average</span><span class="p">(</span><span class="n">da_psd_ref</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">da_psd</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_isotropic</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">])</span>
@@ -1279,7 +763,7 @@ Attributes:
 <h3>Plots<a class="headerlink" href="#plots" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDIsotropic</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDIsotropic</span><span class="p">:</span>
         
     <span class="k">def</span> <span class="nf">init_fig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1350,7 +834,7 @@ Attributes:
 <h4>Wavenumber + Wavelength<a class="headerlink" href="#wavenumber-wavelength" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDIsotropic</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDIsotropic</span><span class="p">()</span>
 <span class="n">psd_iso_plot</span><span class="o">.</span><span class="n">init_fig</span><span class="p">()</span>
 <span class="n">psd_iso_plot</span><span class="o">.</span><span class="n">plot_both</span><span class="p">(</span>
     <span class="n">da_psd_ref</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span>
@@ -1370,9 +854,6 @@ Attributes:
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../../_images/e6a54c2435a8b49986750ad4a16bcdadbca754470b37b5e11a87ff853e9c8239.png" src="../../_images/e6a54c2435a8b49986750ad4a16bcdadbca754470b37b5e11a87ff853e9c8239.png" />
-</div>
 </div>
 </section>
 </section>
@@ -1384,7 +865,7 @@ Attributes:
 \]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics</span> <span class="kn">import</span> <span class="n">power_spectrum</span> <span class="k">as</span> <span class="n">psdcalc</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics</span> <span class="kn">import</span> <span class="n">power_spectrum</span> <span class="k">as</span> <span class="n">psdcalc</span>
 <span class="kn">from</span> <span class="nn">oceanbench._src.metrics.utils</span> <span class="kn">import</span> <span class="n">find_intercept_1D</span><span class="p">,</span> <span class="n">find_intercept_2D</span>
 </pre></div>
 </div>
@@ -1392,7 +873,7 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_score_iso</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_isotropic_score</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_score_iso</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_isotropic_score</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> 
     <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> 
     <span class="n">psd_dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">],</span>
@@ -1404,7 +885,7 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDScoreIsotropic</span><span class="p">(</span><span class="n">PlotPSDIsotropic</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDScoreIsotropic</span><span class="p">(</span><span class="n">PlotPSDIsotropic</span><span class="p">):</span>
     
     <span class="k">def</span> <span class="nf">_add_score</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1472,7 +953,7 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDScoreIsotropic</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDScoreIsotropic</span><span class="p">()</span>
 <span class="n">psd_iso_plot</span><span class="o">.</span><span class="n">init_fig</span><span class="p">()</span>
 <span class="n">psd_iso_plot</span><span class="o">.</span><span class="n">plot_score</span><span class="p">(</span>
     <span class="n">da_psd_score_iso</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span>
@@ -1488,19 +969,10 @@ Attributes:
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x14f956b0ac50&gt;
-</pre></div>
-</div>
-<img alt="../../_images/7e0c951b0bf25a731764d06936df4bbae27d907c2332704fed154431863dc6cd.png" src="../../_images/7e0c951b0bf25a731764d06936df4bbae27d907c2332704fed154431863dc6cd.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">space_rs</span> <span class="o">=</span> <span class="n">find_intercept_1D</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">space_rs</span> <span class="o">=</span> <span class="n">find_intercept_1D</span><span class="p">(</span>
     <span class="n">y</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">da_psd_score_iso</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">freq_r</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
     <span class="n">x</span><span class="o">=</span><span class="n">da_psd_score_iso</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mf">0.5</span>
@@ -1511,14 +983,8 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(Isotropic) Spatial Resolved Scale: </span><span class="si">{</span><span class="n">space_rs</span><span class="o">/</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [km]&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(Isotropic) Spatial Resolved Scale: </span><span class="si">{</span><span class="n">space_rs</span><span class="o">/</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [km]&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(Isotropic) Spatial Resolved Scale: </span><span class="si">{</span><span class="n">space_rs</span><span class="o">/</span><span class="mf">1e3</span><span class="o">/</span><span class="mi">111</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [degrees]&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Isotropic) Spatial Resolved Scale: 70.43 [km]
-(Isotropic) Spatial Resolved Scale: 0.63 [degrees]
 </pre></div>
 </div>
 </div>
@@ -1530,7 +996,7 @@ Attributes:
 <h4>Time vs Longitude<a class="headerlink" href="#time-vs-longitude" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># frequency dims</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># frequency dims</span>
 <span class="n">da_ref_psd_st</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_spacetime</span><span class="p">(</span><span class="n">da_ref</span><span class="p">,</span> <span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">])</span>
 <span class="n">da_psd_st</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_spacetime</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="s2">&quot;ssh&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">])</span>
 
@@ -1544,475 +1010,14 @@ Attributes:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_st</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_st</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
-
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body[data-theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-index-preview {
-  grid-column: 2 / 5;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data,
-.xr-index-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data,
-.xr-index-data-in:checked ~ .xr-index-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-index-name div,
-.xr-index-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data,
-.xr-index-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2,
-.xr-no-icon {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:    (freq_time: 20, freq_lon: 99)
-Coordinates:
-  * freq_time  (freq_time) float64 0.02381 0.04762 0.07143 ... 0.4524 0.4762
-  * freq_lon   (freq_lon) float64 9.038e-07 1.808e-06 ... 8.858e-05 8.948e-05
-Data variables:
-    ssh        (freq_time, freq_lon) float64 4.015e+04 6.262e+04 ... 4.992e-07</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-3eae4433-efe2-4a12-8ad2-53d73aae8240' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-3eae4433-efe2-4a12-8ad2-53d73aae8240' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>freq_time</span>: 20</li><li><span class='xr-has-index'>freq_lon</span>: 99</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-7ae7669a-fc6c-4c64-8de4-d49604884c95' class='xr-section-summary-in' type='checkbox'  checked><label for='section-7ae7669a-fc6c-4c64-8de4-d49604884c95' class='xr-section-summary' >Coordinates: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>freq_time</span></div><div class='xr-var-dims'>(freq_time)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.02381 0.04762 ... 0.4524 0.4762</div><input id='attrs-93df6b67-5db4-430c-9581-bcd1f97b6dd3' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-93df6b67-5db4-430c-9581-bcd1f97b6dd3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-50b0e807-6ec4-4c56-92d4-c03dc29681db' class='xr-var-data-in' type='checkbox'><label for='data-50b0e807-6ec4-4c56-92d4-c03dc29681db' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>spacing :</span></dt><dd>0.023809523809523836</dd></dl></div><div class='xr-var-data'><pre>array([0.02381 , 0.047619, 0.071429, 0.095238, 0.119048, 0.142857, 0.166667,
-       0.190476, 0.214286, 0.238095, 0.261905, 0.285714, 0.309524, 0.333333,
-       0.357143, 0.380952, 0.404762, 0.428571, 0.452381, 0.47619 ])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>freq_lon</span></div><div class='xr-var-dims'>(freq_lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>9.038e-07 1.808e-06 ... 8.948e-05</div><input id='attrs-d20f98c6-3709-4bbd-9967-f86240bd6366' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d20f98c6-3709-4bbd-9967-f86240bd6366' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f9ea54ac-a764-4729-8522-4ec705349bb7' class='xr-var-data-in' type='checkbox'><label for='data-f9ea54ac-a764-4729-8522-4ec705349bb7' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>spacing :</span></dt><dd>9.038412355727123e-07</dd></dl></div><div class='xr-var-data'><pre>array([9.038412e-07, 1.807682e-06, 2.711524e-06, 3.615365e-06, 4.519206e-06,
-       5.423047e-06, 6.326889e-06, 7.230730e-06, 8.134571e-06, 9.038412e-06,
-       9.942254e-06, 1.084609e-05, 1.174994e-05, 1.265378e-05, 1.355762e-05,
-       1.446146e-05, 1.536530e-05, 1.626914e-05, 1.717298e-05, 1.807682e-05,
-       1.898067e-05, 1.988451e-05, 2.078835e-05, 2.169219e-05, 2.259603e-05,
-       2.349987e-05, 2.440371e-05, 2.530755e-05, 2.621140e-05, 2.711524e-05,
-       2.801908e-05, 2.892292e-05, 2.982676e-05, 3.073060e-05, 3.163444e-05,
-       3.253828e-05, 3.344213e-05, 3.434597e-05, 3.524981e-05, 3.615365e-05,
-       3.705749e-05, 3.796133e-05, 3.886517e-05, 3.976901e-05, 4.067286e-05,
-       4.157670e-05, 4.248054e-05, 4.338438e-05, 4.428822e-05, 4.519206e-05,
-       4.609590e-05, 4.699974e-05, 4.790359e-05, 4.880743e-05, 4.971127e-05,
-       5.061511e-05, 5.151895e-05, 5.242279e-05, 5.332663e-05, 5.423047e-05,
-       5.513432e-05, 5.603816e-05, 5.694200e-05, 5.784584e-05, 5.874968e-05,
-       5.965352e-05, 6.055736e-05, 6.146120e-05, 6.236505e-05, 6.326889e-05,
-       6.417273e-05, 6.507657e-05, 6.598041e-05, 6.688425e-05, 6.778809e-05,
-       6.869193e-05, 6.959578e-05, 7.049962e-05, 7.140346e-05, 7.230730e-05,
-       7.321114e-05, 7.411498e-05, 7.501882e-05, 7.592266e-05, 7.682651e-05,
-       7.773035e-05, 7.863419e-05, 7.953803e-05, 8.044187e-05, 8.134571e-05,
-       8.224955e-05, 8.315339e-05, 8.405723e-05, 8.496108e-05, 8.586492e-05,
-       8.676876e-05, 8.767260e-05, 8.857644e-05, 8.948028e-05])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-4a741f2c-d595-468a-b47b-6cba9850fe3a' class='xr-section-summary-in' type='checkbox'  checked><label for='section-4a741f2c-d595-468a-b47b-6cba9850fe3a' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>ssh</span></div><div class='xr-var-dims'>(freq_time, freq_lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>4.015e+04 6.262e+04 ... 4.992e-07</div><input id='attrs-a6f8a256-c829-4e07-bb00-6976c9fd9314' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-a6f8a256-c829-4e07-bb00-6976c9fd9314' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1cb46ab9-6417-4cd8-aded-82495e9a1c3b' class='xr-var-data-in' type='checkbox'><label for='data-1cb46ab9-6417-4cd8-aded-82495e9a1c3b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[4.01476298e+04, 6.26164854e+04, 2.56494308e+04, ...,
-        2.33724749e-06, 1.83897665e-06, 1.79311978e-06],
-       [1.20301569e+04, 1.00701246e+04, 5.91257203e+03, ...,
-        2.11909791e-06, 1.71046269e-06, 1.58213864e-06],
-       [6.13046124e+03, 5.83322845e+03, 2.92105969e+03, ...,
-        1.56001588e-06, 1.47233874e-06, 1.32552525e-06],
-       ...,
-       [4.10000233e+00, 2.91954141e+00, 2.76040879e+00, ...,
-        7.77503129e-07, 6.68756824e-07, 4.88053403e-07],
-       [3.52151866e+00, 3.16985326e+00, 2.32732134e+00, ...,
-        6.20550091e-07, 5.27803772e-07, 5.80213318e-07],
-       [3.22750716e+00, 3.22553123e+00, 2.75934715e+00, ...,
-        6.11164679e-07, 4.92608002e-07, 4.99161444e-07]])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-651c4989-1ccc-4182-bbf1-cc9e853312dc' class='xr-section-summary-in' type='checkbox'  ><label for='section-651c4989-1ccc-4182-bbf1-cc9e853312dc' class='xr-section-summary' >Indexes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>freq_time</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-2d0a3cd5-f336-434b-9bac-132c3afc909f' class='xr-index-data-in' type='checkbox'/><label for='index-2d0a3cd5-f336-434b-9bac-132c3afc909f' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Float64Index([0.023809523809523808, 0.047619047619047616,  0.07142857142857142,
-               0.09523809523809523,  0.11904761904761904,  0.14285714285714285,
-               0.16666666666666666,  0.19047619047619047,  0.21428571428571427,
-               0.23809523809523808,  0.26190476190476186,   0.2857142857142857,
-               0.30952380952380953,   0.3333333333333333,   0.3571428571428571,
-               0.38095238095238093,  0.40476190476190477,  0.42857142857142855,
-               0.45238095238095233,  0.47619047619047616],
-             dtype=&#x27;float64&#x27;, name=&#x27;freq_time&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>freq_lon</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-2289e7c7-9066-4f83-aeed-dd4e7d3a82fd' class='xr-index-data-in' type='checkbox'/><label for='index-2289e7c7-9066-4f83-aeed-dd4e7d3a82fd' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Float64Index([ 9.038412355727224e-07, 1.8076824711454448e-06,
-               2.711523706718167e-06, 3.6153649422908896e-06,
-               4.519206177863612e-06,  5.423047413436334e-06,
-               6.326888649009057e-06,  7.230729884581779e-06,
-                 8.1345711201545e-06,  9.038412355727223e-06,
-               9.942253591299946e-06, 1.0846094826872668e-05,
-               1.174993606244539e-05, 1.2653777298018113e-05,
-              1.3557618533590836e-05, 1.4461459769163558e-05,
-               1.536530100473628e-05,    1.6269142240309e-05,
-              1.7172983475881724e-05, 1.8076824711454447e-05,
-               1.898066594702717e-05,  1.988450718259989e-05,
-              2.0788348418172614e-05, 2.1692189653745337e-05,
-               2.259603088931806e-05,  2.349987212489078e-05,
-              2.4403713360463504e-05, 2.5307554596036227e-05,
-               2.621139583160895e-05,  2.711523706718167e-05,
-              2.8019078302754394e-05, 2.8922919538327117e-05,
-               2.982676077389984e-05,  3.073060200947256e-05,
-              3.1634443245045284e-05,    3.2538284480618e-05,
-               3.344212571619073e-05,  3.434596695176345e-05,
-              3.5249808187336174e-05,  3.615364942290889e-05,
-               3.705749065848162e-05,  3.796133189405434e-05,
-              3.8865173129627064e-05,  3.976901436519978e-05,
-               4.067285560077251e-05,  4.157669683634523e-05,
-              4.2480538071917954e-05,  4.338437930749067e-05,
-                4.42882205430634e-05,  4.519206177863612e-05,
-              4.6095903014208844e-05,  4.699974424978156e-05,
-               4.790358548535429e-05,  4.880742672092701e-05,
-              4.9711267956499734e-05,  5.061510919207245e-05,
-               5.151895042764518e-05,   5.24227916632179e-05,
-              5.3326632898790624e-05,  5.423047413436334e-05,
-               5.513431536993607e-05,  5.603815660550879e-05,
-              5.6941997841081514e-05,  5.784583907665423e-05,
-               5.874968031222695e-05,  5.965352154779968e-05,
-                6.05573627833724e-05,  6.146120401894512e-05,
-               6.236504525451784e-05,  6.326888649009057e-05,
-                6.41727277256633e-05,    6.5076568961236e-05,
-               6.598041019680873e-05,  6.688425143238146e-05,
-               6.778809266795418e-05,   6.86919339035269e-05,
-               6.959577513909962e-05,  7.049961637467235e-05,
-               7.140345761024507e-05,  7.230729884581779e-05,
-               7.321114008139051e-05,  7.411498131696324e-05,
-               7.501882255253596e-05,  7.592266378810868e-05,
-                7.68265050236814e-05,  7.773034625925413e-05,
-               7.863418749482685e-05,  7.953802873039957e-05,
-               8.044186996597229e-05,  8.134571120154502e-05,
-               8.224955243711774e-05,  8.315339367269046e-05,
-               8.405723490826318e-05,  8.496107614383591e-05,
-               8.586491737940863e-05,  8.676875861498135e-05,
-               8.767259985055407e-05,   8.85764410861268e-05,
-               8.948028232169951e-05],
-             dtype=&#x27;float64&#x27;, name=&#x27;freq_lon&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-dae097e4-941a-4af5-a233-009d432b6cc9' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-dae097e4-941a-4af5-a233-009d432b6cc9' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">colors</span>
 <span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">ticker</span>
 
@@ -2129,7 +1134,7 @@ Data variables:
 <h4>Wavenumber<a class="headerlink" href="#wavenumber" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 
 <span class="n">psd_st_plot</span> <span class="o">=</span> <span class="n">PlotPSDSpaceTime</span><span class="p">()</span>
 <span class="n">psd_st_plot</span><span class="o">.</span><span class="n">init_fig</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -2155,9 +1160,6 @@ Data variables:
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../../_images/45a8e9d1b07e798947ab8ce8a04a43eb5bbc4deafdaecb6c8aa71416001c0497.png" src="../../_images/45a8e9d1b07e798947ab8ce8a04a43eb5bbc4deafdaecb6c8aa71416001c0497.png" />
 </div>
 </div>
 </section>
@@ -2165,7 +1167,7 @@ Data variables:
 <h4>Wavelength<a class="headerlink" href="#wavelength" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 
 <span class="n">psd_st_plot</span> <span class="o">=</span> <span class="n">PlotPSDSpaceTime</span><span class="p">()</span>
 <span class="n">psd_st_plot</span><span class="o">.</span><span class="n">init_fig</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -2191,9 +1193,6 @@ Data variables:
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../../_images/9fa119198bcfdde1e5382334750d00b55bc9d2434ed5558b6c8b8b0b60b754fd.png" src="../../_images/9fa119198bcfdde1e5382334750d00b55bc9d2434ed5558b6c8b8b0b60b754fd.png" />
 </div>
 </div>
 </section>
@@ -2202,14 +1201,14 @@ Data variables:
 <h3>Space-Time PSD Score<a class="headerlink" href="#space-time-psd-score" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics.utils</span> <span class="kn">import</span> <span class="n">find_intercept_1D</span><span class="p">,</span> <span class="n">find_intercept_2D</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics.utils</span> <span class="kn">import</span> <span class="n">find_intercept_1D</span><span class="p">,</span> <span class="n">find_intercept_2D</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_score_st</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_spacetime_score</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">da_psd_score_st</span> <span class="o">=</span> <span class="n">psdcalc</span><span class="o">.</span><span class="n">psd_spacetime_score</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="o">=</span><span class="n">da_ref</span><span class="p">,</span> 
     <span class="n">variable</span><span class="o">=</span><span class="s2">&quot;ssh&quot;</span><span class="p">,</span> 
     <span class="n">psd_dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">],</span>
@@ -2219,471 +1218,10 @@ Data variables:
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
-
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body[data-theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-index-preview {
-  grid-column: 2 / 5;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data,
-.xr-index-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data,
-.xr-index-data-in:checked ~ .xr-index-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-index-name div,
-.xr-index-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data,
-.xr-index-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2,
-.xr-no-icon {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:    (freq_time: 20, freq_lon: 99)
-Coordinates:
-  * freq_time  (freq_time) float64 0.02381 0.04762 0.07143 ... 0.4524 0.4762
-  * freq_lon   (freq_lon) float64 9.038e-07 1.808e-06 ... 8.858e-05 8.948e-05
-Data variables:
-    ssh        (freq_time, freq_lon) float64 0.9928 0.9964 ... 0.06844 0.04944</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-518a1ca3-64d0-49b3-8033-434a375be34c' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-518a1ca3-64d0-49b3-8033-434a375be34c' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>freq_time</span>: 20</li><li><span class='xr-has-index'>freq_lon</span>: 99</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-c007b79e-95af-4252-a967-1fa24e28c9cf' class='xr-section-summary-in' type='checkbox'  checked><label for='section-c007b79e-95af-4252-a967-1fa24e28c9cf' class='xr-section-summary' >Coordinates: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>freq_time</span></div><div class='xr-var-dims'>(freq_time)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.02381 0.04762 ... 0.4524 0.4762</div><input id='attrs-337e69ed-53bd-4143-9430-2c5e34604ec6' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-337e69ed-53bd-4143-9430-2c5e34604ec6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-779dfd18-59db-489c-9eea-5ef5df4a8b86' class='xr-var-data-in' type='checkbox'><label for='data-779dfd18-59db-489c-9eea-5ef5df4a8b86' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>spacing :</span></dt><dd>0.023809523809523836</dd></dl></div><div class='xr-var-data'><pre>array([0.02381 , 0.047619, 0.071429, 0.095238, 0.119048, 0.142857, 0.166667,
-       0.190476, 0.214286, 0.238095, 0.261905, 0.285714, 0.309524, 0.333333,
-       0.357143, 0.380952, 0.404762, 0.428571, 0.452381, 0.47619 ])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>freq_lon</span></div><div class='xr-var-dims'>(freq_lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>9.038e-07 1.808e-06 ... 8.948e-05</div><input id='attrs-d567e46a-0a28-46d2-8bbf-1eb416d9e468' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d567e46a-0a28-46d2-8bbf-1eb416d9e468' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-07edf93b-cdb9-4f45-941f-d217404fbaf7' class='xr-var-data-in' type='checkbox'><label for='data-07edf93b-cdb9-4f45-941f-d217404fbaf7' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>spacing :</span></dt><dd>9.038412355727123e-07</dd></dl></div><div class='xr-var-data'><pre>array([9.038412e-07, 1.807682e-06, 2.711524e-06, 3.615365e-06, 4.519206e-06,
-       5.423047e-06, 6.326889e-06, 7.230730e-06, 8.134571e-06, 9.038412e-06,
-       9.942254e-06, 1.084609e-05, 1.174994e-05, 1.265378e-05, 1.355762e-05,
-       1.446146e-05, 1.536530e-05, 1.626914e-05, 1.717298e-05, 1.807682e-05,
-       1.898067e-05, 1.988451e-05, 2.078835e-05, 2.169219e-05, 2.259603e-05,
-       2.349987e-05, 2.440371e-05, 2.530755e-05, 2.621140e-05, 2.711524e-05,
-       2.801908e-05, 2.892292e-05, 2.982676e-05, 3.073060e-05, 3.163444e-05,
-       3.253828e-05, 3.344213e-05, 3.434597e-05, 3.524981e-05, 3.615365e-05,
-       3.705749e-05, 3.796133e-05, 3.886517e-05, 3.976901e-05, 4.067286e-05,
-       4.157670e-05, 4.248054e-05, 4.338438e-05, 4.428822e-05, 4.519206e-05,
-       4.609590e-05, 4.699974e-05, 4.790359e-05, 4.880743e-05, 4.971127e-05,
-       5.061511e-05, 5.151895e-05, 5.242279e-05, 5.332663e-05, 5.423047e-05,
-       5.513432e-05, 5.603816e-05, 5.694200e-05, 5.784584e-05, 5.874968e-05,
-       5.965352e-05, 6.055736e-05, 6.146120e-05, 6.236505e-05, 6.326889e-05,
-       6.417273e-05, 6.507657e-05, 6.598041e-05, 6.688425e-05, 6.778809e-05,
-       6.869193e-05, 6.959578e-05, 7.049962e-05, 7.140346e-05, 7.230730e-05,
-       7.321114e-05, 7.411498e-05, 7.501882e-05, 7.592266e-05, 7.682651e-05,
-       7.773035e-05, 7.863419e-05, 7.953803e-05, 8.044187e-05, 8.134571e-05,
-       8.224955e-05, 8.315339e-05, 8.405723e-05, 8.496108e-05, 8.586492e-05,
-       8.676876e-05, 8.767260e-05, 8.857644e-05, 8.948028e-05])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-561a8309-ceaa-4f7d-a9e7-906326682eee' class='xr-section-summary-in' type='checkbox'  checked><label for='section-561a8309-ceaa-4f7d-a9e7-906326682eee' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>ssh</span></div><div class='xr-var-dims'>(freq_time, freq_lon)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.9928 0.9964 ... 0.06844 0.04944</div><input id='attrs-bc743510-54df-4f5f-b291-d61f5715a18f' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-bc743510-54df-4f5f-b291-d61f5715a18f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-15e9368a-5710-4b09-a449-44b2babf5447' class='xr-var-data-in' type='checkbox'><label for='data-15e9368a-5710-4b09-a449-44b2babf5447' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[ 0.99278081,  0.99638734,  0.99322253, ..., -0.00898471,
-         0.0148068 ,  0.00588282],
-       [ 0.97098706,  0.95219522,  0.93999918, ...,  0.00361252,
-         0.00472882,  0.00535294],
-       [ 0.93729278,  0.92534858,  0.9476684 , ...,  0.03044107,
-         0.04311473,  0.02183102],
-       ...,
-       [-1.70584411, -1.32011806, -0.90970268, ...,  0.09582197,
-        -0.07345835, -0.01388695],
-       [-0.9371712 , -1.18582113, -0.48432833, ..., -0.06458954,
-         0.01127268,  0.03031493],
-       [-1.49234131, -1.29001577, -1.15705867, ...,  0.0410346 ,
-         0.06843792,  0.0494399 ]])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-006662e8-4805-4fd8-b700-13dd2ae3306d' class='xr-section-summary-in' type='checkbox'  ><label for='section-006662e8-4805-4fd8-b700-13dd2ae3306d' class='xr-section-summary' >Indexes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>freq_time</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-5a61e05a-96d9-4f0f-80d3-52e9570a4223' class='xr-index-data-in' type='checkbox'/><label for='index-5a61e05a-96d9-4f0f-80d3-52e9570a4223' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Float64Index([0.023809523809523808, 0.047619047619047616,  0.07142857142857142,
-               0.09523809523809523,  0.11904761904761904,  0.14285714285714285,
-               0.16666666666666666,  0.19047619047619047,  0.21428571428571427,
-               0.23809523809523808,  0.26190476190476186,   0.2857142857142857,
-               0.30952380952380953,   0.3333333333333333,   0.3571428571428571,
-               0.38095238095238093,  0.40476190476190477,  0.42857142857142855,
-               0.45238095238095233,  0.47619047619047616],
-             dtype=&#x27;float64&#x27;, name=&#x27;freq_time&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>freq_lon</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-86063cf2-08c2-4baf-84ad-354a86909fc6' class='xr-index-data-in' type='checkbox'/><label for='index-86063cf2-08c2-4baf-84ad-354a86909fc6' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Float64Index([ 9.038412355727224e-07, 1.8076824711454448e-06,
-               2.711523706718167e-06, 3.6153649422908896e-06,
-               4.519206177863612e-06,  5.423047413436334e-06,
-               6.326888649009057e-06,  7.230729884581779e-06,
-                 8.1345711201545e-06,  9.038412355727223e-06,
-               9.942253591299946e-06, 1.0846094826872668e-05,
-               1.174993606244539e-05, 1.2653777298018113e-05,
-              1.3557618533590836e-05, 1.4461459769163558e-05,
-               1.536530100473628e-05,    1.6269142240309e-05,
-              1.7172983475881724e-05, 1.8076824711454447e-05,
-               1.898066594702717e-05,  1.988450718259989e-05,
-              2.0788348418172614e-05, 2.1692189653745337e-05,
-               2.259603088931806e-05,  2.349987212489078e-05,
-              2.4403713360463504e-05, 2.5307554596036227e-05,
-               2.621139583160895e-05,  2.711523706718167e-05,
-              2.8019078302754394e-05, 2.8922919538327117e-05,
-               2.982676077389984e-05,  3.073060200947256e-05,
-              3.1634443245045284e-05,    3.2538284480618e-05,
-               3.344212571619073e-05,  3.434596695176345e-05,
-              3.5249808187336174e-05,  3.615364942290889e-05,
-               3.705749065848162e-05,  3.796133189405434e-05,
-              3.8865173129627064e-05,  3.976901436519978e-05,
-               4.067285560077251e-05,  4.157669683634523e-05,
-              4.2480538071917954e-05,  4.338437930749067e-05,
-                4.42882205430634e-05,  4.519206177863612e-05,
-              4.6095903014208844e-05,  4.699974424978156e-05,
-               4.790358548535429e-05,  4.880742672092701e-05,
-              4.9711267956499734e-05,  5.061510919207245e-05,
-               5.151895042764518e-05,   5.24227916632179e-05,
-              5.3326632898790624e-05,  5.423047413436334e-05,
-               5.513431536993607e-05,  5.603815660550879e-05,
-              5.6941997841081514e-05,  5.784583907665423e-05,
-               5.874968031222695e-05,  5.965352154779968e-05,
-                6.05573627833724e-05,  6.146120401894512e-05,
-               6.236504525451784e-05,  6.326888649009057e-05,
-                6.41727277256633e-05,    6.5076568961236e-05,
-               6.598041019680873e-05,  6.688425143238146e-05,
-               6.778809266795418e-05,   6.86919339035269e-05,
-               6.959577513909962e-05,  7.049961637467235e-05,
-               7.140345761024507e-05,  7.230729884581779e-05,
-               7.321114008139051e-05,  7.411498131696324e-05,
-               7.501882255253596e-05,  7.592266378810868e-05,
-                7.68265050236814e-05,  7.773034625925413e-05,
-               7.863418749482685e-05,  7.953802873039957e-05,
-               8.044186996597229e-05,  8.134571120154502e-05,
-               8.224955243711774e-05,  8.315339367269046e-05,
-               8.405723490826318e-05,  8.496107614383591e-05,
-               8.586491737940863e-05,  8.676875861498135e-05,
-               8.767259985055407e-05,   8.85764410861268e-05,
-               8.948028232169951e-05],
-             dtype=&#x27;float64&#x27;, name=&#x27;freq_lon&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-2028b033-f7e7-4049-a82a-c20c2e590d8c' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-2028b033-f7e7-4049-a82a-c20c2e590d8c' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">colors</span>
 <span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">ticker</span>
 
@@ -2807,7 +1345,7 @@ Data variables:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psd_st_plot</span> <span class="o">=</span> <span class="n">PlotPSDSpaceTimeScore</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_st_plot</span> <span class="o">=</span> <span class="n">PlotPSDSpaceTimeScore</span><span class="p">()</span>
 <span class="n">psd_st_plot</span><span class="o">.</span><span class="n">init_fig</span><span class="p">()</span>
 <span class="n">psd_st_plot</span><span class="o">.</span><span class="n">plot_wavelength</span><span class="p">(</span>
     <span class="n">da_psd_score_st</span><span class="o">.</span><span class="n">ssh</span><span class="p">,</span>
@@ -2824,13 +1362,10 @@ Data variables:
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../../_images/4f4eff394d5cfb2503247a3529dbb45b2093ca94f026ec2d0c13e1b8901acaee.png" src="../../_images/4f4eff394d5cfb2503247a3529dbb45b2093ca94f026ec2d0c13e1b8901acaee.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lon_rs</span><span class="p">,</span> <span class="n">time_rs</span> <span class="o">=</span> <span class="n">find_intercept_2D</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lon_rs</span><span class="p">,</span> <span class="n">time_rs</span> <span class="o">=</span> <span class="n">find_intercept_2D</span><span class="p">(</span>
         <span class="n">x</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">da_psd_score_st</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">freq_lon</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
         <span class="n">y</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">da_psd_score_st</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">freq_time</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
         <span class="n">z</span><span class="o">=</span><span class="n">da_psd_score_st</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
@@ -2842,16 +1377,9 @@ Data variables:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial Resolved Scale: </span><span class="si">{</span><span class="n">lon_rs</span><span class="o">/</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [km]&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial Resolved Scale: </span><span class="si">{</span><span class="n">lon_rs</span><span class="o">/</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [km]&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial Resolved Scale: </span><span class="si">{</span><span class="n">lon_rs</span><span class="o">/</span><span class="mf">1e3</span><span class="o">/</span><span class="mi">111</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [degrees]&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time Resolved Scale: </span><span class="si">{</span><span class="n">time_rs</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [days]&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Spatial Resolved Scale: 119.56 [km]
-Spatial Resolved Scale: 1.08 [degrees]
-Time Resolved Scale: 38.29 [days]
 </pre></div>
 </div>
 </div>
@@ -2869,16 +1397,16 @@ Time Resolved Scale: 38.29 [days]
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "conda-env-jejeqx-py"
+            mode: "conda-env-miniconda3-jejeqx-py"
         },
         kernelOptions: {
-            name: "conda-env-jejeqx-py",
+            name: "conda-env-miniconda3-jejeqx-py",
             path: "./content/metrics"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'conda-env-jejeqx-py'</script>
+    <script>kernelName = 'conda-env-miniconda3-jejeqx-py'</script>
 
                 </article>
               
