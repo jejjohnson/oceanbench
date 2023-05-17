@@ -2,7 +2,7 @@ import xarray as xr
 import numpy as np
 
 def alongtrack_ssh(ds: xr.Dataset, variable: str="ssh") -> xr.Dataset:
-    ds["ssh"] = ds["sla_filtered"] + ds["mdt"] - ds["lwe"]
+    ds["ssh"] = ds["sla_unfiltered"] + ds["mdt"] - ds["lwe"]
     return ds
 
 def remove_swath_dimension(ds: xr.Dataset, name: str="nC") -> xr.Dataset:
@@ -147,8 +147,10 @@ def select_track_segments(
     
     ds = xr.Dataset(
         {
-            variable_interp: (("segment", "track_val"), np.asarray(list_ssh_map_interp_segment)),
-            variable: (("segment", "track_val"), np.asarray(list_ssh_alongtrack_segment)),
+            # variable_interp: (("track_val", "segment"), np.asarray(list_ssh_map_interp_segment).T),
+            # variable: (("track_val", "segment",), np.asarray(list_ssh_alongtrack_segment).T),
+            variable_interp: (("segment", "track_val", ), np.asarray(list_ssh_map_interp_segment)),
+            variable: (("segment", "track_val", ), np.asarray(list_ssh_alongtrack_segment)),
         },
         coords={
             "segment": np.arange(num_segments),
@@ -160,6 +162,5 @@ def select_track_segments(
     
     attrs = dict(delta_x=delta_x, velocity=velocity, length_scale=length_scale, nperseg=npt)
     
-    ds[variable].attrs = attrs
-    ds[variable_interp].attrs = attrs
+    ds.attrs = attrs
     return ds

@@ -1,3 +1,4 @@
+from typing import List
 import xarray as xr
 
 def where_slice(ds: xr.Dataset, variable: str, min_val: float, max_val: float) -> xr.Dataset:
@@ -8,3 +9,10 @@ def where_slice(ds: xr.Dataset, variable: str, min_val: float, max_val: float) -
     )
         
     return ds
+
+
+def select_variables(ds: xr.Dataset, variables: List[str]):
+    if isinstance(variables, str):
+        variables = [variables]
+
+    return ds[variables]

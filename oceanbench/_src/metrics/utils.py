@@ -2,12 +2,19 @@ from typing import Union, List, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
+import warnings
 
 
 def find_intercept_1D(
     x: np.ndarray, y: np.ndarray, level: float = 0.5, **kwargs
 ) -> np.ndarray:
-    f = interp1d(x, y, **kwargs)
+    f = interp1d(
+        x, 
+        y,
+        fill_value=kwargs.pop("fill_value", "extrapolate"),
+        kind=kwargs.pop("kind", "slinear"),
+        **kwargs
+        )
 
     try:
         ynew = f(level)
@@ -17,6 +24,7 @@ def find_intercept_1D(
         warnings.warn(text)
         if level < x.min():
             ynew = f(x.min())
+            print("NEEEEE:", ynew)
         else:
             ynew = f(x.max())
 

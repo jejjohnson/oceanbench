@@ -6,6 +6,7 @@ import xrft
 import xarray as xr
 from functools import reduce
 import pint_xarray
+import scipy
 
 
 def psd_spacetime(
@@ -99,7 +100,7 @@ def psd_welch(
     da = da.copy()
 
     wavenumber, psd = scipy.signal.welch(
-        da[variable].pint.dequantify().values.flatten(),
+        da[variable].values.flatten(),
         fs=1.0 / delta_x,
         nperseg=nperseg,
         scaling=kwargs.pop("scaling", "density"),
@@ -121,9 +122,10 @@ def psd_welch_error(
 ) -> xr.DataArray:
     da = da.copy()
 
+    diff = da[variable].values.flatten() - da[variable_ref].values.flatten()
+
     wavenumber, psd = scipy.signal.welch(
-        da[variable].pint.dequantify().values.flatten()
-        - da[variable_ref].values.flatten(),
+        diff,
         fs=1.0 / delta_x,
         nperseg=nperseg,
         scaling=kwargs.pop("scaling", "density"),
@@ -155,15 +157,15 @@ def psd_welch_score(
     )
 
     # differ
-    _, psd = scipy.signal.welch(
-        da[variable_ref].values.flatten(),
-        fs=1.0 / delta_x,
+    ds_ = psd_welch(
+        da=da,
+        variable=variable_ref,
+        delta_x=delta_x,
         nperseg=nperseg,
-        scaling=kwargs.pop("scaling", "density"),
-        noverlap=kwargs.pop("noverlap", 0),
+        **kwargs
     )
 
-    ds["score"] = (("wavenumber"), 1 - ds["error"].values / psd)
+    ds["score"] = (("wavenumber"), 1 - (ds["error"].values / ds_[variable_ref].values))
 
     return ds
 

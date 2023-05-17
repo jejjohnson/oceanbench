@@ -1,20 +1,18 @@
 from typing import List
 import xarray as xr
+import pyinterp
+import pyinterp.fill
+import pyinterp.backends.xarray
 
 
-def fillnans(
-    ds: xr.Dataset, 
-    dims: List[str], 
-    method: str="slinear", 
-    **kwargs
-) -> xr.Dataset:
-    
-    if isinstance(dims, str):
-        dims = list(dims)
-        
-    for idim in dims:
-        ds = ds.interpolate_na(dim=idim, method=method, **kwargs)
-        
+def fillnan_gauss_seidel(ds: xr.Dataset, variable: str):
+    ds = ds.copy()
+    ds["lon"] = ds.lon.assign_attrs(units="degrees_east")
+    ds["lat"] = ds.lat.assign_attrs(units="degrees_north")
+
+    ds[variable].transpose("lon", "lat", "time")[:, :] = pyinterp.fill.gauss_seidel(
+        pyinterp.backends.xarray.Grid3D(ds[variable])
+    )[1]
     return ds
 
 
