@@ -1,0 +1,11 @@
+lat:
+  min_val: 33.025
+  max_val: 42.9917
+lon:
+  min_val: -64.975
+  max_val: -55.007
+time:
+  min_val: "2017-01-01"
+  max_val: "2018-01-01"
+
+name: "evaluation"

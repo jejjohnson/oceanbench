@@ -132,7 +132,7 @@ dmypy.json
 datasets/*
 !datasets/.gitkeep
 *.npz
-outputs/*
+\outputs/*
 \wandb/
 \checkpoints/
 notebooks/*.gif
@@ -151,3 +151,4 @@ notebooks/*.gif
 \.idea/
 .DS_Store
 .vscode/settings.json
+\jbook/_build/

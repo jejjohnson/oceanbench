@@ -1,0 +1,48 @@
+alongtrack_segments:
+    _target_: "oceanbench._src.preprocessing.alongtrack.select_track_segments"
+    _partial_: True
+    variable: "ssh"
+    variable_interp: "ssh_interp"
+    velocity: 6.77
+    delta_t: 0.9434
+    length_scale: 1000
+    segment_overlapping: 0.25
+
+lat:
+    _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    _partial_: True
+    variable: "lat"
+    min_val: 33.025
+    max_val: 42.9917
+    
+lon:
+    _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    _partial_: True
+    variable: "lon"
+    min_val: -64.975
+    max_val: -55.007
+    
+time:
+    _target_: "builtins.slice"
+    _args_: ["2017-01-01", "2018-01-01"]
+
+
+nadir:
+    data:
+    - "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/test/dt_gulfstream_c2_phy_l3_20161201-20180131_285-315_23-53.nc"
+    variable: "ssh"
+
+
+rescale_space: 
+    _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
+    _partial_: True
+    mean: True
+    
+rescale_time:
+    _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
+    _partial_: True
+    t0: "2017-01-01"
+    freq_dt: 1
+    freq_unit: "D"
+    
+

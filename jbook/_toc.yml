@@ -1,0 +1,32 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: content/overview.md
+parts:
+  - caption: GeoProcessing
+    chapters:
+      - file: content/geoprocess/gridded_data.md
+      - file: content/geoprocess/scaling.md
+      - file: content/geoprocess/physical_variables
+  - caption: AlongTrack
+    chapters:
+      - file: content/alongtrack/AlongTrack
+      - file: content/alongtrack/AlongTrack_SWOT
+      - file: content/alongtrack/AlongTrack_Eval
+  - caption: Machine Learning
+    chapters:
+      - file: content/ml/xrdataset
+      - file: content/ml/pytorch_dataset
+  - caption: Metrics
+    chapters:
+      - file: content/metrics/power_spectrum
+      - file: content/metrics/power_spectrum_score
+  - caption: Visualization
+    chapters:
+      - file: content/viz/pixel_densities
+  - caption: Data Challenges
+    chapters:
+      - file: content/data_challenges/dc20a
+      - file: content/data_challenges/dc21a
+      - file: content/data_challenges/dc23a
