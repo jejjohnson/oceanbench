@@ -2,7 +2,7 @@ name: "4dvarnet"
 experiment: "swot1nadir5"
 data:
   _target_: oceanbench._src.data.pipe
-  inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/4DVarNet/2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadirswot_GF_GF.nc"
+  inp: "../../../sla-data-registry/data_challenges/dc20a_osse/staging/results/4DVarNet/2020a_SSH_mapping_NATL60_4DVarNet_v2022_nadirswot_GF_GF.nc"
   fns:
     - {_target_: "xarray.open_dataset", decode_times: True, _partial_: True}
     # RENAME

@@ -1,4 +1,4 @@
-import autoroot
+# import autoroot
 import hydra
 from loguru import logger
 from pathlib import Path
@@ -12,137 +12,72 @@ pd.set_option("display.precision", 4)
 from oceanbench._src.geoprocessing.gridding import grid_to_regular_grid
 from oceanbench._src.metrics.utils import find_intercept_1D, find_intercept_2D
 
+METRICS_SUMMARY = []
+import hvplot
+import hvplot.xarray
+hvplot.extension('matplotlib')
 
-def add_units(da):
-    da = da.pint.quantify(
-        {
-            "ssh": "meter",
-            "lon": "degrees_east",
-            "lat": "degrees_north",
-            "time": "seconds",
-        }
+def hvp(inp, **kw):  return inp.hvplot(**kw)
+def opts(plot, **kw):  return plot.opts(**kw)
+def cols(plot, ncol):  return plot.cols(ncol)
+
+def merge_ds(study_ds, ref_ds, var='ssh'):
+    da = grid_to_regular_grid(
+        src_grid_ds=study_ds.pint.dequantify()[var],
+        tgt_grid_ds=ref_ds.pint.dequantify()[var],
+        keep_attrs=True,
     )
-    return da
+    da["time"] = ref_ds["time"]
 
+    return xr.Dataset(dict(
+        ref = ref_ds[var],
+        study = da,
+    ), coords=ref_ds.coords)
+
+
+def add_units(da, units={}):
+    da = da.pint.quantify(units)
+    return da.pint.dequantify()
 
 @hydra.main(config_path="config", config_name="main", version_base="1.2")
 def main(cfg):
-    # OPEN DATASETS
-    logger.info(f"Loading results datasets...")
-    ds = hydra.utils.instantiate(cfg.results.data).compute()
-    logger.info(f"Loading reference datasets...")
-    ds_ref = hydra.utils.instantiate(cfg.reference.data).compute()
+    eval = hydra.utils.instantiate(cfg.evaluation)
 
+    logger.info(f"Building and preprocessing eval dataset...")
+    ds = eval.build_eval_ds().pipe(eval.preprocessing)
 
-    results = list()
-    results.append(cfg.results.name.upper())
-    results.append(cfg.results.experiment.upper())
+    logger.info(f"plotting results...")
+    ds_plots = {
+        plot: plot_fn(ds) for plot, plot_fn in eval.plots.items()
+    }
 
-    # REGRIDDING
-    logger.info(f"Regridding...")
-    ds = grid_to_regular_grid(
-        src_grid_ds=ds.pint.dequantify(),
-        tgt_grid_ds=ds_ref.pint.dequantify(),
-        keep_attrs=True,
+    logger.info(f"computing metrics...")
+    metrics_data = {
+        metric: metric_fn(ds) for metric, metric_fn in eval.metrics.items()
+    }
+
+    logger.info(f"plotting metrics...")
+    metrics_plots = {
+        plot: plot_fn(metrics_dict) for plot, plot_fn in eval.metrics_plots.items()
+    }
+
+    logger.info(f"metrics summary...")
+    metrics_summary = pd.Series(
+        {
+            name: (value(metrics_data) if callable(value) else value)
+            for name, value in eval.summary.items()
+        }
     )
-    ds["time"] = ds_ref["time"]
+    logger.info(metrics_summary.to_frame(name='DC2020a_OSSE').T.to_markdown())
+    METRICS_SUMMARY.append(metrics_summary)
 
-    # INTERPOLATE NANS
-    logger.info(f"Interpolating nans...")
-    ds = hydra.utils.instantiate(cfg.evaluation.fill_nans)(ds)
-    ds_ref = hydra.utils.instantiate(cfg.evaluation.fill_nans)(ds_ref)
+    return metrics_summary
+    
 
-    # ADD UNITS
-    ds = add_units(ds)
-    ds_ref = add_units(ds_ref)
 
-    # CALCULATE PHYSICAL VARIABLE
-
-    # RESCALING
-    logger.info(f"Rescaling Space...")
-    ds = hydra.utils.instantiate(cfg.evaluation.rescale_space)(ds)
-    ds_ref = hydra.utils.instantiate(cfg.evaluation.rescale_space)(ds_ref)
-
-    logger.info(f"Rescaling Time...")
-    ds = hydra.utils.instantiate(cfg.evaluation.rescale_time)(ds)
-    ds_ref = hydra.utils.instantiate(cfg.evaluation.rescale_time)(ds_ref)
-
-    ds["time"] = ds_ref["time"]
-
-    # CALCULATING STATISTICS
-    logger.info(f"Calculating nrmse...")
-    nrmse_mu = hydra.utils.instantiate(cfg.evaluation.nrmse_spacetime)(
-        da=ds.pint.dequantify(), da_ref=ds_ref.pint.dequantify()
-    )
-    results.append(nrmse_mu.values)
-
-    nrmse_std = hydra.utils.instantiate(cfg.evaluation.nrmse_space)(
-        da=ds.pint.dequantify(), da_ref=ds_ref.pint.dequantify()
-    ).std()
-    results.append(nrmse_std.values)
-
-    logger.info(f"nrmse (mean) : {nrmse_mu.values:.2f}")
-    logger.info(f"nrmse (temporal variance): {nrmse_std.values:.2f}")
-
-    # PSD ISOTROPIC SCORE
-    logger.info(f"Calculating Isotropic PSD...")
-    ds_psd_score_iso = hydra.utils.instantiate(cfg.evaluation.psd_isotropic_score)(
-        da=ds.pint.dequantify(), da_ref=ds_ref.pint.dequantify()
-    )
-
-    logger.info(f"Calculating Resolved Scales...")
-    space_rs = find_intercept_1D(
-        y=1.0 / ds_psd_score_iso.ssh.freq_r.values,
-        x=ds_psd_score_iso.ssh.values,
-        level=0.5,
-    )
-    results.append(space_rs / 1e3)
-    results.append(space_rs / 1e3 / 111)
-
-    logger.info(f"(Isotropic) Spatial Resolved Scale: {space_rs/1e3:.2f} [km]")
-    logger.info(f"(Isotropic) Spatial Resolved Scale: {space_rs/1e3/111:.2f} [degrees]")
-
-    # PSD (SPACETIME) SCORE
-    logger.info(f"Calculating SpaceTime PSD...")
-    ds_psd_score_st = hydra.utils.instantiate(cfg.evaluation.psd_spacetime_score)(
-        da=ds.pint.dequantify(), da_ref=ds_ref.pint.dequantify()
-    )
-
-    logger.info(f"Calculating Resolved Scales...")
-    lon_rs, time_rs = find_intercept_2D(
-        x=1.0 / ds_psd_score_st.ssh.freq_lon.values,
-        y=1.0 / ds_psd_score_st.ssh.freq_time.values,
-        z=ds_psd_score_st.ssh.values,
-        levels=0.5,
-    )
-    results.append(lon_rs / 1e3)
-    results.append(lon_rs / 1e3 / 111)
-    results.append(time_rs)
-
-    logger.info(f"Spatial Resolved Scale: {lon_rs/1e3:.2f} [km]")
-    logger.info(f"Spatial Resolved Scale: {lon_rs/1e3/111:.2f} [degrees]")
-    logger.info(f"Time Resolved Scale: {time_rs:.2f} [days]")
-
-    logger.info(f"Creating Leaderboard...")
-    data = [results]
-
-    Leaderboard = pd.DataFrame(
-        data,
-        columns=[
-            "Method",
-            "Experiment",
-            "µ(RMSE)",
-            "σ(RMSE)",
-            "iso λx [km]",
-            "iso λx [degree]",
-            "λx [km]",
-            "λx [degree]",
-            "λt [days]",
-        ],
-    )
-
-    print(Leaderboard.T)
 
 
 if __name__ == "__main__":
+    # main()
     main()
+    print(pd.concat(METRICS_SUMMARY, axis=1).T.to_markdown())

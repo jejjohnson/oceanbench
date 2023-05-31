@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import List
 import xarray as xr
 from functools import reduce
 
 
 def xr_cond_average(
-    ds: xr.Dataset, dims: Optional[str] = None, drop: bool = True
+    ds: xr.Dataset, dims: List[str] = None, drop: bool = True
 ) -> xr.Dataset:
     """Function to conditionally average dimensions
 

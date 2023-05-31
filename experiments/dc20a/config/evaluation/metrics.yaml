@@ -11,7 +11,7 @@ resample_aggregate:
 fill_nans:
   _target_: "oceanbench._src.geoprocessing.interpolate.fillnan_gauss_seidel"
   _partial_: True
-  variable: "ssh"
+  variable: "study"
 
 rescale_space:
   _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
@@ -28,7 +28,8 @@ rescale_time:
 psd_isotropic_score:
   _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
   _partial_: True
-  variable: "ssh"
+  ref_variable: "ref"
+  study_variable: "study"
   psd_dims: ["lon", "lat"]
   avg_dims: ["time"]
   detrend: "constant"
@@ -41,7 +42,8 @@ psd_isotropic_score:
 psd_spacetime_score:
   _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
   _partial_: True
-  variable: "ssh"
+  ref_variable: "ref"
+  study_variable: "study"
   psd_dims: ["time", "lon"]
   avg_dims: ["lat"]
   detrend: "constant"
@@ -52,13 +54,15 @@ psd_spacetime_score:
   truncate: True
 
 nrmse_spacetime:
-  _target_: "oceanbench._src.metrics.stats.nrmse_da"
+  _target_: "oceanbench._src.metrics.stats.nrmse_ds"
   _partial_: True
-  variable: "ssh"
+  target: "study"
+  reference: "ref"
   dim: ["lat", "lon", "time"]
 
 nrmse_space:
-  _target_: "oceanbench._src.metrics.stats.nrmse_da"
+  _target_: "oceanbench._src.metrics.stats.nrmse_ds"
   _partial_: True
-  variable: "ssh"
+  target: "study"
+  reference: "ref"
   dim: ["lat", "lon"]

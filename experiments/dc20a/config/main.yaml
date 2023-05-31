@@ -6,7 +6,7 @@ defaults:
   - domain: evaluation.yaml
   - reference: default.yaml
   - results: duacs_swotnadir.yaml
-  - evaluation: default.yaml
+  - evaluation: leaderboard.yaml
   - postprocess: sea_surface_height.yaml
   - experiment: nadir4.yaml
   - preprocess: default.yaml

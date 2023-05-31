@@ -2,7 +2,7 @@ name: "dymost"
 experiment: "swot1nadir5"
 data:
   _target_: oceanbench._src.data.pipe
-  inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/DYMOST/2020a_SSH_mapping_NATL60_DYMOST_Dynamic_swot_en_j1_tpn_g2.nc"
+  inp: "../../../sla-data-registry/data_challenges/dc20a_osse/staging/results/DYMOST/2020a_SSH_mapping_NATL60_DYMOST_Dynamic_swot_en_j1_tpn_g2.nc"
   fns:
     - {_target_: "xarray.open_dataset", decode_times: True, _partial_: True}
     # RENAME

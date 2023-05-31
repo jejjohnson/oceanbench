@@ -2,7 +2,7 @@ name: "nerf_ffn"
 experiment: "swot1nadir5"
 data:
   _target_: oceanbench._src.data.pipe
-  inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/results/NerF/nerf_ffn_swot_dc20a.nc"
+  inp: "../../../sla-data-registry/data_challenges/dc20a_osse/staging/results/NerF/nerf_ffn_swot_dc20a.nc"
   fns:
     - { _target_: "xarray.open_dataset", decode_times: True, _partial_: True }
     # VALIDATE COORDINATES
