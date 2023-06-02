@@ -6,7 +6,7 @@ outputs:
     bfn: {inp: '${....base_dir}/bfn.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
     miost: {inp: '${....base_dir}/miost.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
     dymost: {inp: '${....base_dir}/dymost.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
-    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.default.cfg}', '${results.postpro.select}']}
     nerf_mlp: {inp: '${....base_dir}/nerf_mlp.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
     nerf_siren: {inp: '${....base_dir}/nerf_siren.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
     nerf_ffn: {inp: '${....base_dir}/nerf_ffn.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}

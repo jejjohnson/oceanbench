@@ -5,7 +5,7 @@ method: duacs
 outputs:
   build_eval_ds:
       inp: 
-          _target_: oceanbench._src.datasets.utils.interpstack_dataarrays
+          _target_: oceanbench._src.datasets.utils.stack_dataarrays
           _partial_: true
           dataarrays: 
               ref: '${results.outputs.ref}'

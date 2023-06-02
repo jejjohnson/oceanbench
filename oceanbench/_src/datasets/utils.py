@@ -149,17 +149,17 @@ def regridstack_dataarrays(dataarrays, ref_grid_var=None):
             src_grid_ds=v,
             tgt_grid_ds=ref_grid,
             keep_attrs=True,
-    ) for k,v in dataarrays.items() if k!=ref_grid_var}
+    ) if k!=ref_grid_var else v for k,v in dataarrays.items() }
     
     dataarrays = {
-        k: v.interp(time=ref_grid.time, method='nearest') 
-        for k,v in dataarrays.items() if k!=ref_grid_var
+        k: v.assign_coords(time=ref_grid.time) if k!=ref_grid_var else v
+        for k,v in dataarrays.items()
     }
-    print(ref_grid, dataarrays)
+    # print(ref_grid, dataarrays)
 
     return xr.Dataset(dataarrays).to_array()
 
-def interpstack_dataarrays(dataarrays, ref_grid_var=None, spatinterp='nearest', timeinterp='nearest'):
+def stack_dataarrays(dataarrays, ref_grid_var=None, spatinterp='nearest', timeinterp='nearest'):
     import oceanbench._src.geoprocessing.gridding
     dataarrays = {k: v() if callable(v) else v for k,v in dataarrays.items()}
 
@@ -167,12 +167,10 @@ def interpstack_dataarrays(dataarrays, ref_grid_var=None, spatinterp='nearest', 
                               if ref_grid_var is not None 
                               else next(iter(dataarrays.items())))
     
-    
     dataarrays = {
-        k: v.interp(lat=ref_grid.lat, lon=ref_grid.lon, method=spatinterp)
-        .interp(time=ref_grid.time, method=timeinterp) if k!=ref_grid_var else v
+        k: v.assign_coords(lat=ref_grid.lat, lon=ref_grid.lon)
+        .assign_coords(time=ref_grid.time) if k!=ref_grid_var else v
         for k,v in dataarrays.items() 
     }
-    
 
     return xr.Dataset(dataarrays).to_array()

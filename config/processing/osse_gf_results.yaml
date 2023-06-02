@@ -26,8 +26,16 @@ postpro:
       - '${....regrid.cfg}'
       - {_target_: "operator.itemgetter", _args_: ['ssh']}
 
+  select: '${..select.cfg}'
+  regrid: 
+     fns: 
+      - '${....resample.cfg}'
+      - '${lib.processing.to_dataset}'
+      - '${....regrid.cfg}'
+      - {_target_: "operator.itemgetter", _args_: ['ssh']}
+
 outputs:
-  ref: {inp: '${task.outputs.data.ssh}', fns: ['${F.call}', '${....postpro.default}']}
+  ref: {inp: '${task.outputs.data.ssh}', fns: ['${F.call}', '${....postpro.select}', '${....postpro.regrid}']}
   methods: {}
 
 
@@ -41,5 +49,6 @@ defaults:
     - /processing/components/grid_prepro@prepro.gssh
     - /processing/components/grid_prepro@prepro.ssh_mod
     - /processing/pipe@postpro.default
+    - /processing/pipe@postpro.regrid
     - /processing/pipe@outputs.ref
     - _self_
