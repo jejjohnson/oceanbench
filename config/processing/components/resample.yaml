@@ -1,0 +1,13 @@
+
+freq: 1D
+cls: DataArray
+
+cfg:
+    _target_: oceanbench._src.data.pipe
+    _partial_: true
+    fns:
+    - _target_: 'xarray.${....cls}.resample'
+      _partial_: True
+      indexer: {time: '${.....freq}'}
+    - _target_: 'xarray.core.resample.${....cls}Resample.mean'
+      _partial_: True

@@ -10,7 +10,6 @@ import pandas as pd
 
 pd.set_option("display.precision", 4)
 from oceanbench._src.geoprocessing.gridding import grid_to_regular_grid
-from oceanbench._src.metrics.utils import find_intercept_1D, find_intercept_2D
 
 METRICS_SUMMARY = []
 import hvplot

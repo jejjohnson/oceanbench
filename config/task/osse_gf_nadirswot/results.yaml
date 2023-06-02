@@ -1,0 +1,27 @@
+#@package _global_.results
+#
+base_dir: '../oceanbench-data-registry/results/osse_gf_nadirswot'
+outputs:
+  methods:
+    bfn: {inp: '${....base_dir}/bfn.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
+    miost: {inp: '${....base_dir}/miost.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
+    dymost: {inp: '${....base_dir}/dymost.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
+    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    nerf_mlp: {inp: '${....base_dir}/nerf_mlp.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    nerf_siren: {inp: '${....base_dir}/nerf_siren.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    nerf_ffn: {inp: '${....base_dir}/nerf_ffn.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    duacs: {inp: '${....base_dir}/duacs.nc', fns: ['${.....prepro.ssh_mod.cfg}', '${.....postpro.default}']}
+
+defaults:
+    - /processing/osse_gf_results@_global_.results
+    - /task/osse_gf_nadirswot/task@_global_.task
+    - /funcs@_global_.F
+    - /processing/pipe@outputs.methods.bfn
+    - /processing/pipe@outputs.methods.4dvarnet
+    - /processing/pipe@outputs.methods.duacs
+    - /processing/pipe@outputs.methods.dymost
+    - /processing/pipe@outputs.methods.miost
+    - /processing/pipe@outputs.methods.nerf_ffn
+    - /processing/pipe@outputs.methods.nerf_mlp
+    - /processing/pipe@outputs.methods.nerf_siren
+    - _self_

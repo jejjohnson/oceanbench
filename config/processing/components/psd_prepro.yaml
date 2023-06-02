@@ -1,0 +1,23 @@
+
+
+data_variable: 'ssh'
+t0: "2012-10-22T12:00:00"
+
+lib:
+    fill_nans: {variable: '${...data_variable}'}
+    rescale_time: {t0: '${...t0}'}
+
+cfg:
+    fns:
+        - '${...lib.to_dataset}'
+        - '${...lib.fill_nans}'
+        - '${...lib.rescale_space}'
+        - '${...lib.rescale_time}'
+        - {_target_: "operator.itemgetter", _args_: ['${.....data_variable}']}
+        
+defaults:
+    - /processing/lib@lib
+    - /processing/pipe@cfg
+    - /processing/components/select@select
+    - /processing/components/resample@resample
+    - /funcs@F

@@ -1,0 +1,6 @@
+#@package _global_
+
+defaults:
+  - /leaderboard/osse_gf
+  - /task/osse_gf_nadir/results
+  - /task/osse_gf_nadir/task

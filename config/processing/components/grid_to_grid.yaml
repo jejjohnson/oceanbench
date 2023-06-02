@@ -1,0 +1,15 @@
+target_grid:
+  domain: {}
+  period: []
+  resolution: {}
+
+cfg:
+  _target_: "oceanbench._src.geoprocessing.gridding.grid_to_regular_grid"
+  _partial_: True
+  tgt_grid_ds: ${..target_grid.cfg}
+
+
+defaults:
+  - /data/components/grid@target_grid
+
+

@@ -122,4 +122,11 @@ jupytext --to myst example.ipynb
 ```
 
 
+ ## Jupyter 
+ if you want to add the oceanbench conda environment as a jupyter kernel, you need to set the ESMF environment variable:
+
+  ```
+  conda activate oceanbench
+  mamba install ipykernel -y 
+  python -m ipykernel install --user --name=oceanbench --env ESMFMKFILE "$ESMFMKFILE"
 

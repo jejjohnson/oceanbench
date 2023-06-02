@@ -135,3 +135,44 @@ def get_slices(idx: int, da_size: Dict[str, int], patches: Dict[str, int], strid
         )
     }
     return slices
+
+
+def regridstack_dataarrays(dataarrays, ref_grid_var=None):
+    import oceanbench._src.geoprocessing.gridding
+    dataarrays = {k: v() if callable(v) else v for k,v in dataarrays.items()}
+
+    ref_grid_var, ref_grid = (ref_grid_var, dataarrays[ref_grid_var]) if ref_grid_var is not None else next(iter(dataarrays.items()))
+    
+    
+    dataarrays = {
+        k: oceanbench._src.geoprocessing.gridding.grid_to_regular_grid(
+            src_grid_ds=v,
+            tgt_grid_ds=ref_grid,
+            keep_attrs=True,
+    ) for k,v in dataarrays.items() if k!=ref_grid_var}
+    
+    dataarrays = {
+        k: v.interp(time=ref_grid.time, method='nearest') 
+        for k,v in dataarrays.items() if k!=ref_grid_var
+    }
+    print(ref_grid, dataarrays)
+
+    return xr.Dataset(dataarrays).to_array()
+
+def interpstack_dataarrays(dataarrays, ref_grid_var=None, spatinterp='nearest', timeinterp='nearest'):
+    import oceanbench._src.geoprocessing.gridding
+    dataarrays = {k: v() if callable(v) else v for k,v in dataarrays.items()}
+
+    ref_grid_var, ref_grid = ((ref_grid_var, dataarrays[ref_grid_var]) 
+                              if ref_grid_var is not None 
+                              else next(iter(dataarrays.items())))
+    
+    
+    dataarrays = {
+        k: v.interp(lat=ref_grid.lat, lon=ref_grid.lon, method=spatinterp)
+        .interp(time=ref_grid.time, method=timeinterp) if k!=ref_grid_var else v
+        for k,v in dataarrays.items() 
+    }
+    
+
+    return xr.Dataset(dataarrays).to_array()

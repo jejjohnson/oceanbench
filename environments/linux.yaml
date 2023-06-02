@@ -1,14 +1,17 @@
 name: oceanbench
 channels:
   - conda-forge
+  - pyviz
 dependencies:
   - python=3.10
   - pip
   - matplotlib
   - cartopy
+  - hvplot
   - arviz
   - metpy
-  - xarray
+  - pandas>=2
+  - xarray>=2023
   - zarr
   - dask
   - netCDF4
@@ -17,16 +20,17 @@ dependencies:
   - pyinterp
   - xrft
   - numpy_groupies
-  - pint-xarray
   - xesmf>=0.7.0
   - pint-xarray
   - pytest
   - dvc
   - tqdm
+  - brotlipy
   - pip:
       - hydra-core
       - pyrootutils
-      - xarray-dataclasses
+      - loguru
+      # - xarray-dataclasses
       - autoroot
       - einops
       - corner

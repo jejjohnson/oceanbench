@@ -1,0 +1,15 @@
+#@package _global_.task
+outputs:
+    data:
+        obs: '${...data.outputs.nadir_gridded}'
+        ssh: '${...data.outputs.ssh}'
+        
+
+    domain: {lat: [33, 43], lon: [-65, -55]}
+
+    splits: {test: ['2012-10-22', '2012-12-02'], trainval: ['2013-01-01', '2013-09-30']}
+    
+
+defaults:
+    - /data/gf_gridded@data
+    - _self_

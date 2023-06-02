@@ -1,0 +1,43 @@
+#@package _global_
+
+method: duacs
+
+outputs:
+  build_eval_ds:
+      inp: 
+          _target_: oceanbench._src.datasets.utils.interpstack_dataarrays
+          _partial_: true
+          dataarrays: 
+              ref: '${results.outputs.ref}'
+              study: '${oc.select:results.outputs.methods.${method}}'
+          ref_grid_var: ref
+      fns: 
+          - ${F.call}
+          - {_target_: "xarray.DataArray.to_dataset",  dim: 'variable', _partial_: true}
+          - {_target_: "xarray.Dataset.map", _partial_: true, func: '${psd_prepro.cfg}'}
+      
+
+
+  summary: ${metrics.outputs.summary}
+
+metrics:
+  outputs:
+    summary:
+      method: '${method}'
+      task: osse_gf_nadir
+
+hydra:
+  sweeper:
+      params:
+          method: {_target_: builtins.str.join, _args_: [',', '${oc.dict.keys:results.outputs.methods}']}
+
+results: ???
+task: ???
+
+defaults:
+  - /metrics/osse_gf@metrics
+  - /funcs@_global_.F
+  - /processing/components/psd_prepro@psd_prepro
+  - /processing/pipe@outputs.build_eval_ds
+  - _self_
+

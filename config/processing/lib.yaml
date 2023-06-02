@@ -1,0 +1,31 @@
+
+resample_method:  {target_: "xarray.Dataset.resample", _partial_: True, indexer: {time: "1D"}}
+
+resample_aggregate: {_target_: "xarray.core.resample.DatasetResample.mean",  _partial_: True}
+
+fill_nans:
+    _target_: "oceanbench._src.geoprocessing.interpolate.fillnan_gauss_seidel"
+    _partial_: True
+    variable: "ssh"
+
+rescale_space:
+    _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
+    _partial_: True
+    mean: True
+
+rescale_time:
+    _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
+    _partial_: True
+    t0: "2012-10-22T12:00:00"
+    freq_dt: 1
+    freq_unit: "day"
+
+to_dataset:
+    _target_: "xarray.DataArray.to_dataset"
+    _partial_: True
+    name: 'ssh'
+
+add_units:
+    _target_: oceanbench._src.data.add_units
+    _partial_: true
+    units: {ssh: meter, lon: degrees_east, lat: degrees_north, time: seconds}
