@@ -5,6 +5,7 @@ task: ???
 prepro:
   gssh: {data_variable: gssh}
   ssh_mod: {data_variable: ssh_mod}
+  out: {data_variable: out}
 
 select: 
     time: '${task.outputs.splits.test}'
@@ -48,6 +49,7 @@ defaults:
     - /processing/components/grid_prepro@prepro.default
     - /processing/components/grid_prepro@prepro.gssh
     - /processing/components/grid_prepro@prepro.ssh_mod
+    - /processing/components/grid_prepro@prepro.out
     - /processing/pipe@postpro.default
     - /processing/pipe@postpro.regrid
     - /processing/pipe@outputs.ref

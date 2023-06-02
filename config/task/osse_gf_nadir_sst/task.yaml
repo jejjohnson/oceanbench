@@ -1,7 +1,8 @@
 #@package _global_.task
 outputs:
     data:
-        obs: '${...data.outputs.swot_gridded}'
+        obs: '${...data.outputs.nadir_gridded}'
+        sst: '${...data.outputs.sst}'
         ssh: '${...data.outputs.ssh}'
         
 

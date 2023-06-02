@@ -11,5 +11,5 @@ outputs:
     
 
 defaults:
-    - /data/gf_gridded@data
+    - /data/gridded@data
     - _self_
