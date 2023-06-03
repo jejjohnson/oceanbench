@@ -1,13 +1,13 @@
 
 alongtrack_segments:
-    _target_: "oceanbench._src.preprocessing.alongtrack.select_track_segments"
-    _partial_: True
-    variable: "ref"
-    variable_interp: "study"
-    velocity: 6.77
-    delta_t: 0.9434
-    length_scale: 1000
-    segment_overlapping: 0.25
+  _target_: "oceanbench._src.preprocessing.alongtrack.select_track_segments"
+  _partial_: True
+  variable: "ref"
+  variable_interp: "study"
+  velocity: 6.77
+  delta_t: 0.9434
+  length_scale: 1000
+  segment_overlapping: 0.25
 
 psd_welch_score:
   _target_: "oceanbench._src.metrics.power_spectrum.psd_welch_score"

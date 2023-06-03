@@ -28,7 +28,10 @@ format:
           # - {_target_: operator.mul, _args_: [1e-3], _partial_: true}
           - {_target_: builtins.str.format, _args_: ['{:.2f} km'], _partial_: true}
     
-    
+psd_score:
+  alongtrack_segments:
+    length_scale: 850.
+
 defaults:
     - lib@_global_.lib.metrics
     - components/alongtrack_psd_score@psd_score

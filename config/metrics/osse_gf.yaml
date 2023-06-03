@@ -3,34 +3,34 @@
 
 outputs:
   metrics:
-      nrmse:
-          fns: ['${.....nrmse.cfg}', '${F.tofloat}']
-      
-      lambda_x_isotrop: 
-          fns: ['${lib.metrics.psd_isotropic_score}', '${F.getsecond}']
-      
-      lambda_x_spacetime: 
-          fns: ['${lib.metrics.psd_spacetime_score}', '${F.getsecond}']
-      
-      lambda_t_spacetime: 
-          fns: ['${lib.metrics.psd_spacetime_score}', '${F.getthird}']
+    nrmse:
+        fns: ['${.....nrmse.cfg}', '${F.tofloat}']
+    
+    lambda_x_isotrop: 
+        fns: ['${lib.metrics.psd_isotropic_score}', '${F.getsecond}']
+    
+    lambda_x_spacetime: 
+        fns: ['${lib.metrics.psd_spacetime_score}', '${F.getsecond}']
+    
+    lambda_t_spacetime: 
+        fns: ['${lib.metrics.psd_spacetime_score}', '${F.getthird}']
 
   summary:
-      method: '???'
-      task: '???'
-      nrmse:
-          fns: ['${....metrics.nrmse}', '${.....format.nrmse}']
-      lambda_x_isotrop: 
-          fns: ['${....metrics.lambda_x_isotrop}', '${.....format.lambda_x_isotrop}']
-      lambda_x_spacetime: 
-          fns: ['${....metrics.lambda_x_spacetime}', '${.....format.lambda_x_spacetime}']
-      lambda_t_spacetime:
-          fns: ['${....metrics.lambda_t_spacetime}', '${.....format.lambda_t_spacetime}']
+    method: '???'
+    task: '???'
+    nrmse:
+        fns: ['${....metrics.nrmse}', '${.....format.nrmse}']
+    lambda_x_isotrop: 
+        fns: ['${....metrics.lambda_x_isotrop}', '${.....format.lambda_x_isotrop}']
+    lambda_x_spacetime: 
+        fns: ['${....metrics.lambda_x_spacetime}', '${.....format.lambda_x_spacetime}']
+    lambda_t_spacetime:
+        fns: ['${....metrics.lambda_t_spacetime}', '${.....format.lambda_t_spacetime}']
 
 spatial_scale_formatting:            
-    fns:
-        - {_target_: operator.mul, _args_: [1e-3], _partial_: true}
-        - {_target_: builtins.str.format, _args_: ['{:.2f} km'], _partial_: true}
+  fns:
+      - {_target_: operator.mul, _args_: [1e-3], _partial_: true}
+      - {_target_: builtins.str.format, _args_: ['{:.2f} km'], _partial_: true}
         
         
 format:            

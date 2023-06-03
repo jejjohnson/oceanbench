@@ -1,5 +1,0 @@
-results: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/results"
-ml_ready: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/staging/ml_ready"
-train: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/train"
-test: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/test"
-mdt_ref: "/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/ref"

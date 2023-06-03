@@ -23,7 +23,7 @@ outputs:
     sst: {inp: '${...base_dir}/${...domain}_mod_ssh.nc', fns: ['${....prepro.ssh.cfg}', '${....select.ssh.cfg}']}
 
 defaults:
-    - /processing/components/grid_prepro@prepro.nadir_gridded
+    - /processing/components/grid_prepro@prepro.obs
     - /processing/components/grid_prepro@prepro.ssh
     - /processing/pipe@outputs.nadir_gridded
     - /processing/pipe@outputs.ssh
