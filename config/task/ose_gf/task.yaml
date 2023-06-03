@@ -8,7 +8,7 @@ outputs:
         j2g: ${....data.outputs.j2g}
         j2n: ${....data.outputs.j2n}
         j3: ${....data.outputs.j3}
-        s3a: ${....data.outputs.s2a}
+        s3a: ${....data.outputs.s3a}
       test:
         c2: ${....data.outputs.c2}
         
