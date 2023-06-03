@@ -9,18 +9,20 @@ outputs:
     bfn: {inp: '${....base_dir}/bfn.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
     miost: {inp: '${....base_dir}/miost.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
     dymost: {inp: '${....base_dir}/dymost.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
-    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.default.cfg}', '${results.postpro.default}']}
     duacs: {inp: '${....base_dir}/duacs.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
     convlstm: {inp: '${....base_dir}/ConvLSTM_SSH.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
-    4dvarnet2023: {inp: '${....base_dir}/4dvarnet2023.nc', fns: ['${.....prepro.rec_ssh.cfg}', '${.....postpro.default}']}
+    convlstm_sst: {inp: '${....base_dir}/ConvLSTM_SSH-SST.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    musti: {inp: '${....base_dir}/OSE_ssh_mapping_MUSTI.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.rec_ssh.cfg}', '${.....postpro.default}']}
 
 defaults:
     - /processing/ose_gf_results@_global_.results
     - /funcs@_global_.F
     - /processing/pipe@outputs.methods.bfn
     - /processing/pipe@outputs.methods.4dvarnet
-    - /processing/pipe@outputs.methods.4dvarnet2023
     - /processing/pipe@outputs.methods.convlstm
+    - /processing/pipe@outputs.methods.convlstm_sst
+    - /processing/pipe@outputs.methods.musti
     - /processing/pipe@outputs.methods.duacs
     - /processing/pipe@outputs.methods.dymost
     - /processing/pipe@outputs.methods.miost
