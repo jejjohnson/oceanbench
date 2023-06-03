@@ -1,0 +1,48 @@
+
+domain:
+  lat: {_target_: "builtins.slice", _args_: [32., 44.]}
+  lon: {_target_: "builtins.slice", _args_: [-66., -54.]}
+  time: {_target_: "builtins.slice", _args_: ["2012-10-22", "2012-12-02"]}
+  
+domain_full:
+  lat: {_target_: "builtins.slice", _args_: [32., 44.]}
+  lon: {_target_: "builtins.slice", _args_: [-66., -54.]}
+  time: {_target_: "builtins.slice", _args_: ["2012-10-22", "2013-10-01"]}
+
+select:
+    _target_: "xarray.Dataset.sel"
+    _partial_: True
+    indexers: "${domain}"
+
+
+GRIDDED_NADIR4:
+    name: "ssh_obs"
+    experiment: "nadir4"
+    variable: "ssh_mod"
+    data:
+        _target_: "oceanbench._src.data.pipe"
+        inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/gridded_nadir4.nc"
+        fns:
+            - {_target_: "xarray.open_dataset", decode_times: True, _partial_: True}
+            # VALIDATE COORDINATES
+            - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+            - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
+            # SELECT REGION
+            - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}
+            - "${select}"
+            
+GRIDDED_SWOT1:
+    name: "ssh_obs"
+    experiment: "nadir4"
+    variable: "ssh_mod"
+    data:
+        _target_: "oceanbench._src.data.pipe"
+        inp: "/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/ml_ready/gridded_swot1.nc"
+        fns:
+            - {_target_: "xarray.open_dataset", decode_times: True, _partial_: True}
+            # VALIDATE COORDINATES
+            - {_target_: "oceanbench._src.geoprocessing.validation.validate_latlon", _partial_: True}
+            - {_target_: "oceanbench._src.geoprocessing.validation.validate_time", _partial_: True}
+            # SELECT REGION
+            - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True}
+            - "${select}"
