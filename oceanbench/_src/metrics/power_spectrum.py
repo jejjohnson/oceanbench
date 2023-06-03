@@ -114,30 +114,6 @@ def psd_welch(
     return da.to_dataset()
 
 
-def psd_welch_error(
-    ds: xr.Dataset,
-    variable: str,
-    variable_ref: str,
-    delta_x: float,
-    nperseg=None,
-    **kwargs,
-) -> xr.Dataset:
-    ds = ds.copy()
-
-    diff = ds[variable].values.flatten() - ds[variable_ref].values.flatten()
-
-    wavenumber, psd = scipy.signal.welch(
-        diff,
-        fs=1.0 / delta_x,
-        nperseg=nperseg,
-        scaling=kwargs.pop("scaling", "density"),
-        noverlap=kwargs.pop("noverlap", 0),
-    )
-
-    da = xr.DataArray(data=psd, coords={"wavenumber": wavenumber}, name="error")
-    return da.to_dataset()
-
-
 def psd_welch_score(
     ds: xr.Dataset,
     variable: str,
@@ -149,17 +125,17 @@ def psd_welch_score(
     ds = ds.copy()
 
     # error
-    ds = psd_welch_error(
-        ds=ds,
-        variable=variable,
+    ds_err = psd_welch(
+        ds=(ds[variable] - ds[variable_ref]).to_dataset(name='error'),
+        variable='error',
         variable_ref=variable_ref,
         delta_x=delta_x,
         nperseg=nperseg,
         **kwargs,
     )
 
-    # differ
-    ds_ = psd_welch(
+    # ref
+    ds = psd_welch(
         ds=ds,
         variable=variable_ref,
         delta_x=delta_x,
@@ -167,9 +143,14 @@ def psd_welch_score(
         **kwargs
     )
 
-    ds["score"] = (("wavenumber"), 1 - (ds["error"].values / ds_[variable_ref].values))
+    ds["score"] = (("wavenumber"), 1 - (ds_err["error"].values / ds[variable_ref].values))
 
-    return ds
+    space_rs = find_intercept_1D(
+        y=1./(ds.wavenumber.values+1e-15),
+        x=ds.score.values,
+        level=0.5
+    )
+    return ds, space_rs
 
 
 def psd_isotropic_error(

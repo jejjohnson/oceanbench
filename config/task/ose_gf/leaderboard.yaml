@@ -1,0 +1,6 @@
+#@package _global_
+
+defaults:
+  - /leaderboard/ose_gf.yaml
+  - /task/ose_gf/results.yaml
+  - /task/ose_gf/task.yaml

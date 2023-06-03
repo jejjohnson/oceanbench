@@ -1,0 +1,22 @@
+base_dir: ../oceanbench-data-registry/ose/coord
+
+outputs:
+  alg: {inp: '${...base_dir}/gf_2017_l3_alg.nc', fns: ['${....prepro.default.cfg}']}
+  h2g: {inp: '${...base_dir}/gf_2017_l3_h2g.nc', fns: ['${....prepro.default.cfg}']}
+  j2g: {inp: '${...base_dir}/gf_2017_l3_j2g.nc', fns: ['${....prepro.default.cfg}']}
+  j2n: {inp: '${...base_dir}/gf_2017_l3_j2n.nc', fns: ['${....prepro.default.cfg}']}
+  j3: {inp: '${...base_dir}/gf_2017_l3_j3.nc', fns: ['${....prepro.default.cfg}']}
+  s3a: {inp: '${...base_dir}/gf_2017_l3_s3a.nc', fns: ['${....prepro.default.cfg}']}
+  c2: {inp: '${...base_dir}/gf_2017_l3_c2.nc', fns: ['${....prepro.default.cfg}']}
+
+defaults:
+  - /processing/components/nadirtrack_prepro@prepro.default
+  - /processing/pipe@outputs.alg
+  - /processing/pipe@outputs.h2g
+  - /processing/pipe@outputs.j2g
+  - /processing/pipe@outputs.j2n
+  - /processing/pipe@outputs.j3
+  - /processing/pipe@outputs.s3a
+  - /processing/pipe@outputs.c2
+  
+  

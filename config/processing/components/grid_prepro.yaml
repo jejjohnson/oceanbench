@@ -12,7 +12,7 @@ cfg:
         - {_target_: "${....geoval}.validate_latlon", _partial_: true}
         - {_target_: "${....geoval}.validate_time", _partial_: true}
         - {_target_: "${....geoval}.validate_ssh", variable: '${....data_variable}', _partial_: true}
-        - { _target_: "xarray.Dataset.sortby", variables: "time", _partial_: True }
+        - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True }
         - {_target_: "operator.itemgetter", _args_: ['${.....data_variable}']}
 
 defaults:

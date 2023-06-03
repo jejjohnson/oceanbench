@@ -1,0 +1,18 @@
+
+geoval: 'oceanbench._src.geoprocessing.validation'
+
+cfg:
+  fns:
+    - {_target_: xarray.open_dataset, decode_times: true, _partial_: true}
+    - {_target_: "xarray.Dataset.rename", name_dict: {"longitude": "lon"}, _partial_: True}
+    - {_target_: "xarray.Dataset.rename", name_dict: {"latitude": "lat"}, _partial_: True}
+    - {_target_: "oceanbench._src.preprocessing.alongtrack.alongtrack_ssh", _partial_: True}
+    - {_target_: "${....geoval}.validate_latlon", _partial_: true}
+    - {_target_: "${....geoval}.validate_time", _partial_: true}
+    - {_target_: "${....geoval}.validate_ssh", variable: 'ssh', _partial_: true}
+    - { _target_: "xarray.Dataset.sortby", variables: "time", _partial_: True }
+    - {_target_: "operator.itemgetter", _args_: ['ssh']}
+    - {_target_: "xarray.Dataset.compute", _partial_: True}
+
+defaults:
+  - /processing/pipe@cfg

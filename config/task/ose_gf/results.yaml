@@ -1,0 +1,27 @@
+#@package _global_.results
+
+task: ???
+
+base_dir: '../oceanbench-data-registry/results/ose_gf'
+outputs:
+  ref: {inp: '${task.outputs.data.test.c2}', fns: ['${F.call}', '${....postpro.select}']}
+  methods:
+    bfn: {inp: '${....base_dir}/bfn.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    miost: {inp: '${....base_dir}/miost.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    dymost: {inp: '${....base_dir}/dymost.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.default.cfg}', '${results.postpro.default}']}
+    duacs: {inp: '${....base_dir}/duacs.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    convlstm: {inp: '${....base_dir}/ConvLSTM_SSH.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
+    4dvarnet2023: {inp: '${....base_dir}/4dvarnet2023.nc', fns: ['${.....prepro.rec_ssh.cfg}', '${.....postpro.default}']}
+
+defaults:
+    - /processing/ose_gf_results@_global_.results
+    - /funcs@_global_.F
+    - /processing/pipe@outputs.methods.bfn
+    - /processing/pipe@outputs.methods.4dvarnet
+    - /processing/pipe@outputs.methods.4dvarnet2023
+    - /processing/pipe@outputs.methods.convlstm
+    - /processing/pipe@outputs.methods.duacs
+    - /processing/pipe@outputs.methods.dymost
+    - /processing/pipe@outputs.methods.miost
+    - _self_

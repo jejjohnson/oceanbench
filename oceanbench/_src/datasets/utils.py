@@ -159,17 +159,16 @@ def regridstack_dataarrays(dataarrays, ref_grid_var=None):
 
     return xr.Dataset(dataarrays).to_array()
 
-def stack_dataarrays(dataarrays, ref_grid_var=None, spatinterp='nearest', timeinterp='nearest'):
-    import oceanbench._src.geoprocessing.gridding
+def stack_dataarrays(dataarrays, ref_var=None):
     dataarrays = {k: v() if callable(v) else v for k,v in dataarrays.items()}
 
-    ref_grid_var, ref_grid = ((ref_grid_var, dataarrays[ref_grid_var]) 
-                              if ref_grid_var is not None 
+    ref_var, ref_grid = ((ref_var, dataarrays[ref_var]) 
+                              if ref_var is not None 
                               else next(iter(dataarrays.items())))
     
     dataarrays = {
         k: v.assign_coords(lat=ref_grid.lat, lon=ref_grid.lon)
-        .assign_coords(time=ref_grid.time) if k!=ref_grid_var else v
+        .assign_coords(time=ref_grid.time) if k!=ref_var else v
         for k,v in dataarrays.items() 
     }
 

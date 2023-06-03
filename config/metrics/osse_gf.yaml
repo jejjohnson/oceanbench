@@ -1,10 +1,10 @@
-#@package _global_
+#@package _global_.metrics
 
 
 outputs:
   metrics:
       nrmse:
-          fns: ['${lib.metrics.nrmse_spacetime}', '${F.tofloat}']
+          fns: ['${.....nrmse.cfg}', '${F.tofloat}']
       
       lambda_x_isotrop: 
           fns: ['${lib.metrics.psd_isotropic_score}', '${F.getsecond}']
@@ -41,7 +41,8 @@ format:
     
     
 defaults:
-    - /metrics/lib@_global_.lib.metrics
+    - lib@_global_.lib.metrics
+    - components/nrmse@nrmse
     - /funcs@_global_.F
     - /processing/pipe@spatial_scale_formatting
     - /processing/pipe@outputs.summary.nrmse

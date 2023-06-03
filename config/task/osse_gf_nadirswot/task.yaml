@@ -1,5 +1,6 @@
 #@package _global_.task
 outputs:
+    name: DC2020 OSSE Gulfstream Nadir + Swot
     data:
         obs: '${...data.outputs.swot_gridded}'
         ssh: '${...data.outputs.ssh}'
@@ -11,5 +12,5 @@ outputs:
     
 
 defaults:
-    - /data/gridded@data
+    - /data/osse_natl60_gridded@data
     - _self_

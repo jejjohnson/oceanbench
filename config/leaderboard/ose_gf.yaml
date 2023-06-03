@@ -13,8 +13,8 @@ outputs:
       fns: 
           - ${F.call}
           - {_target_: "xarray.DataArray.to_dataset",  dim: 'variable', _partial_: true}
-          - {_target_: "xarray.Dataset.map", _partial_: true, func: '${psd_prepro.cfg}'}
-      
+          - {_target_: "xarray.Dataset.dropna",  dim: 'time', _partial_: true}
+          # - {_target_: "xarray.Dataset.map", _partial_: true, func: '${psd_prepro.cfg}'}
 
 
   summary: ${metrics.outputs.summary}
@@ -34,10 +34,8 @@ results: ???
 task: ???
 
 defaults:
-  - /metrics/osse_gf@metrics
+  - /metrics/ose_gf@metrics
   - /funcs@_global_.F
-  - /processing/components/grid_psd_prepro@psd_prepro
-  - /processing/lib@lib.processing
   - /processing/pipe@outputs.build_eval_ds
   - _self_
 

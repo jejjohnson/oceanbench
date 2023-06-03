@@ -13,13 +13,6 @@ rescale_space:
     _partial_: True
     mean: True
 
-rescale_time:
-    _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
-    _partial_: True
-    t0: "2012-10-22T12:00:00"
-    freq_dt: 1
-    freq_unit: "day"
-
 to_dataset:
     _target_: "xarray.DataArray.to_dataset"
     _partial_: True

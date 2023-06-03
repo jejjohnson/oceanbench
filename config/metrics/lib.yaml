@@ -28,16 +28,3 @@ psd_spacetime_score:
     true_amplitude: True
     truncate: True
 
-nrmse_spacetime:
-    _target_: "oceanbench._src.metrics.stats.nrmse_ds"
-    _partial_: True
-    target: study
-    reference: ref
-    dim: ["lat", "lon", "time"]
-
-nrmse_space:
-    _target_: "oceanbench._src.metrics.stats.nrmse_ds"
-    _partial_: True
-    target: ref
-    reference: study
-    dim: ["lat", "lon"]

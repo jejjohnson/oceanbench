@@ -1,0 +1,23 @@
+
+alongtrack_segments:
+    _target_: "oceanbench._src.preprocessing.alongtrack.select_track_segments"
+    _partial_: True
+    variable: "ref"
+    variable_interp: "study"
+    velocity: 6.77
+    delta_t: 0.9434
+    length_scale: 1000
+    segment_overlapping: 0.25
+
+psd_welch_score:
+  _target_: "oceanbench._src.metrics.power_spectrum.psd_welch_score"
+  _partial_: True
+  variable: "study"
+  variable_ref: "ref"
+  delta_x: {_target_: operator.mul, _args_: ['${....alongtrack_segments.velocity}', '${....alongtrack_segments.delta_t}']}
+  nperseg: {_target_: operator.floordiv, _args_: ['${....alongtrack_segments.length_scale}', '${...delta_x}']}
+
+cfg: {fns: ['${...alongtrack_segments}', '${...psd_welch_score}']}
+
+defaults:
+  - /processing/pipe@cfg

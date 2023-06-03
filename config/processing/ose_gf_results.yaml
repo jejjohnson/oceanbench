@@ -1,0 +1,45 @@
+#@package _global_.results
+
+task: ???
+
+prepro:
+  rec_ssh: {data_variable: rec_ssh}
+
+select: 
+  time: '${task.outputs.splits.test}'
+  lat: '${task.outputs.domain.lat}'
+  lon: '${task.outputs.domain.lon}'
+
+degrid:
+  _target_: oceanbench._src.geoprocessing.gridding.grid_to_coord_based
+  _partial_: true
+  tgt_coord_based_ds: {inp: '${...outputs.ref}', fns: ['${F.call}'], _partial_: false}
+
+postpro:
+  select: '${..select.cfg}'
+  degrid: 
+     fns: 
+      - '${lib.processing.to_dataset}'
+      - '${....degrid}'
+      - {_target_: "operator.itemgetter", _args_: ['ssh']}
+  default:
+     fns: 
+      - '${...degrid}'
+      - '${...select}'
+
+outputs:
+  ref: ???
+  methods: {}
+
+
+defaults:
+    - /funcs@_global_.F
+    - /processing/lib@_global_.lib.processing
+    - /processing/components/select_where@select
+    - /processing/components/grid_prepro@prepro.default
+    - /processing/components/grid_prepro@prepro.rec_ssh
+    - /processing/pipe@postpro.default
+    - /processing/pipe@postpro.degrid
+    - /processing/pipe@degrid.tgt_coord_based_ds
+    - /processing/pipe@outputs.ref
+    - _self_

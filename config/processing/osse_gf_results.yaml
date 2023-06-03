@@ -8,9 +8,9 @@ prepro:
   out: {data_variable: out}
 
 select: 
-    time: '${task.outputs.splits.test}'
-    lat: '${task.outputs.domain.lat}'
-    lon: '${task.outputs.domain.lon}'
+  time: '${task.outputs.splits.test}'
+  lat: '${task.outputs.domain.lat}'
+  lon: '${task.outputs.domain.lon}'
 
 regrid:
   target_grid:
