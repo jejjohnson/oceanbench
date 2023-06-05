@@ -14,5 +14,7 @@ jobs:
         with:
           environment-file: environments/linux.yaml
 
+      - name: install xarray-dataclasses
+        run: pip install --no-deps xarray-dataclasses
       - name: pytest
         run: pytest oceanbench/_src
