@@ -64,8 +64,7 @@ def test_psd_isotropic_error():
     
     # CASE I - non-average dimensions
     ds_psd = psd_isotropic_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=None
     )
@@ -74,8 +73,7 @@ def test_psd_isotropic_error():
     
     # CASE II - average dimensions
     ds_psd = psd_isotropic_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
     )
@@ -91,8 +89,7 @@ def test_psd_spacetime_error():
     
     # CASE I - non-average dimensions
     ds_psd = psd_spacetime_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=None
     )
@@ -101,8 +98,7 @@ def test_psd_spacetime_error():
     
     # CASE II - average dimensions
     ds_psd = psd_spacetime_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
     )
@@ -118,11 +114,10 @@ def test_psd_isotropic_score():
     
     # CASE I - non-average dimensions
     ds_psd = psd_isotropic_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=None
-    )
+    )[0]
     dims = set(["freq_r", "time"])
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
@@ -131,11 +126,10 @@ def test_psd_isotropic_score():
     
     # CASE II - average dimensions
     ds_psd = psd_isotropic_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
-    )
+    )[0]
     dims = set(["freq_r"])
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
@@ -151,11 +145,10 @@ def test_psd_spacetime_score():
     
     # CASE I - non-average dimensions
     ds_psd = psd_spacetime_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=None
-    )
+    )[0]
     dims = set(["freq_lat", "freq_lon", "time"])
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
@@ -164,11 +157,10 @@ def test_psd_spacetime_score():
     
     # CASE II - average dimensions
     ds_psd = psd_spacetime_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable=ds_ref, study_variable="ssh", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
-    )
+    )[0]
     dims = set(["freq_lat", "freq_lon"])
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
