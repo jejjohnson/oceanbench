@@ -1,0 +1,15 @@
+target_grid:
+  domain: {}
+  period: []
+  resolution: {}
+
+cfg:
+  _target_: "oceanbench._src.geoprocessing.gridding.coord_based_to_grid"
+  _partial_: True
+  target_grid_ds: ${..target_grid.cfg}
+
+
+defaults:
+  - /data/components/grid@target_grid
+
+

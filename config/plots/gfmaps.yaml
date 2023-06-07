@@ -1,0 +1,122 @@
+
+cmaps:
+  ssh: viridis
+  ke: YlGnBu_r
+  vort_r: RdBu
+  strain: 
+    _target_: oceanbench._src.utils.hydra.const_fn
+    const:
+      inp: cmocean.cm
+      _partial_: false
+      fns: 
+        - {_target_: importlib.import_module, _partial_: True}
+        - {_target_: operator.attrgetter, _args_: [speed]}
+        - {_target_: holoviews.plotting.util.process_cmap, _partial_: True}
+
+geocalc: oceanbench._src.geoprocessing.geostrophic_v2
+
+attrs:
+  ke: {units: 'm$^{2}$s$^{-2}$', standard_name: kinetic_energy, long_name: Kinetic Energy}
+  ssh: {units: 'm', standard_name: sea_surface_height, long_name: Sea Surface Height}
+  vort_r: {units: '', standard_name: relative_vorticity, long_name: Relative vorticity}
+  strain: {units: '', standard_name: strain, long_name: Strain}
+
+
+
+
+transforms:
+  ke: 
+    fns:
+      - ${lib.processing.to_dataset}
+      - {_target_: '${.....geocalc}.geostrophic_velocities', _partial_: True}
+      - {_target_: '${.....geocalc}.kinetic_energy', _partial_: True}
+      - {_target_: operator.attrgetter, _args_: [ke]}
+  vort_r:
+    fns:
+      - ${lib.processing.to_dataset}
+      - {_target_: '${.....geocalc}.geostrophic_velocities', _partial_: True}
+      - {_target_: '${.....geocalc}.relative_vorticity', _partial_: True}
+      - {_target_: '${.....geocalc}.coriolis_normalized', _partial_: True, variable: vort_r}
+      - {_target_: operator.attrgetter, _args_: [vort_r]}
+  strain:
+    fns:
+      - ${lib.processing.to_dataset}
+      - {_target_: '${.....geocalc}.geostrophic_velocities', _partial_: True}
+      - {_target_: '${.....geocalc}.strain_magnitude', _partial_: True}
+      - {_target_: '${.....geocalc}.coriolis_normalized', _partial_: True, variable: strain}
+      - {_target_: operator.attrgetter, _args_: [strain]}
+
+
+ke_clim: 
+  fns:
+  - ${lib.plots.default_hvopts.image.hvplot.clim}
+  - {_target_: oceanbench._src.utils.hydra.parallel, _partial_: True, fns: [null, {_target_: operator.mul, _partial_: true, _args_: [0.7]}]}
+  - {_target_: builtins.tuple, _partial_: True}
+
+ke_hvplot:
+  clim: ${..ke_clim}
+  cmap: '${oc.select:..cmaps.ke,viridis}'
+
+strain_hvplot:
+  clim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[0, 30]]}}
+  cmap: '${oc.select:..cmaps.strain,viridis}'
+
+vort_hvplot:
+  clim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[-30, 30]]}}
+  cmap: '${oc.select:..cmaps.vort_r,viridis}'
+
+plot_fns:
+  ssh_study: {plottype: ssh, variable: study, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
+  ssh_ref: {plottype: ssh, variable: ref, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
+  ke_study: { plottype: ke, variable: study, img_hvplot: '${...ke_hvplot}'}
+  ke_ref: { plottype: ke, variable: ref, img_hvplot: '${...ke_hvplot}'}
+  # vort_r_study: {plottype: vort_r, variable: study, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
+  vort_r_study: {plottype: vort_r, variable: study, img_hvplot: '${...vort_hvplot}'}
+  vort_r_ref: {plottype: vort_r, variable: ref, img_hvplot: '${...vort_hvplot}'}
+  strain_study: {plottype: strain, variable: study, img_hvplot: '${...strain_hvplot}'}
+  strain_ref: {plottype: strain, variable: ref, img_hvplot: '${...strain_hvplot}'}
+
+outputs:
+  preprocess:
+    ssh: {transforms: '${....transforms.ssh}', attrs: {var: '${.....attrs.ssh}'}}
+    ke: {transforms: '${....transforms.ke}', attrs: {var: '${.....attrs.ke}'}}
+    vort_r: {transforms: '${....transforms.vort_r}', attrs: {var: '${.....attrs.vort_r}'}}
+    strain: {transforms: '${....transforms.strain}', attrs: {var: '${.....attrs.strain}'}}
+  plots:
+    ssh_study: {fns: ['${....preprocess.ssh.cfg}', '${.....plot_fns.ssh_study.cfg}']}
+    ssh_ref: {fns: ['${....preprocess.ssh.cfg}', '${.....plot_fns.ssh_ref.cfg}']}
+    ke_study: {fns: ['${....preprocess.ke.cfg}', '${.....plot_fns.ke_study.cfg}']}
+    ke_ref: {fns: ['${....preprocess.ke.cfg}', '${.....plot_fns.ke_ref.cfg}']}
+    vort_r_study: {fns: ['${....preprocess.vort_r.cfg}', '${.....plot_fns.vort_r_study.cfg}']}
+    vort_r_ref: {fns: ['${....preprocess.vort_r.cfg}', '${.....plot_fns.vort_r_ref.cfg}']}
+    strain_study: {fns: ['${....preprocess.strain.cfg}', '${.....plot_fns.strain_study.cfg}']}
+    strain_ref: {fns: ['${....preprocess.strain.cfg}', '${.....plot_fns.strain_ref.cfg}']}
+
+defaults:
+  - /processing/pipe@ke_clim
+  - /processing/pipe@cmaps.strain.const
+  - /processing/pipe@transforms.ssh
+  - /processing/pipe@transforms.ke
+  - /processing/pipe@transforms.vort_r
+  - /processing/pipe@transforms.strain
+  - /plots/components/preprocess@outputs.preprocess.ssh
+  - /plots/components/preprocess@outputs.preprocess.ke
+  - /plots/components/preprocess@outputs.preprocess.vort_r
+  - /plots/components/preprocess@outputs.preprocess.strain
+  - components/maps_contour@plot_fns.ssh_study
+  - components/maps_contour@plot_fns.ssh_ref
+  - components/maps_contour@plot_fns.ke_study
+  - components/maps_contour@plot_fns.ke_ref
+  - components/maps_contour@plot_fns.vort_r_study
+  - components/maps_contour@plot_fns.vort_r_ref
+  - components/maps_contour@plot_fns.strain_study
+  - components/maps_contour@plot_fns.strain_ref
+  - /processing/pipe@outputs.plots.ssh_study
+  - /processing/pipe@outputs.plots.ssh_ref
+  - /processing/pipe@outputs.plots.ke_study
+  - /processing/pipe@outputs.plots.ke_ref
+  - /processing/pipe@outputs.plots.vort_r_study
+  - /processing/pipe@outputs.plots.vort_r_ref
+  - /processing/pipe@outputs.plots.strain_study
+  - /processing/pipe@outputs.plots.strain_ref
+  - _self_

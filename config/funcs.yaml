@@ -4,3 +4,5 @@ getsecond: {_target_: operator.itemgetter, _args_: [1]}
 getthird: {_target_: operator.itemgetter, _args_: [2]}
 tofloat: {_target_: builtins.float, _partial_: true}
 call: {_target_: operator.methodcaller, _args_: ['__call__']}
+hvplot: {_target_: operator.methodcaller, _args_: [hvplot], _partial_: True}
+opts: {_target_: operator.methodcaller, _args_: [opts]}

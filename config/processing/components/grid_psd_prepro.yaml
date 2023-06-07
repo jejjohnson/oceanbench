@@ -5,14 +5,13 @@ rescale_time:
 
 cfg:
   fns:
-    - '${lib.to_dataset}'
-    - '${lib.fill_nans}'
-    - '${lib.rescale_space}'
+    - '${lib.processing.to_dataset}'
+    - '${lib.processing.fill_nans}'
+    - '${lib.processing.rescale_space}'
     - '${...rescale_time.cfg}'
     - {_target_: "operator.itemgetter", _args_: [ssh]}
         
 defaults:
-  - /processing/lib@_global_.lib
+  - /processing/lib@_global_.lib.processing
   - /processing/pipe@cfg
   - /processing/components/rescale_time@rescale_time
-  - /funcs@F

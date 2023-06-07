@@ -1,7 +1,5 @@
 #@package _global_.results
 
-task: ???
-
 prepro:
   rec_ssh: {data_variable: rec_ssh}
 
@@ -13,10 +11,32 @@ select:
 degrid:
   _target_: oceanbench._src.geoprocessing.gridding.grid_to_coord_based
   _partial_: true
-  tgt_coord_based_ds: {inp: '${...outputs.ref}', fns: ['${F.call}'], _partial_: false}
+  tgt_coord_based_ds: {inp: '${...outputs.eval.ref}', fns: ['${F.call}'], _partial_: false}
+
+regrid:
+  target_grid:
+    domain: ${task.outputs.domain}
+    period: ${task.outputs.splits.test}
+    resolution: {lon: 0.05, lat: 0.05}
+
+grid:
+  target_grid:
+    domain: ${task.outputs.domain}
+    period: ${task.outputs.splits.test}
+    resolution: {lon: 0.05, lat: 0.05}
 
 postpro:
   select: '${..select.cfg}'
+  grid: 
+     fns: 
+      - '${lib.processing.to_dataset}'
+      - '${....grid.cfg}'
+      - {_target_: "operator.itemgetter", _args_: ['ssh']}
+  regrid: 
+     fns: 
+      - '${lib.processing.to_dataset}'
+      - '${....regrid.cfg}'
+      - {_target_: "operator.itemgetter", _args_: ['ssh']}
   degrid: 
      fns: 
       - '${lib.processing.to_dataset}'
@@ -39,7 +59,9 @@ defaults:
     - /processing/components/grid_prepro@prepro.default
     - /processing/components/grid_prepro@prepro.rec_ssh
     - /processing/pipe@postpro.default
+    - /processing/components/grid_to_grid@regrid
+    - /processing/components/coord_based_to_grid@grid
+    - /processing/pipe@postpro.regrid
+    - /processing/pipe@postpro.grid
     - /processing/pipe@postpro.degrid
-    - /processing/pipe@degrid.tgt_coord_based_ds
-    - /processing/pipe@outputs.ref
     - _self_

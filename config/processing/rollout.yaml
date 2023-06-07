@@ -1,0 +1,7 @@
+_target_: builtins.map
+func: {dicts: ['${F.call}']}
+seq: []
+
+defaults:
+- /funcs@_global_.F
+- concatdicts@func

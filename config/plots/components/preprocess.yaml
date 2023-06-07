@@ -1,0 +1,24 @@
+transforms: ???
+tidx: 10
+attrs:
+  lon: {units: degrees, standard_name: longitude, long_name: Longitude}
+  lat: {units: degrees, standard_name: latitude, long_name: Latitude}
+  var: {units: 'm', standard_name: sea_surface_height, long_name: Sea Surface Height}
+  ssh: {units: 'm', standard_name: sea_surface_height, long_name: Sea Surface Height}
+
+cfg:
+  fns:
+    - _target_: 'oceanbench._src.utils.hydra.assign_var_attrs'
+      var_attrs: {lon: '${.....attrs.lon}', lat: '${.....attrs.lat}', ref: '${.....attrs.ssh}', study: '${.....attrs.ssh}'}
+      _partial_: True
+    - {_target_: "xarray.Dataset.map", _partial_: true, func: '${....transforms}'}
+    - _target_: 'oceanbench._src.utils.hydra.assign_var_attrs'
+      var_attrs: {lon: '${.....attrs.lon}', lat: '${.....attrs.lat}', ref: '${.....attrs.var}', study: '${.....attrs.var}'}
+      _partial_: True
+    - {_target_: "xarray.Dataset.isel", _partial_: true, time: '${....tidx}'}
+
+defaults:
+  - /processing/pipe@cfg
+  - /processing/lib@_global_.lib.processing
+  - _self_
+  - /processing/pipe@transforms

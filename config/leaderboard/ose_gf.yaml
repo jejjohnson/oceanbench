@@ -2,28 +2,47 @@
 method: duacs
 
 outputs:
+  eval_ds:
+    _target_: oceanbench._src.datasets.utils.stack_dataarrays
+    _partial_: true
+    dataarrays: 
+        ref: '${results.outputs.eval.ref}'
+        study: '${oc.select:results.outputs.eval.methods.${method}}'
+    ref_var: ref
+    
   build_eval_ds:
-      inp: 
-          _target_: oceanbench._src.datasets.utils.stack_dataarrays
-          _partial_: true
-          dataarrays: 
-              ref: '${results.outputs.ref}'
-              study: '${oc.select:results.outputs.methods.${method}}'
-          ref_var: ref
+      inp: ${..eval_ds}
       fns: 
           - ${F.call}
           - {_target_: "xarray.DataArray.to_dataset",  dim: 'variable', _partial_: true}
           - {_target_: "xarray.Dataset.dropna",  dim: 'time', _partial_: true}
-          # - {_target_: "xarray.Dataset.map", _partial_: true, func: '${psd_prepro.cfg}'}
-
 
   summary: ${metrics.outputs.summary}
+
+  plot_ds:
+    maps:
+      _target_: oceanbench._src.datasets.utils.stack_dataarrays
+      _partial_: true
+      dataarrays: 
+          ref: '${results.outputs.plots.maps.ref}'
+          study: '${oc.select:results.outputs.plots.maps.methods.${method}}'
+  plots:
+    build_ds:
+      maps:
+        inp: ${....plot_ds.maps}
+        fns:
+          - ${F.call}
+          - {_target_: "xarray.DataArray.to_dataset",  dim: 'variable', _partial_: true}
+    maps: ${plots.outputs.plots}
+
+
 
 metrics:
   outputs:
     summary:
       method: '${method}'
       task: ${task.outputs.name}
+
 
 hydra:
   sweeper:
@@ -34,6 +53,8 @@ results: ???
 task: ???
 
 defaults:
+  - /processing/pipe@outputs.plots.build_ds.maps
+  - /plots/gfmaps@plots
   - /metrics/ose_gf@metrics
   - /funcs@_global_.F
   - /processing/pipe@outputs.build_eval_ds

@@ -1,0 +1,59 @@
+plottype: ???
+variable: ???
+tidx: 0
+img_hvplot: {}
+contour_hvplot: {}
+
+final_img_hvplot:
+  _target_: oceanbench._src.utils.hydra.concatdicts
+  _args_:
+  - ${lib.plots.default_hvopts.image.hvplot}
+  - ${...img_hvplot}
+
+final_contour_hvplot:
+  _target_: oceanbench._src.utils.hydra.concatdicts
+  _args_:
+  - ${lib.plots.default_hvopts.contour.hvplot}
+  - ${...contour_hvplot}
+
+getvar:
+  {_target_: operator.attrgetter, _args_: ['${...variable}']}
+
+plot_fns:
+  image:
+    fns:
+    - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: '${.....final_img_hvplot}', _partial_: True}
+    - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: '${F.hvplot}', _partial_: True}}
+  contour: 
+    fns:
+    - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: '${.....final_contour_hvplot}', _partial_: True}
+    - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: '${F.hvplot}', _partial_: True}}
+
+var_plot_fns:
+  image:
+    fns:
+    - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: {obj: '${......plot_fns.image}', inp: '${......getvar}'}, _partial_: True}
+    - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: {_target_: oceanbench._src.utils.hydra.call_if_callable, _partial_: true}, _partial_: True}}
+  contour:
+    fns:
+    - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: {obj: '${......plot_fns.contour}', inp: '${......getvar}'}, _partial_: True}
+    - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: {_target_: oceanbench._src.utils.hydra.call_if_callable, _partial_: true}, _partial_: True}}
+
+cfg:
+  fns:
+  - _target_: oceanbench._src.utils.hydra.rolloutdict
+    _partial_: True
+    dict_fns: ${....var_plot_fns}
+  - {_target_: operator.methodcaller, _args_: ['values']}
+  - {_target_: oceanbench._src.utils.hydra.unpack_to, to: {_target_: operator.mul, _partial_: true}, _partial_: True}
+
+
+defaults:
+  - /funcs@_global_.F
+  - /processing/pipe@cfg
+  - /processing/pipe@plot_fns.image
+  - /processing/pipe@plot_fns.contour
+  - /processing/pipe@var_plot_fns.image
+  - /processing/pipe@var_plot_fns.contour
+  - /plots/lib@_global_.lib.plots
+  - _self_

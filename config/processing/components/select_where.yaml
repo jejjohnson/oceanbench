@@ -2,6 +2,7 @@
 time: [null, null]
 lat: [-90, 90]
 lon: [-180, 180]
+drop: True
 cls: DataArray
 
 cfg:
@@ -14,11 +15,13 @@ cfg:
       variable: "lat"
       min_val: ${....lat.0}
       max_val: ${....lat.1}
+      drop: ${....drop}
     - _target_: "oceanbench._src.geoprocessing.subset.where_slice"
       _partial_: True
       variable: "lon"
       min_val: ${....lon.0}
       max_val: ${....lon.1}
+      drop: ${....drop}
 
 defaults:
   - /processing/pipe@cfg

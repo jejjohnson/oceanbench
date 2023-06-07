@@ -1,27 +1,58 @@
 #@package _global_.results
 #
 base_dir: '../oceanbench-data-registry/results/osse_gf_nadir'
+
+
+
 outputs:
-  methods:
-    bfn: {inp: '${....base_dir}/bfn.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
-    miost: {inp: '${....base_dir}/miost.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
-    dymost: {inp: '${....base_dir}/dymost.nc', fns: ['${.....prepro.gssh.cfg}', '${.....postpro.default}']}
-    4dvarnet: {inp: '${....base_dir}/4dvarnet.nc', fns: ['${.....prepro.default.cfg}', '${results.postpro.select}']}
-    nerf_mlp: {inp: '${....base_dir}/nerf_mlp.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
-    nerf_siren: {inp: '${....base_dir}/nerf_siren.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
-    nerf_ffn: {inp: '${....base_dir}/nerf_ffn.nc', fns: ['${.....prepro.default.cfg}', '${.....postpro.default}']}
-    duacs: {inp: '${....base_dir}/duacs.nc', fns: ['${.....prepro.ssh_mod.cfg}', '${.....postpro.default}']}
+  eval:
+    methods:
+      bfn: {inp: '${results.base_dir}/bfn.nc', fns: ['${results.prepro.gssh.cfg}', '${results.postpro.default}']}
+      miost: {inp: '${results.base_dir}/miost.nc', fns: ['${results.prepro.gssh.cfg}', '${results.postpro.default}']}
+      dymost: {inp: '${results.base_dir}/dymost.nc', fns: ['${results.prepro.gssh.cfg}', '${results.postpro.default}']}
+      4dvarnet: {inp: '${results.base_dir}/4dvarnet.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      nerf_mlp: {inp: '${results.base_dir}/nerf_mlp.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      nerf_siren: {inp: '${results.base_dir}/nerf_siren.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      nerf_ffn: {inp: '${results.base_dir}/nerf_ffn.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      duacs: {inp: '${results.base_dir}/duacs.nc', fns: ['${results.prepro.ssh_mod.cfg}', '${results.postpro.default}']}
+
+  plots:
+    maps:
+      ref: ${results.outputs.eval.ref}
+      methods:
+        bfn: ${results.outputs.eval.methods.bfn}
+        miost: ${results.outputs.eval.methods.miost}
+        dymost: ${results.outputs.eval.methods.dymost}
+        duacs: {inp: '${results.outputs.eval.methods.duacs}', fns: ['${F.call}', '${results.filter.cfg}', '${results.duacsselect.cfg}']}
+        nerf_ffn: ${results.outputs.eval.methods.nerf_ffn}
+        nerf_siren: ${results.outputs.eval.methods.nerf_siren}
+        nerf_mlp: ${results.outputs.eval.methods.nerf_mlp}
+        4dvarnet: ${results.outputs.eval.methods.4dvarnet}
+
+filter:
+  shape: TAPER
+  scale: 2
+  n_steps: 0
+
+duacsselect:
+  lat: [33.5, 42.5] 
+  lon: [-64.5, -55.5] 
+  drop: False
+
 
 defaults:
-    - /processing/osse_gf_results@_global_.results
-    - /task/osse_gf_nadir/task@_global_.task
-    - /funcs@_global_.F
-    - /processing/pipe@outputs.methods.bfn
-    - /processing/pipe@outputs.methods.4dvarnet
-    - /processing/pipe@outputs.methods.duacs
-    - /processing/pipe@outputs.methods.dymost
-    - /processing/pipe@outputs.methods.miost
-    - /processing/pipe@outputs.methods.nerf_ffn
-    - /processing/pipe@outputs.methods.nerf_mlp
-    - /processing/pipe@outputs.methods.nerf_siren
-    - _self_
+  - /processing/components/select_where@duacsselect
+  - /processing/components/filter@filter
+  - /processing/osse_gf_results@_global_.results
+  - /task/osse_gf_nadir/task@_global_.task
+  - /funcs@_global_.F
+  - /processing/pipe@outputs.eval.methods.bfn
+  - /processing/pipe@outputs.eval.methods.4dvarnet
+  - /processing/pipe@outputs.eval.methods.duacs
+  - /processing/pipe@outputs.eval.methods.dymost
+  - /processing/pipe@outputs.eval.methods.miost
+  - /processing/pipe@outputs.eval.methods.nerf_ffn
+  - /processing/pipe@outputs.eval.methods.nerf_mlp
+  - /processing/pipe@outputs.eval.methods.nerf_siren
+  - /processing/pipe@outputs.plots.maps.methods.duacs
+  - _self_

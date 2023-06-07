@@ -15,7 +15,7 @@ def streamfunction(
     """Calculates the stream function from SSH values
 
     Eq:
-        η = (g/f₀) Ψ
+        Ψ = (g/f₀) η
 
     Args:
         ds (xr.Dataset): the sea surface height [m]
