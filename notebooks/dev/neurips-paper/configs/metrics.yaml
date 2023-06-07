@@ -1,0 +1,103 @@
+
+fill_nans:
+    _target_: "oceanbench._src.geoprocessing.interpolate.fillnan_gauss_seidel"
+    _partial_: True
+    variable: "ssh"
+    
+spatial_rescale:
+    _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
+    _partial_: True
+    mean: True
+
+temporal_rescale:
+    _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
+    _partial_: True
+    t0: "2012-10-22"
+    freq_dt: 1
+    freq_unit: "D"
+    
+psd_isotropic:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic"
+    _partial_: True
+    variable: "ssh"
+    dims: ["lon", "lat"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+    
+psd_isotropic_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
+    _partial_: True
+    variable: "ssh"
+    psd_dims: ["lon", "lat"]
+    avg_dims: ["time"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+    
+psd_spacetime_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
+    _partial_: True
+    variable: "ssh"
+    psd_dims: ["time", "lon"]
+    avg_dims: ["lat"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+    
+psd_spacetime:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime"
+    _partial_: True
+    variable: "ssh"
+    dims: ["time", "lon"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+    
+psd_isotropic_avg:
+    _target_: "oceanbench._src.preprocessing.mean.xr_cond_average"
+    _partial_: True
+    dims: ["time"]
+    drop: True
+    
+psd_spacetime_avg:
+    _target_: "oceanbench._src.preprocessing.mean.xr_cond_average"
+    _partial_: True
+    dims: ["lat"]
+    drop: True
+    
+    
+psd_preprocess_chain:
+    _target_: "oceanbench._src.data.pipe"
+    _partial_: true
+    fns:
+        - "${fill_nans}" # FILL NANs
+        - "${spatial_rescale}" # RESCALE LATLON DEGREEs -> METERS
+        - "${temporal_rescale}" # RESCALE TIME -> DAYS
+
+
+psd_isotropic_chain:
+    _target_: "oceanbench._src.data.pipe"
+    _partial_: true
+    fns:
+        - "${psd_isotropic}" # ISOTROPIC POWER SPECTRUM
+        - "${psd_isotropic_avg}" # AVERAGE TIME DIMENSIONS
+        
+psd_spacetime_chain:
+    _target_: "oceanbench._src.data.pipe"
+    _partial_: true
+    fns:
+        - "${psd_spacetime}" # ISOTROPIC POWER SPECTRUM
+        - "${psd_spacetime_avg}" # AVERAGE LATITUDE DIMENSIONS
