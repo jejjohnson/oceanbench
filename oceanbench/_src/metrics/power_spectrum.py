@@ -3,6 +3,7 @@ import xarray as xr
 from oceanbench._src.preprocessing.mean import xr_cond_average
 from typing import List
 import xrft
+import xwavelet
 import xarray as xr
 from functools import reduce
 import pint_xarray
@@ -10,7 +11,7 @@ import scipy
 
 
 def psd_spacetime(
-    ds: xr.Dataset, variable: str, dims: List[str], **kwargs
+    ds: xr.Dataset, variable: str, dims: List[str], method='Fourier', **kwargs
 ) -> xr.Dataset:
     """Calculates the PSD with arbitrary dimensions
 
@@ -20,7 +21,7 @@ def psd_spacetime(
         ds (xr.Dataset): the xarray dataset with dimensions
         variable (str): the variable we wish to do the PSD
         dims (List[str]): the dimensions for the PSD
-        **kwargs: all key word args for the xrft.power_spectrum
+        **kwargs: all keyword args for the xrft.power_spectrum
 
     Returns:
         ds (xr.Dataset): the xr.Dataset with the new frequency dimensions.
@@ -33,25 +34,28 @@ def psd_spacetime(
         )
     """
     name = f"{variable}_psd"
-
+    
     # compute PSD err and PSD signal
-    psd_signal = xrft.power_spectrum(
-        ds[variable],
-        dim=dims,
-        scaling=kwargs.get("scaling", "density"),
-        detrend=kwargs.get("detrend", "linear"),
-        window=kwargs.get("window", "tukey"),
-        nfactor=kwargs.get("nfactor", 2),
-        window_correction=kwargs.get("window_correction", True),
-        true_amplitude=kwargs.get("true_amplitude", True),
-        truncate=kwargs.get("truncate", True),
-    )
+    if method == 'Fourier':
+        psd_signal = xrft.power_spectrum(
+            ds[variable],
+            dim=dims,
+            scaling=kwargs.get("scaling", "density"),
+            detrend=kwargs.get("detrend", "linear"),
+            window=kwargs.get("window", "tukey"),
+            nfactor=kwargs.get("nfactor", 2),
+            window_correction=kwargs.get("window_correction", True),
+            true_amplitude=kwargs.get("true_amplitude", True),
+            truncate=kwargs.get("truncate", True),
+        )
+    else:
+        raise NotImplementedError("Only Fourier method is implemented.")
 
     return psd_signal.to_dataset(name=variable)
 
 
 def psd_isotropic(
-    ds: xr.DataArray, variable: str, dims: List[str], **kwargs
+    ds: xr.DataArray, variable: str, dims: List[str], method='Fourier', **kwargs
 ) -> xr.DataArray:
     """Calculates the isotropic PSD with arbitrary dimensions
 
@@ -61,7 +65,8 @@ def psd_isotropic(
         ds (xr.Dataset): the xarray dataset with dimensions
         variable (str): the variable we wish to do the PSD
         dims (List[str]): the dimensions for the PSD
-        **kwargs: all key word args for the xrft.power_spectrum
+        method (str): Method to compute the PSD (Fourier or wavelet). 
+        **kwargs: all keyword args for the xrft.power_spectrum or xwavelet.wvlt_power_spectrum
 
     Returns:
         ds (xr.Dataset): the xr.Dataset with the new frequency dimensions.
@@ -76,23 +81,33 @@ def psd_isotropic(
     name = f"{variable}_psd"
 
     # compute PSD err and PSD signal
-    psd_signal = xrft.isotropic_power_spectrum(
-        ds[variable],
-        dim=dims,
-        scaling=kwargs.get("scaling", "density"),
-        detrend=kwargs.get("detrend", "linear"),
-        window=kwargs.get("window", "tukey"),
-        nfactor=kwargs.get("nfactor", 2),
-        window_correction=kwargs.get("window_correction", True),
-        true_amplitude=kwargs.get("true_amplitude", True),
-        truncate=kwargs.get("truncate", True),
-    )
+    if method == 'Fourier':
+        psd_signal = xrft.isotropic_power_spectrum(
+            ds[variable],
+            dim=dims,
+            scaling=kwargs.get("scaling", "density"),
+            detrend=kwargs.get("detrend", "linear"),
+            window=kwargs.get("window", "tukey"),
+            nfactor=kwargs.get("nfactor", 2),
+            window_correction=kwargs.get("window_correction", True),
+            true_amplitude=kwargs.get("true_amplitude", True),
+            truncate=kwargs.get("truncate", True),
+        )
+    elif method == 'wavelet':
+        psd_signal = xwavelet.wvlt_power_spectrum(
+            ds[variable],
+            dim=dims,
+            s=kwargs.get("scale"),
+            xo=kwargs.get("xo"),
+            ntheta=kwargs.get("ntheta"),
+        )
+    else:
+        raise NotImplementedError("Only Fourier and wavelet methods are implemented.")
 
     original_dims = ds.dims
     psd_signal = psd_signal.to_dataset(name=variable)
 
     return psd_signal
-
 
 def psd_welch(
     da: xr.DataArray, variable: str, delta_x: float, nperseg=None, **kwargs

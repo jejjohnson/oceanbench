@@ -1,0 +1,206 @@
+plugins:
+  source:
+    - module: intake_xarray
+
+sources:
+
+  GIGATL:
+    description: GIGATL
+    parameters: # User parameters
+      region:
+        description: region
+        type: str
+        default: "1"
+        allowed: ["1", "2"]
+      datatype:
+        description: surface ("surf") or interior ("int")
+        type: str
+        default: "surf"
+        allowed: ["surf", "int"]
+      season:
+        description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+        type: str
+        default: "fma"
+        allowed: ["fma", "aso"]
+    driver: zarr
+    args:
+      urlpath: 's3://Pangeo/pangeo-forge/swot_adac/GIGATL/Region0{{ region }}/{{ datatype }}/{{ season }}.zarr'
+      consolidated: True
+      storage_options:
+        anon: True
+        client_kwargs:
+          endpoint_url: 'https://ncsa.osn.xsede.org'
+
+  HYCOM25:
+      description: HYCOM25
+      parameters: # User parameters
+        region:
+          description: region
+          type: str
+          default: "1"
+          allowed: ["1", "2", "3", "4", "5"]
+        datatype:
+          description: surface ("surface_hourly") only at this time
+          type: str
+          default: "surface_hourly"
+          allowed: ["surface_hourly"]
+        season:
+          description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+          type: str
+          default: "fma"
+          allowed: ["fma", "aso"]
+      driver: zarr
+      args:
+        urlpath: 's3://Pangeo/pangeo-forge/swot_adac/HYCOM25/Region0{{ region }}/{{ datatype }}/{{ season }}.zarr'
+        consolidated: True
+        storage_options:
+          anon: True
+          client_kwargs:
+            endpoint_url: 'https://ncsa.osn.xsede.org'
+
+  HYCOM50:
+      description: HYCOM50
+      parameters: # User parameters
+        region:
+          description: region
+          type: str
+          default: "1_GS"
+          allowed: ["1_GS", "2_GE", "3_MD"]
+        datatype:
+          description: surface ("surf"), interior ("int"), vertical velocity ("int_wvel"), or grid ("grid")
+          type: str
+          default: "surf"
+          allowed: ["surf", "int", "int_wvel", "grid"]
+        season:
+          description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+          type: str
+          default: ""
+          allowed: ["fma", "aso", ""]
+        grid:
+          description: grid type
+          type: str
+          default: ""
+          allowed: ["grid", ""]
+      driver: zarr
+      args:
+        urlpath: 's3://Pangeo/pangeo-forge/swot_adac/HYCOM50/Region0{{ region }}/{{ datatype }}/{{ season }}{{ grid }}.zarr'
+        consolidated: True
+        storage_options:
+          anon: True
+          client_kwargs:
+            endpoint_url: 'https://ncsa.osn.xsede.org'
+
+  eNATL60:
+      description: eNATL60
+      parameters: # User parameters
+        region:
+          description: region
+          type: str
+          default: "1"
+          allowed: ["1", "2", "3"]
+        datatype:
+          description: surface ("surface_hourly") or (forthcoming) interior ("interior_daily")
+          type: str
+          default: "surface_hourly"
+          allowed: ["surface_hourly", "interior_daily"]
+        season:
+          description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+          type: str
+          default: "fma"
+          allowed: ["fma", "aso"]
+      driver: zarr
+      args:
+        urlpath: 's3://Pangeo/pangeo-forge/swot_adac/eNATL60/Region0{{ region }}/{{ datatype }}/{{ season }}.zarr'
+        consolidated: True
+        storage_options:
+          anon: True
+          client_kwargs:
+            endpoint_url: 'https://ncsa.osn.xsede.org'
+
+  #INALT60:
+  #    description: INALT60
+  #    driver: zarr
+  #    args:
+  #      urlpath: 'not implemented'
+
+
+  FESOM:
+    description: FESOM
+    parameters: # User parameters
+      datatype:
+        description: surface ("surf") or interior ("int")
+        type: str
+        default: "surf"
+        allowed: ["surf", "int"]
+      season:
+        description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+        type: str
+        default: "fma"
+        allowed: ["fma", "aso"]
+    driver: zarr
+    args:
+      urlpath: 's3://Pangeo/pangeo-forge/swot_adac/FESOM/{{ datatype }}/{{ season }}.zarr'
+      consolidated: True
+      storage_options:
+        anon: True
+        client_kwargs:
+          endpoint_url: 'https://ncsa.osn.xsede.org'
+
+  ORCA36:
+    description: ORCA36
+    parameters: # User parameters
+      region:
+        description: region
+        type: str
+        default: "1"
+        allowed: ["1", "2", "3", "4"]
+      datatype:
+        description: surface ("surface_hourly"), interior ("interior_daily"), or grid ("grid")
+        type: str
+        default: "surface_hourly"
+        allowed: ["surface_hourly", "interior_daily", "grid"]
+      season:
+        description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+        type: str
+        default: ""
+        allowed: ["fma", "aso", ""]
+      grid:
+        description: grid type ("bathymetry" or "meshmask")
+        type: str
+        default: ""
+        allowed: ["bathymetry", "meshmask", ""]
+    driver: zarr
+    args:
+      urlpath: 's3://Pangeo/pangeo-forge/swot_adac/orca36/region0{{ region }}-{{ datatype }}-{{ season }}{{ grid }}.zarr'
+      consolidated: True
+      storage_options:
+        anon: True
+        client_kwargs:
+          endpoint_url: 'https://ncsa.osn.xsede.org'
+
+  FIO-COM32:
+    description: FIO-COM32
+    parameters: # User parameters
+      region:
+        description: region
+        type: str
+        default: "1"
+        allowed: ["1", "2", "3", "4"]
+      datatype:
+        description: '"surface_hourly", "surface_flux_hourly", or "interior_daily"'
+        type: str
+        default: "surface_hourly"
+        allowed: ["surface_hourly", "surface_flux_hourly", "interior_daily"]
+      season:
+        description: Feb, Mar, Apr ("fma") or Aug, Sep, Oct ("aso")
+        type: str
+        default: "fma"
+        allowed: ["fma", "aso"]
+    driver: zarr
+    args:
+      urlpath: 's3://Pangeo/pangeo-forge/swot_adac/FIO-COM32/Region0{{ region }}/{{ datatype }}/{{ season }}.zarr'
+      consolidated: True
+      storage_options:
+        anon: True
+        client_kwargs:
+          endpoint_url: 'https://ncsa.osn.xsede.org'
