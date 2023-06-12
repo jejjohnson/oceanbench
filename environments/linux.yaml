@@ -22,10 +22,12 @@ dependencies:
   - numpy_groupies
   - xesmf>=0.7.0
   - pint-xarray
+  - gcm_filters
   - pytest
   - dvc
   - tqdm
   - brotlipy
+  - cmocean
   - pip:
       - hydra-core
       - pyrootutils

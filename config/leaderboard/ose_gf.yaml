@@ -47,7 +47,7 @@ metrics:
 hydra:
   sweeper:
       params:
-          method: {_target_: builtins.str.join, _args_: [',', '${oc.dict.keys:results.outputs.methods}']}
+          method: {_target_: builtins.str.join, _args_: [',', '${oc.dict.keys:results.outputs.eval.methods}']}
 
 results: ???
 task: ???

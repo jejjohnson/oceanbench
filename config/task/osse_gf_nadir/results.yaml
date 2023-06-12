@@ -30,8 +30,8 @@ outputs:
         4dvarnet: ${results.outputs.eval.methods.4dvarnet}
 
 filter:
-  shape: TAPER
-  scale: 2
+  shape: GAUSSIAN
+  scale: 7.
   n_steps: 0
 
 duacsselect:

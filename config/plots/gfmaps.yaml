@@ -54,7 +54,7 @@ ke_clim:
   - {_target_: builtins.tuple, _partial_: True}
 
 ke_hvplot:
-  clim: ${..ke_clim}
+  clim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[0, 1.8]]}}
   cmap: '${oc.select:..cmaps.ke,viridis}'
 
 strain_hvplot:
@@ -70,7 +70,6 @@ plot_fns:
   ssh_ref: {plottype: ssh, variable: ref, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
   ke_study: { plottype: ke, variable: study, img_hvplot: '${...ke_hvplot}'}
   ke_ref: { plottype: ke, variable: ref, img_hvplot: '${...ke_hvplot}'}
-  # vort_r_study: {plottype: vort_r, variable: study, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
   vort_r_study: {plottype: vort_r, variable: study, img_hvplot: '${...vort_hvplot}'}
   vort_r_ref: {plottype: vort_r, variable: ref, img_hvplot: '${...vort_hvplot}'}
   strain_study: {plottype: strain, variable: study, img_hvplot: '${...strain_hvplot}'}

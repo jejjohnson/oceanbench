@@ -241,7 +241,7 @@ def psd_isotropic_score(
     psd_dims: List[str],
     avg_dims: Optional[List[str]] = None,
     **kwargs,
-) -> tuple[xr.Dataset, float]:
+) -> tuple[xr.Dataset, Optional[float]]:
     """Calculates the isotropic PSD score with arbitrary dimensions
 
     PSD_SCORE = 1 - PSD(x - y) / PSD(y)
@@ -282,13 +282,15 @@ def psd_isotropic_score(
         psd_ref = xr_cond_average(psd_ref, dims=avg_dims)
 
     # normalized score
-    score = (1.0 - (psd_err.error / psd_ref.ref)).to_dataset(name='score')
+    score = (1.0 - (psd_err.error / psd_ref[ref_variable])).to_dataset(name='score')
 
-    space_rs = find_intercept_1D(
-        y=1.0 / score.freq_r.values,
-        x=score.score.values,
-        level=0.5,
-    )
+    space_rs = None
+    if score.freq_r.shape == score.score.shape: # Only frequency dims should remain to compute score
+        space_rs = find_intercept_1D(
+            y=1.0 / score.freq_r.values,
+            x=score.score.values,
+            level=0.5,
+        )
     return score, space_rs
 
 
@@ -299,7 +301,7 @@ def psd_spacetime_score(
     psd_dims: List[str],
     avg_dims: Optional[List[str]] = None,
     **kwargs,
-) -> tuple[xr.Dataset, float, float]:
+) -> tuple[xr.Dataset, Optional[float], Optional[float]]:
     """Calculates the PSD score with arbitrary dimensions
 
     PSD_SCORE = 1 - PSD(x - y) / PSD(y)
@@ -341,11 +343,14 @@ def psd_spacetime_score(
 
     # normalized score
     score = (1.0 - (psd_err.error / psd_ref[ref_variable])).to_dataset(name="score")
-
-    lon_rs, time_rs = find_intercept_2D(
-        x=1.0 / score.freq_lon.values,
-        y=1.0 / score.freq_time.values,
-        z=score.score.values,
-        levels=0.5,
-    )
-    return score, lon_rs.item(), time_rs.item()
+    lon_rs, time_rs = None, None
+    if "freq_lon" in score.dims and "freq_time" in score.dims:
+        lon_rs, time_rs = find_intercept_2D(
+            x=1.0 / score.freq_lon.values,
+            y=1.0 / score.freq_time.values,
+            z=score.score.values,
+            levels=0.5,
+        )
+        lon_rs, time_rs = lon_rs.item(), time_rs.item()
+        
+    return score, lon_rs, time_rs

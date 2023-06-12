@@ -1,0 +1,40 @@
+
+
+plot_fns:
+  isotrop_study: {plottype: psd_isotrop, variable: study, add_hvplot: {label: study}}
+  isotrop_ref: {plottype: psd_isotrop, variable: ref, add_hvplot: {label: ref}}
+
+psd_isotrop:
+  fns:
+    - {_target_: "xarray.DataArray.to_dataset", name: ssh, _partial_: True}
+    - '${lib.processing.psd_isotropic}'
+    - {_target_: operator.attrgetter, _args_: ['ssh']}
+
+to_km:
+  fns:
+    - {_target_: operator.attrgetter, _args_: ['freq_r']}
+    - {_target_: operator.mul, _args_: [1000], _partial_: True}
+outputs:
+  preprocess:
+    default: 
+      fns:
+      - {_target_: "xarray.Dataset.map", _partial_: true, func: '${......psd_prepro.cfg}'}
+      - {_target_: "xarray.Dataset.map", _partial_: true, func: '${......psd_isotrop}'}
+      - {_target_: "xarray.Dataset.assign_coords", _partial_: true, freq_r: '${......to_km}'}
+      - {_target_: "xarray.Dataset.mean", _partial_: true, dim: ['time']}
+  plots:
+    isotrop_ref: {fns: ['${....preprocess.default}', '${.....plot_fns.isotrop_ref.cfg}']}
+    isotrop_study: {fns: ['${....preprocess.default}', '${.....plot_fns.isotrop_study.cfg}']}
+
+defaults:
+  - /processing/components/grid_psd_prepro@psd_prepro
+  - /plots/components/psd_lines@plot_fns.isotrop_ref
+  - /plots/components/psd_lines@plot_fns.isotrop_study
+  - /processing/pipe@psd_isotrop
+  - /processing/pipe@to_km
+  - /processing/pipe@outputs.preprocess.default
+  - /processing/pipe@outputs.plots.isotrop_ref
+  - /processing/pipe@outputs.plots.isotrop_study
+  - /funcs@_global_.F
+  - /processing/lib@_global_.lib.processing
+  - _self_

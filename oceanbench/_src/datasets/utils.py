@@ -160,6 +160,7 @@ def regridstack_dataarrays(dataarrays, ref_grid_var=None):
     return xr.Dataset(dataarrays).to_array()
 
 def stack_dataarrays(dataarrays, ref_var=None):
+
     dataarrays = {k: v() if callable(v) else v for k,v in dataarrays.items()}
 
     ref_var, ref_grid = ((ref_var, dataarrays[ref_var]) 

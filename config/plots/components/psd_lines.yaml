@@ -1,0 +1,54 @@
+variable: ???
+plottype: psd_isotrop
+add_hvplot: {}
+add_opts: {}
+
+final_psd_hvplot:
+  _target_: oceanbench._src.utils.hydra.concatdicts
+  _args_:
+  - ${lib.plots.default_hvopts.${...plottype}.hvplot}
+  - ${...add_hvplot}
+
+final_psd_opts:
+  _target_: oceanbench._src.utils.hydra.concatdicts
+  _args_:
+  - ${lib.plots.default_hvopts.${...plottype}.opts}
+  - ${...add_opts}
+
+
+hvplot:
+  fns:
+  - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: '${....final_psd_hvplot}', _partial_: True}
+  - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: '${F.hvplot}', _partial_: True}}
+opts:
+  fns:
+  - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: '${....final_psd_opts}', _partial_: True}
+  - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: '${F.opts}', _partial_: True}}
+
+_plot_fns: {_target_: oceanbench._src.utils.hydra.rollout, fns: ['${...hvplot}', '${...opts}'], _partial_: True}
+
+plot_fn:
+  fns: 
+    - ${..._plot_fns}
+    - askw: fns
+      fn: 
+        _target_: functools.partial
+        _partial_: True
+        _args_: [{_target_: oceanbench._src.utils.hydra.pipe, _partial_: true}]
+
+
+getvar: {_target_: operator.attrgetter, _args_: ['${...variable}']}
+
+cfg:
+  fns:
+  - {_target_: oceanbench._src.utils.hydra.rolloutdict, dict_fns: {obj: '${.....plot_fn}', inp: '${.....getvar}'}, _partial_: True}
+  - {askw: kwargs, fn: {_target_: oceanbench._src.utils.hydra.unpack_to, to: {_target_: oceanbench._src.utils.hydra.call_if_callable, _partial_: true}, _partial_: True}}
+
+defaults:
+  - /funcs@_global_.F
+  - /processing/pipe@cfg
+  - /processing/pipe@plot_fn
+  - /processing/pipe@hvplot
+  - /processing/pipe@opts
+  - /plots/lib@_global_.lib.plots
+  - _self_

@@ -131,7 +131,6 @@ def grid_to_coord_based(src_grid_ds, tgt_coord_based_ds, data_vars=None):
             for v in src_grid_ds.variables
             if set(src_grid_ds[v].dims) == {"time", "lat", "lon"}
         ]
-
     ref = tgt_coord_based_ds.lon
     coords = dict(
         lon=np.ravel(ref.values),

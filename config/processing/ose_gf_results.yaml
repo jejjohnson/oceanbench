@@ -48,8 +48,9 @@ postpro:
       - '${...select}'
 
 outputs:
-  ref: ???
-  methods: {}
+  eval: 
+    ref: ???
+    methods: {}
 
 
 defaults:
@@ -64,4 +65,5 @@ defaults:
     - /processing/pipe@postpro.regrid
     - /processing/pipe@postpro.grid
     - /processing/pipe@postpro.degrid
+    - /processing/pipe@degrid.tgt_coord_based_ds
     - _self_

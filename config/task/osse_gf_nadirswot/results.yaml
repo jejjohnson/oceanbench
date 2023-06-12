@@ -28,9 +28,9 @@ outputs:
         nerf_mlp: ${results.outputs.eval.methods.nerf_mlp}
 
 filter:
-  shape: TAPER
-  scale: 2
-  n_steps: 10
+  shape: GAUSSIAN
+  scale: 7.
+  n_steps: 0
 
 duacsselect:
   lat: [33.5, 42.5] 

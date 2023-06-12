@@ -86,6 +86,14 @@ mamba env create -n environments/linux.yaml
 
 **Note**: we also have a `macos.yaml` file for MACOS users as well.
 
+
+#### Testing dependency
+
+In order to run the tests, first run the following:
+
+```
+pip install --no-deps xarray-dataclasses
+```
 #### poetry
 
 The easiest way to get started is to simply use the poetry package which installs all necessary dev packages as well

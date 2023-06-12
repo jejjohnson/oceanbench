@@ -7,7 +7,7 @@ filter_shape:
   _partial_: False
   fns:
     - {_target_: importlib.import_module, _partial_: True}
-    - {_target_: operator.attrgetter, _args_: [FilterShape.TAPER]}
+    - {_target_: operator.attrgetter, _args_: ['FilterShape.${.....shape}']}
 
 cfg:
   fns: 
@@ -16,7 +16,7 @@ cfg:
       _target_: gcm_filters.Filter.apply
       _partial_: True
       dims: [lat, lon]
-      self: {_target_: gcm_filters.Filter, filter_shape: '${......filter_shape}', filter_scale: 10, dx_min: 1., n_steps: 10}
+      self: {_target_: gcm_filters.Filter, filter_shape: '${......filter_shape}', filter_scale: '${......scale}', dx_min: 1., n_steps: '${......n_steps}'}
 
 defaults:
   - /processing/pipe@filter_shape
