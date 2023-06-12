@@ -1,0 +1,19 @@
+
+geoval: 'oceanbench._src.geoprocessing.validation'
+
+time_units: null
+data_variable: 'ssh'
+decode_times: False
+
+cfg:
+    fns:
+        - {_target_: xarray.open_dataset, decode_times: '${....decode_times}', _partial_: true}
+        - {_target_: "${....geoval}.decode_cf_time", units: '${....time_units}', _partial_: true}
+        - {_target_: "${....geoval}.validate_latlon", _partial_: true}
+        - {_target_: "${....geoval}.validate_time", _partial_: true}
+        - {_target_: "${....geoval}.validate_ssh", variable: '${....data_variable}', _partial_: true}
+        - {_target_: "xarray.Dataset.sortby", variables: "time", _partial_: True }
+        - {_target_: "operator.itemgetter", _args_: ['${.....data_variable}']}
+
+defaults:
+    - /processing/pipe@cfg

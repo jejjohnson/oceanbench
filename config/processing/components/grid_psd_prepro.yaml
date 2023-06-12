@@ -1,0 +1,17 @@
+
+
+rescale_time:
+  t0: "2012-10-22T12:00:00"
+
+cfg:
+  fns:
+    - '${lib.processing.to_dataset}'
+    - '${lib.processing.fill_nans}'
+    - '${lib.processing.rescale_space}'
+    - '${...rescale_time.cfg}'
+    - {_target_: "operator.itemgetter", _args_: [ssh]}
+        
+defaults:
+  - /processing/lib@_global_.lib.processing
+  - /processing/pipe@cfg
+  - /processing/components/rescale_time@rescale_time

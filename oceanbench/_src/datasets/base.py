@@ -89,7 +89,7 @@ class XRDABatcher:
         msg += f"\nDataArray Size: {self.da_dims}"
         msg += f"\nPatches:        {self.patches}"
         msg += f"\nStrides:        {self.strides}"
-        msg += f"\nNum Batches:    {self.da_size}"
+        msg += f"\nNum Items:    {self.da_size}"
         return msg
     
     def __str__(self) -> str:
@@ -98,7 +98,7 @@ class XRDABatcher:
         msg += f"\nDataArray size: {self.da_dims}"
         msg += f"\nPatches:        {self.patches}"
         msg += f"\nStrides:        {self.strides}"
-        msg += f"\nNum Batches:    {self.da_size}"
+        msg += f"\nNum Items:    {self.da_size}"
         return msg
     
     @property

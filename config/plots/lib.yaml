@@ -1,0 +1,92 @@
+#@package _global_.lib.plots
+
+colors:
+- black
+- 'tab:green'
+- 'tab:red'
+- 'tab:blue'
+- 'tab:olive'
+- 'tab:cyan'
+
+_minmax:
+  _target_: oceanbench._src.utils.hydra.rollout
+  _partial_: True
+  fns: [{_target_: operator.methodcaller, _args_: [min]}, {_target_: operator.methodcaller, _args_: [max]}]
+
+minmax:
+  fns: ['${..._minmax}', {_target_: builtins.map, _partial_: true, _args_: [{_target_: 'builtins.float', _partial_: True}]}, {_target_: builtins.tuple, _partial_: true}]
+
+tick_values:
+  _target_: matplotlib.ticker.MaxNLocator.tick_values
+  _args_: [{_target_: matplotlib.ticker.MaxNLocator, _args_: [5]}]
+  _partial_: True
+
+hook: 
+  _target_: oceanbench._src.utils.hydra.const_fn
+  const: 
+    inp: [{_target_: oceanbench._src.viz.add_top_wavelength_hook, _partial_: True}]
+    _partial_: false
+    fns: [{_target_: builtins.list, _partial_: true}]
+
+
+default_hvopts:
+  image:
+    hvplot:
+      kind: image
+      aspect: 1
+      x: lon
+      y: lat
+      clim: {fns: [{_target_: operator.attrgetter, _args_: [ref]}, '${......minmax}']}
+      xlim: {fns: [{_target_: operator.attrgetter, _args_: [lon]}, '${......minmax}']}
+      ylim: {fns: [{_target_: operator.attrgetter, _args_: [lat]}, '${......minmax}']}
+    opts: {}
+  contour:
+    hvplot:
+      kind: 'contour'
+      x: lon
+      y: lat
+      aspect: 1
+      colorbar: False
+      levels: 
+        fns: 
+        - {_target_: operator.attrgetter, _args_: [study]}
+        - '${......minmax}'
+        - {_target_: oceanbench._src.utils.hydra.unpack_to, to: '${.......tick_values}', _partial_: True}
+      alpha: 0.5
+      linewidth: 1
+      color: "black"
+      linestyle:
+        fns:
+        - ${...levels}
+        - {_target_: operator.le, _args_: [0.], _partial_: True}
+        - {_target_: oceanbench._src.utils.hydra.rpartial, _args_: [{_target_: numpy.where, _partial_: True}, "-", "--"]}
+    opts: {}
+  psd_isotrop:
+    hvplot:
+      kind: line
+    opts:
+      hooks: ${....hook}
+      aspect: 1.
+      logx: True
+      logy: True
+      xlim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[0.00075, 0.125]]}}
+      xlabel: Wavenumber [cycles/km]"
+      ylabel: PSD [SSH]
+      show_grid: True
+      xticks: 100
+      yticks: 100
+
+
+
+defaults:
+  - /processing/lib@_global_.lib.processing
+  - /processing/components/grid_psd_prepro@psd_prepro
+  - /processing/pipe@minmax
+  - /processing/pipe@hook.const
+  - /processing/pipe@default_hvopts.image.hvplot.clim
+  - /processing/pipe@default_hvopts.image.hvplot.xlim
+  - /processing/pipe@default_hvopts.image.hvplot.ylim
+  - /processing/pipe@default_hvopts.contour.hvplot.levels
+  - /processing/pipe@default_hvopts.contour.hvplot.linestyle
+  - /funcs@_global_.F
+  - _self_

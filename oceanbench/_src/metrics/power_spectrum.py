@@ -1,6 +1,7 @@
 from typing import List, Optional
 import xarray as xr
 from oceanbench._src.preprocessing.mean import xr_cond_average
+from oceanbench._src.metrics.utils import find_intercept_1D, find_intercept_2D
 from typing import List
 import xrft
 import xarray as xr
@@ -51,8 +52,9 @@ def psd_spacetime(
 
 
 def psd_isotropic(
-    ds: xr.DataArray, variable: str, dims: List[str], **kwargs
-) -> xr.DataArray:
+    ds: xr.Dataset, variable: str,
+    dims: List[str], **kwargs
+) -> xr.Dataset:
     """Calculates the isotropic PSD with arbitrary dimensions
 
     PSD_SCORE = isoPSD(x)
@@ -95,89 +97,70 @@ def psd_isotropic(
 
 
 def psd_welch(
-    da: xr.DataArray, variable: str, delta_x: float, nperseg=None, **kwargs
-) -> xr.DataArray:
-    da = da.copy()
+    ds: xr.Dataset, variable: str, delta_x: float, nperseg=None, **kwargs
+) -> xr.Dataset:
+    ds = ds.copy()
 
     wavenumber, psd = scipy.signal.welch(
-        da[variable].values.flatten(),
+        ds[variable].values.flatten(),
         fs=1.0 / delta_x,
         nperseg=nperseg,
         scaling=kwargs.pop("scaling", "density"),
         noverlap=kwargs.pop("noverlap", 0),
     )
 
-    ds = xr.DataArray(data=psd, coords={"wavenumber": wavenumber}, name=variable)
+    da = xr.DataArray(data=psd, coords={"wavenumber": wavenumber}, name=variable)
 
-    return ds.to_dataset()
-
-
-def psd_welch_error(
-    da: xr.DataArray,
-    variable: str,
-    variable_ref: str,
-    delta_x: float,
-    nperseg=None,
-    **kwargs,
-) -> xr.DataArray:
-    da = da.copy()
-
-    diff = da[variable].values.flatten() - da[variable_ref].values.flatten()
-
-    wavenumber, psd = scipy.signal.welch(
-        diff,
-        fs=1.0 / delta_x,
-        nperseg=nperseg,
-        scaling=kwargs.pop("scaling", "density"),
-        noverlap=kwargs.pop("noverlap", 0),
-    )
-
-    da = xr.DataArray(data=psd, coords={"wavenumber": wavenumber}, name="error")
     return da.to_dataset()
 
 
 def psd_welch_score(
-    da: xr.DataArray,
+    ds: xr.Dataset,
     variable: str,
     variable_ref: str,
     delta_x: float,
     nperseg=None,
     **kwargs,
-) -> xr.DataArray:
-    da = da.copy()
+) -> xr.Dataset:
+    ds = ds.copy()
 
     # error
-    ds = psd_welch_error(
-        da=da,
-        variable=variable,
+    ds_err = psd_welch(
+        ds=(ds[variable] - ds[variable_ref]).to_dataset(name='error'),
+        variable='error',
         variable_ref=variable_ref,
         delta_x=delta_x,
         nperseg=nperseg,
         **kwargs,
     )
 
-    # differ
-    ds_ = psd_welch(
-        da=da,
+    # ref
+    ds = psd_welch(
+        ds=ds,
         variable=variable_ref,
         delta_x=delta_x,
         nperseg=nperseg,
         **kwargs
     )
 
-    ds["score"] = (("wavenumber"), 1 - (ds["error"].values / ds_[variable_ref].values))
+    ds["score"] = (("wavenumber"), 1 - (ds_err["error"].values / ds[variable_ref].values))
 
-    return ds
+    space_rs = find_intercept_1D(
+        y=1./(ds.wavenumber.values+1e-15),
+        x=ds.score.values,
+        level=0.5
+    )
+    return ds, space_rs
 
 
 def psd_isotropic_error(
-    da: xr.DataArray,
-    da_ref: xr.DataArray,
-    variable: str,
+    ds: xr.Dataset,
+    ref_variable: str,
+    study_variable: str,
     psd_dims: List[str],
     avg_dims: Optional[List[str]] = None,
     **kwargs,
-) -> xr.DataArray:
+) -> xr.Dataset:
     """Calculates the isotropic PSD error with arbitrary dimensions
 
     PSD_SCORE = isoPSD(x - y)
@@ -201,8 +184,9 @@ def psd_isotropic_error(
         ["time", "lon"],    # dimensions for isotropic power spectrum
         "lat")              # dimensions for the average
     """
+    da_ref, da = ds[ref_variable], ds[study_variable]
     psd_error = psd_isotropic(
-        ds=da_ref - da, variable=variable, dims=psd_dims, **kwargs
+        ds=(da_ref - da).to_dataset(name='error'), variable='error', dims=psd_dims, **kwargs
     )
     if avg_dims is not None:
         psd_error = xr_cond_average(psd_error, dims=avg_dims, drop=True)
@@ -210,13 +194,13 @@ def psd_isotropic_error(
 
 
 def psd_spacetime_error(
-    da: xr.DataArray,
-    da_ref: xr.DataArray,
-    variable: str,
+    ds: xr.Dataset,
+    ref_variable: str,
+    study_variable: str,
     psd_dims: List[str],
     avg_dims: Optional[List[str]] = None,
     **kwargs,
-) -> xr.DataArray:
+) -> xr.Dataset:
     """Calculates the PSD error with arbitrary dimensions
 
     PSD_SCORE = PSD(x - y)
@@ -240,8 +224,10 @@ def psd_spacetime_error(
         ["time", "lon"],    # dimensions for power spectrum
         "lat")              # dimensions for the average
     """
+    da_ref, da = ds[ref_variable], ds[study_variable]
     psd_error = psd_spacetime(
-        ds=da_ref - da, variable=variable, dims=psd_dims, **kwargs
+        ds=(da_ref - da).to_dataset(name='error'),
+        variable='error', dims=psd_dims, **kwargs
     )
     if avg_dims is not None:
         psd_error = xr_cond_average(psd_error, dims=avg_dims, drop=True)
@@ -249,13 +235,13 @@ def psd_spacetime_error(
 
 
 def psd_isotropic_score(
-    da: xr.DataArray,
-    da_ref: xr.DataArray,
-    variable: str,
+    ds: xr.Dataset,
+    ref_variable: str,
+    study_variable: str,
     psd_dims: List[str],
-    avg_dims: List[str] = None,
+    avg_dims: Optional[List[str]] = None,
     **kwargs,
-) -> xr.DataArray:
+) -> tuple[xr.Dataset, Optional[float]]:
     """Calculates the isotropic PSD score with arbitrary dimensions
 
     PSD_SCORE = 1 - PSD(x - y) / PSD(y)
@@ -280,38 +266,42 @@ def psd_isotropic_score(
         "lat")              # dimensions for the average
     """
     # error
-    score = psd_isotropic_error(
-        da=da,
-        da_ref=da_ref,
-        variable=variable,
+    psd_err = psd_isotropic_error(
+        ds=ds,
+        ref_variable=ref_variable,
+        study_variable=study_variable,
         psd_dims=psd_dims,
         avg_dims=avg_dims,
         **kwargs,
     )
 
     # reference signal
-    psd_ref = psd_isotropic(ds=da_ref, variable=variable, dims=psd_dims, **kwargs)
+    psd_ref = psd_isotropic(ds=ds, variable=ref_variable, dims=psd_dims, **kwargs)
 
     if avg_dims is not None:
         psd_ref = xr_cond_average(psd_ref, dims=avg_dims)
 
-    if score[variable].shape != psd_ref[variable].shape:
-        psd_ref = psd_ref.interp_like(score)
-
     # normalized score
-    score = 1.0 - (score / psd_ref)
+    score = (1.0 - (psd_err.error / psd_ref[ref_variable])).to_dataset(name='score')
 
-    return score
+    space_rs = None
+    if score.freq_r.shape == score.score.shape: # Only frequency dims should remain to compute score
+        space_rs = find_intercept_1D(
+            y=1.0 / score.freq_r.values,
+            x=score.score.values,
+            level=0.5,
+        )
+    return score, space_rs
 
 
 def psd_spacetime_score(
-    da: xr.DataArray,
-    da_ref: xr.DataArray,
-    variable: str,
+    ds: xr.Dataset,
+    ref_variable: str,
+    study_variable: str,
     psd_dims: List[str],
-    avg_dims: List[str] = None,
+    avg_dims: Optional[List[str]] = None,
     **kwargs,
-) -> xr.DataArray:
+) -> tuple[xr.Dataset, Optional[float], Optional[float]]:
     """Calculates the PSD score with arbitrary dimensions
 
     PSD_SCORE = 1 - PSD(x - y) / PSD(y)
@@ -336,25 +326,31 @@ def psd_spacetime_score(
         "lat")              # dimensions for the average
     """
     # error
-    score = psd_spacetime_error(
-        da=da,
-        da_ref=da_ref,
-        variable=variable,
+    psd_err = psd_spacetime_error(
+        ds=ds,
+        ref_variable=ref_variable,
+        study_variable=study_variable,
         psd_dims=psd_dims,
         avg_dims=avg_dims,
         **kwargs,
     )
 
     # reference signal
-    psd_ref = psd_spacetime(ds=da_ref, variable=variable, dims=psd_dims, **kwargs)
+    psd_ref = psd_spacetime(ds=ds, variable=ref_variable, dims=psd_dims, **kwargs)
 
     if avg_dims is not None:
         psd_ref = xr_cond_average(psd_ref, dims=avg_dims)
 
-    if score[variable].shape != psd_ref[variable].shape:
-        psd_ref = psd_ref.interp_like(score)
-
     # normalized score
-    score = 1.0 - (score / psd_ref)
-
-    return score
+    score = (1.0 - (psd_err.error / psd_ref[ref_variable])).to_dataset(name="score")
+    lon_rs, time_rs = None, None
+    if "freq_lon" in score.dims and "freq_time" in score.dims:
+        lon_rs, time_rs = find_intercept_2D(
+            x=1.0 / score.freq_lon.values,
+            y=1.0 / score.freq_time.values,
+            z=score.score.values,
+            levels=0.5,
+        )
+        lon_rs, time_rs = lon_rs.item(), time_rs.item()
+        
+    return score, lon_rs, time_rs

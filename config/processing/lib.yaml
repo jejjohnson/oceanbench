@@ -1,0 +1,50 @@
+
+resample_method:  {target_: "xarray.Dataset.resample", _partial_: True, indexer: {time: "1D"}}
+
+resample_aggregate: {_target_: "xarray.core.resample.DatasetResample.mean",  _partial_: True}
+
+fill_nans:
+    _target_: "oceanbench._src.geoprocessing.interpolate.fillnan_gauss_seidel"
+    _partial_: True
+    variable: "ssh"
+
+rescale_space:
+    _target_: "oceanbench._src.geoprocessing.spatial.latlon_deg2m"
+    _partial_: True
+    mean: True
+
+to_dataset:
+    _target_: "xarray.DataArray.to_dataset"
+    _partial_: True
+    name: 'ssh'
+
+add_units:
+    _target_: oceanbench._src.data.add_units
+    _partial_: true
+    units: {ssh: meter, lon: degrees_east, lat: degrees_north, time: seconds}
+
+psd_spacetime:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime"
+    _partial_: True
+    variable: "ssh"
+    dims: ["time", "lon"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+
+psd_isotropic:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic"
+    _partial_: True
+    variable: "ssh"
+    dims: ["lon", "lat"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+
+

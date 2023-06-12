@@ -1,0 +1,29 @@
+base_dir: ../oceanbench-data-registry/osse_natl60/grid
+
+domain: natl
+prepro:
+    obs:
+      time_units: 'days since 2012-10-01'
+      data_variable: 'ssh_mod'
+    ssh:
+      time_units: 'seconds since 2012-10-01 00:00:00'
+    sst:
+      time_units: 'seconds since 2012-10-01 00:00:00'
+      data_variable: 'sst'
+
+outputs:
+    nadir_gridded: {inp: '${...base_dir}/${...domain}_obs_nadir.nc', fns: ['${....prepro.obs.cfg}']}
+    swot_gridded: {inp: '${...base_dir}/${...domain}_obs_nadirswot.nc', fns: ['${....prepro.obs.cfg}']}
+    ssh: {inp: '${...base_dir}/${...domain}_mod_ssh_daily.nc', fns: ['${....prepro.ssh.cfg}']}
+    sst: {inp: '${...base_dir}/${...domain}_mod_sst.nc', fns: ['${....prepro.sst.cfg}']}
+
+defaults:
+    - /processing/components/grid_prepro@prepro.obs
+    - /processing/components/grid_prepro@prepro.ssh
+    - /processing/components/grid_prepro@prepro.sst
+    - /processing/pipe@outputs.nadir_gridded
+    - /processing/pipe@outputs.swot_gridded
+    - /processing/pipe@outputs.ssh
+    - /processing/pipe@outputs.sst
+    - /processing/components/select@select.ssh
+    - _self_

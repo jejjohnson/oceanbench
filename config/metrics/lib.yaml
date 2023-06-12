@@ -1,0 +1,30 @@
+#@package _global_
+
+psd_isotropic_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
+    _partial_: True
+    ref_variable: ref
+    study_variable: study
+    psd_dims: ["lon", "lat"]
+    avg_dims: ["time"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+
+psd_spacetime_score:
+    _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
+    _partial_: True
+    ref_variable: ref
+    study_variable: study
+    psd_dims: ["time", "lon"]
+    avg_dims: ["lat"]
+    detrend: "constant"
+    window: "tukey"
+    nfactor: 2
+    window_correction: True
+    true_amplitude: True
+    truncate: True
+

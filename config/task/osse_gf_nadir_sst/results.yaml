@@ -1,0 +1,24 @@
+#@package _global_.results
+#
+base_dir: '../oceanbench-data-registry/results/osse_gf_nadir_sst'
+outputs:
+  eval:
+    methods:
+      musti: {inp: '${results.base_dir}/musti_nadir.nc', fns: ['${results.prepro.gssh.cfg}', '${results.postpro.default}']}
+      4dvarnet: {inp: '${results.base_dir}/4dvarnet.nc', fns: ['${results.prepro.out.cfg}', '${results.postpro.select}']}
+
+  plots:
+    maps:
+      ref: ${results.outputs.eval.ref}
+      methods:
+        4dvarnet: ${results.outputs.eval.methods.4dvarnet}
+        musti: ${results.outputs.eval.methods.musti}
+
+defaults:
+  - /processing/pipe@outputs.plots_prepro.maps.default
+  - /processing/osse_gf_results@_global_.results
+  - /task/osse_gf_nadir/task@_global_.task
+  - /funcs@_global_.F
+  - /processing/pipe@outputs.eval.methods.musti
+  - /processing/pipe@outputs.eval.methods.4dvarnet
+  - _self_

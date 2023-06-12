@@ -1,0 +1,24 @@
+#@package _global_
+
+task: ???
+input_dataarrays: '${task.data}'
+patch_size: {time: 10, lat: 200, lon: 200}
+strides: {variable: 2, time: 1, lat: 200, lon: 200}
+
+outputs:
+    trainval: 
+        das: '${...input_dataarrays}'
+        spat_time_domain: {time: '${task.splits.trainval}', lat: '${task.domain.lat}', lon: '${task.domain.lon}'}
+        patch_size: '${...patch_size}'
+        strides: '${...strides}'
+    test: 
+        das: '${...input_dataarrays}'
+        spat_time_domain: {time: '${task.splits.test}', lat: '${task.domain.lat}', lon: '${task.domain.lon}'}
+        patch_size: '${...patch_size}'
+        strides: '${...strides}'
+
+
+defaults:
+    - /dataset/components/patcher@datasets.test
+    - /dataset/components/patcher@datasets.trainval
+    - _self_

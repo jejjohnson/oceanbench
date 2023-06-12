@@ -72,7 +72,7 @@ def validate_time(ds: xr.Dataset) -> xr.Dataset:
 def validate_ssh(ds: xr.Dataset, variable: str = 'ssh') -> xr.Dataset:
     """ Assign ssh attributes to variable """
     ds = ds.copy()
-    ds[variable] = ds.ssh.assign_attrs(
+    ds[variable] = ds[variable].assign_attrs(
         units="m",
         standard_name="sea_surface_height",
         long_name="Sea Surface Height",

@@ -39,7 +39,7 @@ def time_rescale(
         np.float32
     )
 
-    ds = ds.pint.quantify({"time": freq_unit})
+    ds = ds.pint.quantify({"time": freq_unit}).pint.dequantify()
 
     return ds
 

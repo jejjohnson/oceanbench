@@ -71,5 +71,5 @@ def latlon_deg2m(ds: xr.Dataset, mean: bool = True) -> xr.Dataset:
     ds["lon"].attrs = lon_attrs
     ds["lat"].attrs = lat_attrs
 
-    ds = ds.pint.quantify({"lon": "meter", "lat": "meter"})
+    ds = ds.pint.quantify({"lon": "meter", "lat": "meter"}).pint.dequantify()
     return ds

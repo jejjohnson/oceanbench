@@ -7,7 +7,7 @@ import warnings
 
 def find_intercept_1D(
     x: np.ndarray, y: np.ndarray, level: float = 0.5, **kwargs
-) -> np.ndarray:
+) -> float:
     f = interp1d(
         x, 
         y,
@@ -28,7 +28,7 @@ def find_intercept_1D(
         else:
             ynew = f(x.max())
 
-    return ynew
+    return ynew.item()
 
 
 def find_intercept_2D(

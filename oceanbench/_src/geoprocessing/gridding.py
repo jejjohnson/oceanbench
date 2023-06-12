@@ -1,5 +1,4 @@
 import xarray as xr
-import xesmf as xe
 import numpy as np
 import pyinterp
 import pyinterp.backends.xarray
@@ -74,6 +73,7 @@ def coord_based_to_grid(coord_based_ds, target_grid_ds, data_vars=None, t_res=No
 
 
 def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool = True):
+
     """
     src_grid_ds: xr.Dataset with regular lat, lon coordinates (uniform or curvilinear)
     tgt_grid_ds: xr.Dataset with  uniform lat, lon coordinates
@@ -82,6 +82,7 @@ def grid_to_regular_grid(src_grid_ds, tgt_grid_ds, keep_attrs: bool = True):
                   and bilinearly interpolated  values of src_grid_ds.
                 (time coordinates remains unchanged)
     """
+    import xesmf as xe
     reggridder = xe.Regridder(
         src_grid_ds, tgt_grid_ds, "bilinear", unmapped_to_nan=True
     )
@@ -130,7 +131,6 @@ def grid_to_coord_based(src_grid_ds, tgt_coord_based_ds, data_vars=None):
             for v in src_grid_ds.variables
             if set(src_grid_ds[v].dims) == {"time", "lat", "lon"}
         ]
-
     ref = tgt_coord_based_ds.lon
     coords = dict(
         lon=np.ravel(ref.values),

@@ -1,0 +1,55 @@
+#@package _global_.metrics
+
+
+outputs:
+  metrics:
+    nrmse:
+        fns: ['${.....nrmse.cfg}', '${F.tofloat}']
+    
+    lambda_x_isotrop: 
+        fns: ['${lib.metrics.psd_isotropic_score}', '${F.getsecond}']
+    
+    lambda_x_spacetime: 
+        fns: ['${lib.metrics.psd_spacetime_score}', '${F.getsecond}']
+    
+    lambda_t_spacetime: 
+        fns: ['${lib.metrics.psd_spacetime_score}', '${F.getthird}']
+
+  summary:
+    method: '???'
+    task: '???'
+    nrmse:
+        fns: ['${....metrics.nrmse}', '${.....format.nrmse}']
+    lambda_x_isotrop: 
+        fns: ['${....metrics.lambda_x_isotrop}', '${.....format.lambda_x_isotrop}']
+    lambda_x_spacetime: 
+        fns: ['${....metrics.lambda_x_spacetime}', '${.....format.lambda_x_spacetime}']
+    lambda_t_spacetime:
+        fns: ['${....metrics.lambda_t_spacetime}', '${.....format.lambda_t_spacetime}']
+
+spatial_scale_formatting:            
+  fns:
+      - {_target_: operator.mul, _args_: [1e-3], _partial_: true}
+      - {_target_: builtins.str.format, _args_: ['{:.2f} km'], _partial_: true}
+        
+        
+format:            
+    nrmse: {_target_: builtins.str.format, _args_: ['{:.3f}'], _partial_: true}
+    lambda_x_isotrop:  '${..spatial_scale_formatting}'
+    lambda_x_spacetime:  '${..spatial_scale_formatting}'
+    lambda_t_spacetime:  {_target_: builtins.str.format, _args_: ['{:.2f} days'], _partial_: true}
+    
+    
+defaults:
+    - lib@_global_.lib.metrics
+    - components/nrmse@nrmse
+    - /funcs@_global_.F
+    - /processing/pipe@spatial_scale_formatting
+    - /processing/pipe@outputs.summary.nrmse
+    - /processing/pipe@outputs.summary.lambda_x_isotrop
+    - /processing/pipe@outputs.summary.lambda_x_spacetime
+    - /processing/pipe@outputs.summary.lambda_t_spacetime
+    - /processing/pipe@outputs.metrics.nrmse
+    - /processing/pipe@outputs.metrics.lambda_x_isotrop
+    - /processing/pipe@outputs.metrics.lambda_x_spacetime
+    - /processing/pipe@outputs.metrics.lambda_t_spacetime

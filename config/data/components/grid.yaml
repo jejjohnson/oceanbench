@@ -1,0 +1,29 @@
+
+domain: {lon: [-180, 180], lat: [-90, 90]}
+period: ['2000-01-01', '2021-01-01']
+
+resolution:
+  lon: 5
+  lat: 5
+  time: 1D
+
+
+cfg:
+  _target_: "xarray.Dataset"
+  coords:
+    lon: 
+      _target_: "numpy.arange"
+      start: "${....domain.lon.0}"
+      stop: "${....domain.lon.1}"
+      step: ${....resolution.lon}
+    lat:
+      _target_: "numpy.arange"
+      start: "${....domain.lat.0}"
+      stop: "${....domain.lat.1}"
+      step: ${....resolution.lat}
+    time:
+      _target_: "pandas.date_range"
+      start: "${....period.0}"
+      end: "${....period.1}"
+      freq: ${....resolution.time}
+

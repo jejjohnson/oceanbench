@@ -1,0 +1,75 @@
+#@package _global_.results
+
+task: ???
+
+base_dir: '../oceanbench-data-registry/results/ose_gf'
+outputs:
+  eval:
+    ref: {inp: '${task.outputs.data.test.c2}', fns: ['${F.call}', '${results.postpro.select}']}
+    methods:
+      bfn: {inp: '${results.base_dir}/bfn.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      miost: {inp: '${results.base_dir}/miost.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      dymost: {inp: '${results.base_dir}/dymost.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      duacs: {inp: '${results.base_dir}/duacs.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      convlstm: {inp: '${results.base_dir}/ConvLSTM_SSH.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      convlstm_sst: {inp: '${results.base_dir}/ConvLSTM_SSH-SST.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      musti: {inp: '${results.base_dir}/OSE_ssh_mapping_MUSTI.nc', fns: ['${results.prepro.default.cfg}', '${results.postpro.default}']}
+      4dvarnet: {inp: '${results.base_dir}/4dvarnet.nc', fns: ['${results.prepro.rec_ssh.cfg}', '${results.postpro.default}']}
+
+
+  plots:
+    maps:
+      ref: {inp: '${task.outputs.data.test.c2}', fns: ['${F.call}', '${results.postpro.select}', '${results.postpro.grid}']}
+      methods:
+        bfn: {inp: '${results.base_dir}/bfn.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.resample.cfg}', '${results.postpro.regrid}']}
+        miost: {inp: '${results.base_dir}/miost.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.resample.cfg}', '${results.postpro.regrid}']}
+        dymost: {inp: '${results.base_dir}/dymost.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.postpro.regrid}']}
+        duacs: {inp: '${results.base_dir}/duacs.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.postpro.regrid}', '${results.filter.cfg}', '${results.duacsselect.cfg}']}
+        convlstm: {inp: '${results.base_dir}/ConvLSTM_SSH.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.postpro.regrid}']}
+        convlstm_sst: {inp: '${results.base_dir}/ConvLSTM_SSH-SST.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.postpro.regrid}']}
+        musti: {inp: '${results.base_dir}/OSE_ssh_mapping_MUSTI.nc', fns: ['${results.prepro.default.cfg}', '${results.select_grid.cfg}', '${results.postpro.regrid}']}
+        4dvarnet: {inp: '${results.base_dir}/4dvarnet.nc', fns: ['${results.prepro.rec_ssh.cfg}', '${results.select_grid.cfg}', '${results.postpro.regrid}']}
+
+filter:
+  shape: GAUSSIAN
+  scale: 7.
+  n_steps: 0
+
+duacsselect:
+  lat: [33.5, 42.5] 
+  lon: [-64.5, -65.5] 
+  drop: False
+
+select_grid: 
+  time: '${task.outputs.splits.test}'
+  lat: '${task.outputs.domain.lat}'
+  lon: '${task.outputs.domain.lon}'
+
+defaults:
+  - /processing/components/resample@resample
+  - /processing/pipe@outputs.plots_prepro.maps.default
+  - /processing/pipe@outputs.plots_prepro.maps.duacs
+  - /processing/components/filter@filter
+  - /processing/components/select_where@duacsselect
+  - /processing/ose_gf_results@_global_.results
+  - /funcs@_global_.F
+  - /processing/components/select@select_grid
+  - /processing/pipe@outputs.eval.ref
+  - /processing/pipe@outputs.eval.methods.bfn
+  - /processing/pipe@outputs.eval.methods.4dvarnet
+  - /processing/pipe@outputs.eval.methods.convlstm
+  - /processing/pipe@outputs.eval.methods.convlstm_sst
+  - /processing/pipe@outputs.eval.methods.musti
+  - /processing/pipe@outputs.eval.methods.duacs
+  - /processing/pipe@outputs.eval.methods.dymost
+  - /processing/pipe@outputs.eval.methods.miost
+  - /processing/pipe@outputs.plots.maps.ref
+  - /processing/pipe@outputs.plots.maps.methods.bfn
+  - /processing/pipe@outputs.plots.maps.methods.4dvarnet
+  - /processing/pipe@outputs.plots.maps.methods.convlstm
+  - /processing/pipe@outputs.plots.maps.methods.convlstm_sst
+  - /processing/pipe@outputs.plots.maps.methods.musti
+  - /processing/pipe@outputs.plots.maps.methods.duacs
+  - /processing/pipe@outputs.plots.maps.methods.dymost
+  - /processing/pipe@outputs.plots.maps.methods.miost
+  - _self_

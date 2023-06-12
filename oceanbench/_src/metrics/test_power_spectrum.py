@@ -60,12 +60,11 @@ def test_psd_isotropic_error():
     
     ds_ref = get_ssh_data()
     ds_model = ds_ref.copy()
-    ds_model["ssh"] = ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter
+    ds_model = ds_model.assign(study=ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter)
     
     # CASE I - non-average dimensions
     ds_psd = psd_isotropic_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=None
     )
@@ -74,8 +73,7 @@ def test_psd_isotropic_error():
     
     # CASE II - average dimensions
     ds_psd = psd_isotropic_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
     )
@@ -87,12 +85,11 @@ def test_psd_spacetime_error():
     
     ds_ref = get_ssh_data()
     ds_model = ds_ref.copy()
-    ds_model["ssh"] = ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter
+    ds_model = ds_model.assign(study=ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter)
     
     # CASE I - non-average dimensions
     ds_psd = psd_spacetime_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=None
     )
@@ -101,8 +98,7 @@ def test_psd_spacetime_error():
     
     # CASE II - average dimensions
     ds_psd = psd_spacetime_error(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
     )
@@ -114,29 +110,30 @@ def test_psd_isotropic_score():
     
     ds_ref = get_ssh_data()
     ds_model = ds_ref.copy()
-    ds_model["ssh"] = ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter
+    ds_model = ds_model.assign(study=ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter)
+    ds_model = ds_model.pint.dequantify()
     
     # CASE I - non-average dimensions
-    ds_psd = psd_isotropic_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+    ds_psd, rs = psd_isotropic_score(
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=None
     )
     dims = set(["freq_r", "time"])
+    assert rs is None
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
     assert ds_psd.max() <= 1.0
     assert ds_psd.mean() >= 0.99
     
     # CASE II - average dimensions
-    ds_psd = psd_isotropic_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+    ds_psd, rs = psd_isotropic_score(
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
     )
     dims = set(["freq_r"])
+    assert rs is not  None
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
     assert ds_psd.max() <= 1.0
@@ -147,15 +144,14 @@ def test_psd_spacetime_score():
     
     ds_ref = get_ssh_data()
     ds_model = ds_ref.copy()
-    ds_model["ssh"] = ds_model["ssh"] + 1.0 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter
+    ds_model = ds_model.assign(study=ds_model["ssh"] + 0.01 * RNG.randn(*ds_model["ssh"].values.shape) * units.meter)
     
     # CASE I - non-average dimensions
     ds_psd = psd_spacetime_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=None
-    )
+    )[0]
     dims = set(["freq_lat", "freq_lon", "time"])
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0
@@ -164,11 +160,10 @@ def test_psd_spacetime_score():
     
     # CASE II - average dimensions
     ds_psd = psd_spacetime_score(
-        da=ds_model, da_ref=ds_ref, 
-        variable="ssh", 
+        ds=ds_model, ref_variable="ssh", study_variable="study", 
         psd_dims=["lat", "lon"],
         avg_dims=["time"]
-    )
+    )[0]
     dims = set(["freq_lat", "freq_lon"])
     assert dims == set(ds_psd.dims.keys())
     assert ds_psd.min() >= 0.0

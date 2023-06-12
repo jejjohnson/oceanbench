@@ -1,0 +1,11 @@
+
+plots_dict: ???
+
+
+cfg:
+  fns:
+  - _target_: oceanbench._src.utils.hydra.rolloutdict
+    _partial_: True
+    dict_fns: ${....plots_dict}
+  - {_target_: operator.methodcaller, _args_: ['values']}
+  - {_target_: oceanbench._src.utils.hydra.unpack_to, to: {_target_: operator.mul, _partial_: true}, _partial_: True}

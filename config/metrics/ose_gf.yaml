@@ -1,0 +1,45 @@
+#@package _global_.metrics
+
+rescale_time:
+  t0: "2017-01-01"
+
+
+nrmse: {dim: time}
+outputs:
+  metrics:
+      nrmse:
+          fns: ['${.....rescale_time.cfg}', '${.....nrmse.cfg}', '${F.tofloat}']
+
+      lambda_x_alongtrack: 
+          fns: ['${.....psd_score.cfg}', '${F.getsecond}']
+
+  summary:
+      method: '???'
+      task: '???'
+      nrmse:
+          fns: ['${....metrics.nrmse}', '${.....format.nrmse}']
+      lambda_x_alongtrack: 
+          fns: ['${....metrics.lambda_x_alongtrack}', '${.....format.lambda_x_alongtrack}']
+
+format:            
+    nrmse: {_target_: builtins.str.format, _args_: ['{:.3f}'], _partial_: true}
+    lambda_x_alongtrack:
+      fns:
+          # - {_target_: operator.mul, _args_: [1e-3], _partial_: true}
+          - {_target_: builtins.str.format, _args_: ['{:.2f} km'], _partial_: true}
+    
+psd_score:
+  alongtrack_segments:
+    length_scale: 850.
+
+defaults:
+    - lib@_global_.lib.metrics
+    - components/alongtrack_psd_score@psd_score
+    - components/nrmse@nrmse
+    - /funcs@_global_.F
+    - /processing/components/rescale_time@rescale_time
+    - /processing/pipe@format.lambda_x_alongtrack
+    - /processing/pipe@outputs.summary.nrmse
+    - /processing/pipe@outputs.summary.lambda_x_alongtrack
+    - /processing/pipe@outputs.metrics.nrmse
+    - /processing/pipe@outputs.metrics.lambda_x_alongtrack

@@ -1,0 +1,23 @@
+shape: TAPER
+scale: 3
+n_steps: 0
+
+filter_shape:
+  inp: gcm_filters
+  _partial_: False
+  fns:
+    - {_target_: importlib.import_module, _partial_: True}
+    - {_target_: operator.attrgetter, _args_: ['FilterShape.${.....shape}']}
+
+cfg:
+  fns: 
+  - askw: ds
+    fn: 
+      _target_: gcm_filters.Filter.apply
+      _partial_: True
+      dims: [lat, lon]
+      self: {_target_: gcm_filters.Filter, filter_shape: '${......filter_shape}', filter_scale: '${......scale}', dx_min: 1., n_steps: '${......n_steps}'}
+
+defaults:
+  - /processing/pipe@filter_shape
+  - /processing/pipe@cfg

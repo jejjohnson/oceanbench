@@ -1,0 +1,56 @@
+#@package _global_.results
+
+
+prepro:
+  gssh: {data_variable: gssh}
+  ssh_mod: {data_variable: ssh_mod}
+  out: {data_variable: out}
+
+select: 
+  time: '${task.outputs.splits.test}'
+  lat: '${task.outputs.domain.lat}'
+  lon: '${task.outputs.domain.lon}'
+
+regrid:
+  target_grid:
+    domain: ${task.outputs.domain}
+    period: ${task.outputs.splits.test}
+    resolution: {lon: 0.05, lat: 0.05}
+
+postpro:
+  default:
+     fns: 
+      - '${....select.cfg}'
+      - '${....resample.cfg}'
+      - '${lib.processing.to_dataset}'
+      - '${....regrid.cfg}'
+      - {_target_: "operator.itemgetter", _args_: ['ssh']}
+
+  select: '${..select.cfg}'
+  regrid: 
+     fns: 
+      - '${....resample.cfg}'
+      - '${lib.processing.to_dataset}'
+      - '${....regrid.cfg}'
+      - {_target_: "operator.itemgetter", _args_: ['ssh']}
+
+outputs:
+  eval:
+    ref: {inp: '${task.outputs.data.ssh}', fns: ['${F.call}', '${results.postpro.select}', '${results.postpro.regrid}']}
+    methods: {}
+
+
+defaults:
+    - /funcs@_global_.F
+    - /processing/lib@_global_.lib.processing
+    - /processing/components/select@select
+    - /processing/components/resample@resample
+    - /processing/components/grid_to_grid@regrid
+    - /processing/components/grid_prepro@prepro.default
+    - /processing/components/grid_prepro@prepro.gssh
+    - /processing/components/grid_prepro@prepro.ssh_mod
+    - /processing/components/grid_prepro@prepro.out
+    - /processing/pipe@postpro.default
+    - /processing/pipe@postpro.regrid
+    - /processing/pipe@outputs.eval.ref
+    - _self_

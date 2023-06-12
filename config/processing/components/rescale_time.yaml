@@ -1,0 +1,10 @@
+
+t0: "2012-10-22T12:00:00"
+
+cfg:
+  _target_: "oceanbench._src.geoprocessing.temporal.time_rescale"
+  _partial_: True
+  t0: ${..t0}
+  freq_dt: 1
+  freq_unit: "day"
+

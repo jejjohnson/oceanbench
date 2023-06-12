@@ -1,0 +1,22 @@
+#@package _global_.task
+outputs:
+    name: DC2021 OSE Gulfstream
+    data:
+      train:
+        alg: ${....data.outputs.alg}
+        h2g: ${....data.outputs.h2g}
+        j2g: ${....data.outputs.j2g}
+        j2n: ${....data.outputs.j2n}
+        j3: ${....data.outputs.j3}
+        s3a: ${....data.outputs.s3a}
+      test:
+        c2: ${....data.outputs.c2}
+        
+
+    domain: {lat: [33, 43], lon: [-65, -55]}
+    splits: {test: ['2017-01-01', '2017-12-31'], train: ['2016-12-01', '2018-01-31']}
+    
+
+defaults:
+    - /data/nadir_2017@data
+    - _self_

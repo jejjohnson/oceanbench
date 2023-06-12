@@ -86,6 +86,14 @@ mamba env create -n environments/linux.yaml
 
 **Note**: we also have a `macos.yaml` file for MACOS users as well.
 
+
+#### Testing dependency
+
+In order to run the tests, first run the following:
+
+```
+pip install --no-deps xarray-dataclasses
+```
 #### poetry
 
 The easiest way to get started is to simply use the poetry package which installs all necessary dev packages as well
@@ -122,4 +130,11 @@ jupytext --to myst example.ipynb
 ```
 
 
+ ## Jupyter 
+ if you want to add the oceanbench conda environment as a jupyter kernel, you need to set the ESMF environment variable:
+
+  ```
+  conda activate oceanbench
+  mamba install ipykernel -y 
+  python -m ipykernel install --user --name=oceanbench --env ESMFMKFILE "$ESMFMKFILE"
 
