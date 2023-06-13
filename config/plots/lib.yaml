@@ -24,7 +24,9 @@ tick_values:
 hook: 
   _target_: oceanbench._src.utils.hydra.const_fn
   const: 
-    inp: [{_target_: oceanbench._src.viz.add_top_wavelength_hook, _partial_: True}]
+    inp: 
+    - {_target_: oceanbench._src.viz.ygrid_major, _partial_: True}
+    - {_target_: oceanbench._src.viz.xformatter, _partial_: True}
     _partial_: false
     fns: [{_target_: builtins.list, _partial_: true}]
 
@@ -64,22 +66,26 @@ default_hvopts:
   psd_isotrop:
     hvplot:
       kind: line
+      linewidth: 2.5
+      color: black
     opts:
       hooks: ${....hook}
       aspect: 1.
       logx: True
       logy: True
-      xlim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[0.00075, 0.125]]}}
-      xlabel: Wavenumber [cycles/km]"
+      xlim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[10, 1000]]}}
+      xlabel: Wavelength [km]
       ylabel: PSD [SSH]
-      show_grid: True
-      xticks: 100
-      yticks: 100
+      invert_xaxis: true
+      # show_grid: True
+      # xticks: 100
+      # yticks: 100
 
 
 
 defaults:
   - /processing/lib@_global_.lib.processing
+  - /metrics/lib@_global_.lib.metrics
   - /processing/components/grid_psd_prepro@psd_prepro
   - /processing/pipe@minmax
   - /processing/pipe@hook.const

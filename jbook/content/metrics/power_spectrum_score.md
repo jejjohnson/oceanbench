@@ -30,7 +30,7 @@ import einops
 from metpy.units import units
 import pint_xarray
 import xarray_dataclasses as xrdataclass
-from oceanbench._src.datasets.base import XRDABatcher
+from oceanbench._src.datasets.base import XRDAPatcher
 from oceanbench._src.geoprocessing.spatial import transform_360_to_180
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors

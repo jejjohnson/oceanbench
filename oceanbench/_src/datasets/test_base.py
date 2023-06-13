@@ -1,6 +1,6 @@
 from typing import Literal
 import pytest
-from .base import XRDABatcher
+from .base import XRDAPatcher
 import numpy as np
 from xarray_dataclasses import Data, Name, Coord, asdataarray
 from dataclasses import dataclass
@@ -96,7 +96,7 @@ def test_xrda_patcher_1d(variable_1d, patch, stride, domain_limits, datasize):
     strides = {"x": stride} if stride is not None else None
     check_full_scan = True
 
-    ds = XRDABatcher(
+    ds = XRDAPatcher(
         da=variable_1d,
         patches=patches,
         strides=strides,
@@ -136,7 +136,7 @@ def test_xrda_patcher_1d_reconstruct(patch, stride):
     strides = {"x": stride} if stride is not None else None
     check_full_scan = True
 
-    xrda_batcher = XRDABatcher(
+    xrda_batcher = XRDAPatcher(
         da=da, patches=patches, strides=strides, check_full_scan=check_full_scan
     )
 
@@ -208,7 +208,7 @@ def test_xrda_patcher_1d_reconstruct_latent(patch, stride):
     strides = {"x": stride} if stride is not None else None
     check_full_scan = True
 
-    xrda_batcher = XRDABatcher(
+    xrda_batcher = XRDAPatcher(
         da=da, patches=patches, strides=strides, check_full_scan=check_full_scan
     )
 
@@ -282,7 +282,7 @@ def test_xrda_patcher_2d(variable_2d, patch, stride, domain_limits, datasize):
     strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
     check_full_scan = True
 
-    ds = XRDABatcher(
+    ds = XRDAPatcher(
         da=variable_2d,
         patches=patches,
         strides=strides,
@@ -323,7 +323,7 @@ def test_xrda_patcher_2d_reconstruct(patch, stride):
     strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
     check_full_scan = True
 
-    xrda_batcher = XRDABatcher(
+    xrda_batcher = XRDAPatcher(
         da=da, patches=patches, strides=strides, check_full_scan=check_full_scan
     )
 
@@ -440,7 +440,7 @@ def test_xrda_patcher_2d_reconstruct_latent(patch, stride):
     strides = {"x": stride[0], "y": stride[1]} if stride is not None else None
     check_full_scan = True
 
-    xrda_batcher = XRDABatcher(
+    xrda_batcher = XRDAPatcher(
         da=da, patches=patches, strides=strides, check_full_scan=check_full_scan
     )
 
