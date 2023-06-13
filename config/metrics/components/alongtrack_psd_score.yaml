@@ -21,3 +21,4 @@ cfg: {fns: ['${...alongtrack_segments}', '${...psd_welch_score}']}
 
 defaults:
   - /processing/pipe@cfg
+  - _self_

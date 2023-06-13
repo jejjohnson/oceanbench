@@ -10,6 +10,12 @@ psd_isotrop:
     - '${lib.processing.psd_isotropic}'
     - {_target_: operator.attrgetter, _args_: ['ssh']}
 
+psd_spacetime:
+  fns:
+    - {_target_: "xarray.DataArray.to_dataset", name: ssh, _partial_: True}
+    - '${lib.processing.psd_spacetime}'
+    - {_target_: operator.attrgetter, _args_: ['ssh']}
+
 to_km:
   fns:
     - {_target_: operator.attrgetter, _args_: ['freq_r']}

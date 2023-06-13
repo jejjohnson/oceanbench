@@ -352,5 +352,5 @@ def psd_spacetime_score(
             levels=0.5,
         )
         lon_rs, time_rs = lon_rs.item(), time_rs.item()
-        
+
     return score, lon_rs, time_rs

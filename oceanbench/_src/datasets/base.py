@@ -13,7 +13,7 @@ from oceanbench._src.datasets.utils import (
 )
 
 
-class XRDABatcher:
+class XRDAPatcher:
     """
     A dataclass for xarray.DataArray with on the fly slicing and arbitrary
     dimension reconstruction.

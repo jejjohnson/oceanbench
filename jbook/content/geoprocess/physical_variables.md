@@ -29,7 +29,7 @@ import einops
 import metpy
 from metpy.units import units
 import xarray_dataclasses as xrdataclass
-from oceanbench._src.datasets.base import XRDABatcher
+from oceanbench._src.datasets.base import XRDAPatcher
 from oceanbench._src.geoprocessing import geostrophic as geocalc
 import matplotlib.pyplot as plt
 import seaborn as sns

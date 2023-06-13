@@ -65,9 +65,13 @@ vort_hvplot:
   clim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[-30, 30]]}}
   cmap: '${oc.select:..cmaps.vort_r,viridis}'
 
+ssh_hvplot:
+  clim: {_target_: oceanbench._src.utils.hydra.const_fn, const: {_target_: builtins.tuple, _args_: [[-0.5, 1.2]]}}
+  cmap: '${oc.select:..cmaps.ssh,viridis}'
+
 plot_fns:
-  ssh_study: {plottype: ssh, variable: study, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
-  ssh_ref: {plottype: ssh, variable: ref, img_hvplot: {cmap: '${oc.select:....cmaps.${..plottype},viridis}'}}
+  ssh_study: {plottype: ssh, variable: study, img_hvplot: '${...ssh_hvplot}'}
+  ssh_ref: {plottype: ssh, variable: ref, img_hvplot: '${...ssh_hvplot}'}
   ke_study: { plottype: ke, variable: study, img_hvplot: '${...ke_hvplot}'}
   ke_ref: { plottype: ke, variable: ref, img_hvplot: '${...ke_hvplot}'}
   vort_r_study: {plottype: vort_r, variable: study, img_hvplot: '${...vort_hvplot}'}

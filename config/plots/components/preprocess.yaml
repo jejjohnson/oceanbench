@@ -1,5 +1,5 @@
 transforms: ???
-tidx: 10
+tidx: 5
 attrs:
   lon: {units: degrees, standard_name: longitude, long_name: Longitude}
   lat: {units: degrees, standard_name: latitude, long_name: Latitude}

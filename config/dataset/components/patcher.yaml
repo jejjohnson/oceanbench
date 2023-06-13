@@ -6,7 +6,7 @@ strides: null
 ref_grid_var: null
 
 cfg:
-    _target_: oceanbench._src.datasets.base.XRDABatcher
+    _target_: oceanbench._src.datasets.base.XRDAPatcher
     da: 
         _target_: oceanbench._src.datasets.utils.interpstack_dataarrays
         dataarrays: '${...das}'

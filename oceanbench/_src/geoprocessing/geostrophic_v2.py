@@ -67,23 +67,8 @@ def geostrophic_velocities(ds, variable: str = "ssh"):
     """
     ds = ds.copy().metpy.quantify()
     u, v = geocalc.geostrophic_wind(height=ds[variable])
-    return xr.Dataset(dict(u=u, v=v)).metpy.dequantify()
+    return xr.Dataset(dict(u=u, v=v)).metpy.dequantify().assign_coords(lat=ds.lat, lon=ds.lon)
 
-    print(f'{dpsi_dx=}')
-    # ds["u"] = (("time", "lat", "lon"), -dpsi_dy, dict(units=dpsi_dy._units))
-    ds["u"] = (("time", "lat", "lon"), -dpsi_dy)
-    ds["u"] = (("time", "lat", "lon"), -dpsi_dy)
-    ds["u"].attrs["long_name"] = "Zonal Velocity"
-    ds["u"].attrs["standard_name"] = "zonal_velocity"
-
-    ds["v"] = (("time", "lat", "lon"), dpsi_dx)
-    # ds["v"] = (("time", "lat", "lon"), dpsi_dx, dict(units=dpsi_dx._units))
-    ds["v"].attrs["long_name"] = "Meridional Velocity"
-    ds["v"].attrs["standard_name"] = "meridional_velocity"
-    
-    print(f'{ds.u=}')
-    print(f'{ds.u.metpy.dequantify().attrs=}')
-    return ds[['u', 'v']].metpy.dequantify()
 
 
 def kinetic_energy(ds, variables: List[str] = ["u", "v"]):
@@ -133,7 +118,7 @@ def relative_vorticity(ds, variables: List[str] = ["u", "v"]):
 
     ds["vort_r"] = geocalc.vorticity(
         v=ds[variables[1]], u=ds[variables[0]], latitude=ds.lat, longitude=ds.lon
-    )
+    ).assign_coords(lat=ds.lat, lon=ds.lon)
 
     ds["vort_r"].attrs["long_name"] = "Relative Vorticity"
     ds["vort_r"].attrs["standard_name"] = "relative_vorticity"

@@ -31,7 +31,7 @@ import pandas as pd
 import xarray as xr
 import einops
 import xarray_dataclasses as xrdataclass
-from oceanbench._src.datasets.base import XRDABatcher
+from oceanbench._src.datasets.base import XRDAPatcher
 
 %load_ext autoreload
 %autoreload 2
