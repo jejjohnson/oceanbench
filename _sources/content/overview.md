@@ -5,8 +5,10 @@
 
 The **Oceanbench** project aims to facilitate the development and evaluation of ML methods applied to ocean observation data.
 For this purpose it provides:
+
 @ https://github.com/quentinf00/oceanbench-data-registry.git
 - a data registry at  with versioned and open access ocean data
+
 @ https://github.com/jejjohnson/oceanbench.git
 - preconfigured **SSH interpolation task** configurations with
   - preconfigured data validation and preprocessing pipelines
