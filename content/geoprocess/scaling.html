@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Scaling Domains &#8212; OceanBench</title>
   
@@ -44,7 +44,6 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -67,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Physical Variables" href="physical_variables.html" />
     <link rel="prev" title="Regridding Data" href="gridded_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:language" content="None"/>
   </head>
   
   
@@ -442,7 +441,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="scaling-domains">
-<h1>Scaling Domains<a class="headerlink" href="#scaling-domains" title="Permalink to this heading">#</a></h1>
+<h1>Scaling Domains<a class="headerlink" href="#scaling-domains" title="Permalink to this headline">#</a></h1>
 <blockquote>
 <div><p>This demo notebook showcases some key functions for scaling coordinates.
 We often need to use semantic coordinate values that are actually useful for computation.
@@ -486,9 +485,9 @@ Similarly with time coordinates: we often have <code class="docutils literal not
 </div>
 </div>
 <section id="spatial-rescaling">
-<h2>Spatial Rescaling<a class="headerlink" href="#spatial-rescaling" title="Permalink to this heading">#</a></h2>
+<h2>Spatial Rescaling<a class="headerlink" href="#spatial-rescaling" title="Permalink to this headline">#</a></h2>
 <section id="degrees-to-meters">
-<h3>Degrees to Meters<a class="headerlink" href="#degrees-to-meters" title="Permalink to this heading">#</a></h3>
+<h3>Degrees to Meters<a class="headerlink" href="#degrees-to-meters" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.spatial</span> <span class="kn">import</span> <span class="n">latlon_deg2m</span>
@@ -507,9 +506,9 @@ Similarly with time coordinates: we often have <code class="docutils literal not
 </section>
 </section>
 <section id="temporal-rescaling">
-<h2>Temporal Rescaling<a class="headerlink" href="#temporal-rescaling" title="Permalink to this heading">#</a></h2>
+<h2>Temporal Rescaling<a class="headerlink" href="#temporal-rescaling" title="Permalink to this headline">#</a></h2>
 <section id="datetime-2-seconds">
-<h3>DateTime 2 Seconds<a class="headerlink" href="#datetime-2-seconds" title="Permalink to this heading">#</a></h3>
+<h3>DateTime 2 Seconds<a class="headerlink" href="#datetime-2-seconds" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.temporal</span> <span class="kn">import</span> <span class="n">time_rescale</span>

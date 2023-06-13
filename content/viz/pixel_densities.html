@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Pixel Densities &#8212; OceanBench</title>
   
@@ -44,7 +44,6 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -67,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="OSSE 2020a" href="../data_challenges/dc20a.html" />
     <link rel="prev" title="Power Spectrum Score" href="../metrics/power_spectrum_score.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:language" content="None"/>
   </head>
   
   
@@ -428,7 +427,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pixel-densities">
-<h1>Pixel Densities<a class="headerlink" href="#pixel-densities" title="Permalink to this heading">#</a></h1>
+<h1>Pixel Densities<a class="headerlink" href="#pixel-densities" title="Permalink to this headline">#</a></h1>
 <blockquote>
 <div><p>In the ocean community, we often operator in the Fourier domain.
 This is useful for assessing the quality of our models and it can also be useful for learning.
@@ -566,7 +565,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </div>
 <section id="regridding">
-<h2>Regridding<a class="headerlink" href="#regridding" title="Permalink to this heading">#</a></h2>
+<h2>Regridding<a class="headerlink" href="#regridding" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.gridding</span> <span class="kn">import</span> <span class="n">grid_to_regular_grid</span>
@@ -1090,7 +1089,7 @@ Attributes:
              dtype=&#x27;float64&#x27;, name=&#x27;lat&#x27;, length=199))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-f97fc338-9f70-4bca-b70a-3e86be6303cc' class='xr-section-summary-in' type='checkbox'  checked><label for='section-f97fc338-9f70-4bca-b70a-3e86be6303cc' class='xr-section-summary' >Attributes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>regrid_method :</span></dt><dd>bilinear</dd></dl></div></li></ul></div></div></div></div>
 </div>
 <section id="interpolate-nans">
-<h3>Interpolate NANs<a class="headerlink" href="#interpolate-nans" title="Permalink to this heading">#</a></h3>
+<h3>Interpolate NANs<a class="headerlink" href="#interpolate-nans" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.interpolate</span> <span class="kn">import</span> <span class="n">fillnans</span>
@@ -1116,7 +1115,7 @@ Attributes:
 </div>
 </section>
 <section id="units">
-<h3>Units<a class="headerlink" href="#units" title="Permalink to this heading">#</a></h3>
+<h3>Units<a class="headerlink" href="#units" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_units</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
@@ -1146,7 +1145,7 @@ Attributes:
 </section>
 </section>
 <section id="derived-variables">
-<h2>Derived Variables<a class="headerlink" href="#derived-variables" title="Permalink to this heading">#</a></h2>
+<h2>Derived Variables<a class="headerlink" href="#derived-variables" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing</span> <span class="kn">import</span> <span class="n">geostrophic</span> <span class="k">as</span> <span class="n">geocalc</span>
@@ -1684,9 +1683,9 @@ Attributes:
 </div>
 </section>
 <section id="joint-densities">
-<h2>Joint Densities<a class="headerlink" href="#joint-densities" title="Permalink to this heading">#</a></h2>
+<h2>Joint Densities<a class="headerlink" href="#joint-densities" title="Permalink to this headline">#</a></h2>
 <section id="natl60-simulation">
-<h3>NATL60 Simulation<a class="headerlink" href="#natl60-simulation" title="Permalink to this heading">#</a></h3>
+<h3>NATL60 Simulation<a class="headerlink" href="#natl60-simulation" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pixel_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span>
@@ -1853,7 +1852,7 @@ Attributes:
 </div>
 </section>
 <section id="reconstruction">
-<h3>Reconstruction<a class="headerlink" href="#reconstruction" title="Permalink to this heading">#</a></h3>
+<h3>Reconstruction<a class="headerlink" href="#reconstruction" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pixel_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span>
