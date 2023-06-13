@@ -349,7 +349,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -365,6 +367,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-structure">Overall structure</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -376,6 +386,29 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="oceanbench-sea-surface-height-editions">
 <h1>OceanBench: Sea Surface Height Editions<a class="headerlink" href="#oceanbench-sea-surface-height-editions" title="Permalink to this headline">#</a></h1>
+<section id="overall-structure">
+<h2>Overall structure<a class="headerlink" href="#overall-structure" title="Permalink to this headline">#</a></h2>
+<p><img alt="Schema" src="../_images/Oceanbench.png" /></p>
+<p>The <strong>Oceanbench</strong> project aims to facilitate the development and evaluation of ML methods applied to ocean observation data.
+For this purpose it provides:
+&#64; <a class="github reference external" href="https://github.com/quentinf00/oceanbench-data-registry.git">quentinf00/oceanbench-data-registry.git</a></p>
+<ul class="simple">
+<li><p>a data registry at  with versioned and open access ocean data
+&#64; <a class="github reference external" href="https://github.com/jejjohnson/oceanbench.git">jejjohnson/oceanbench.git</a></p></li>
+<li><p>preconfigured <strong>SSH interpolation task</strong> configurations with</p>
+<ul>
+<li><p>preconfigured data validation and preprocessing pipelines</p></li>
+</ul>
+</li>
+<li><p>A <strong>xarray dataarray patcher</strong> allowing to</p>
+<ul>
+<li><p>slice a large ocean state into ML ingestible items</p></li>
+<li><p>reconstructing the full state from models predictions</p></li>
+</ul>
+</li>
+<li><p><strong>leaderboards</strong> with preconfigured post-processing and evaluation pipelines</p></li>
+</ul>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -439,6 +472,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-structure">Overall structure</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
