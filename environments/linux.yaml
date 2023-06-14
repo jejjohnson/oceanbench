@@ -33,6 +33,7 @@ dependencies:
       - pyrootutils
       - loguru
       # - xarray-dataclasses
+      - xrpatcher
       - autoroot
       - einops
       - corner
