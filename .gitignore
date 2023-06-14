@@ -141,6 +141,7 @@ datasets/*
 notebooks/*.gif
 *.mp4
 *.png
+!jbook/content/*.png
 *.nc
 *.pickle
 *.pkl
