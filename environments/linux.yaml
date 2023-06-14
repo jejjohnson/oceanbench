@@ -28,6 +28,8 @@ dependencies:
   - tqdm
   - brotlipy
   - cmocean
+  - jupyter-book
+  - ghp-import
   - pip:
       - hydra-core
       - pyrootutils

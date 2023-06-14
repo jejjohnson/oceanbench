@@ -4,6 +4,13 @@
 format: jb-book
 root: content/overview.md
 parts:
+  - caption: Getting started
+    chapters:
+      - file: content/getting_started/TaskToPatcher.ipynb
+      - file: content/getting_started/pytorch_dataset_integration_example.ipynb
+      - file: content/getting_started/PlotMaps.ipynb
+      - file: content/getting_started/Leaderboards.ipynb
+      - file: content/getting_started/ocean_bench_4dvarnet.ipynb
   - caption: GeoProcessing
     chapters:
       - file: content/geoprocess/gridded_data.md
