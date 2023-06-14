@@ -64,3 +64,6 @@ jb_build: ## Build Jupyterbook
 
 jb_clean: ## Clean JupyterBook
 	jupyter-book clean jbook
+
+jb_publish: ## Publish Jupyter Book
+	ghp-import -n -p -f jbook/_build/html
