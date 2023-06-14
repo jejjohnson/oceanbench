@@ -24,7 +24,8 @@ dependencies:
   - tqdm
   - pip:
       - pyrootutils
-      - xarray-dataclasses
+      # - xarray-dataclasses
+      - xrpatcher
       - autoroot
       - einops
       - corner

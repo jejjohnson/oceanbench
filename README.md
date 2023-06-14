@@ -20,7 +20,7 @@
 It is designed with a flexible and pedagogical abstraction to do:
 1. provides plug-and-play data and pre-configured pipelines for ML researchers to benchmark their models w.r.t. ML and domain-related baselines
 2. provides a transparent and configurable framework for researchers to customize and extend the pipeline for their tasks.
-3. 
+
 It is lightweight in terms of the core functionality.
 We keep the code base simple and focus more on how the user can combine each piece.
 We adopt a strict functional style because it is easier to maintain and combine sequential transformations.
