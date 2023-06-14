@@ -22,13 +22,13 @@ from dataclasses import dataclass
 import numpy as np
 import einops
 import xarray_dataclasses as xrdataclass
-from oceanbench._src.datasets.base import XRDABatcher
+from oceanbench._src.datasets.base import XRDAPatcher
 
 %load_ext autoreload
 %autoreload 2
 ```
 
-This tutorial walks through some of the nice features of the custom `XRDABatcher` class.
+This tutorial walks through some of the nice features of the custom `XRDAPatcher` class.
 This is a custom class that slices and dices through an `xr.DataArray` where a user can specify explicitly the patch dimensions and the strides.
 We preallocated the *slices* and then we can arbitrarily call the slices at will.
 This is very similar to the *torch.utils.data* object except we are only working with `xr.DataArray`'s directly.
@@ -48,7 +48,7 @@ These use cases are:
 * Reconstructing Multiple Variables
 * Choosing Specific Dimensions for Reconstructions
 
-We will walk through each of these and highlight how this can be achieved with the custom `XRDABatcher` class.
+We will walk through each of these and highlight how this can be achieved with the custom `XRDAPatcher` class.
 
 +++
 
@@ -97,7 +97,7 @@ strides = {"time": 30}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -131,7 +131,7 @@ strides = {"time": 15}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -201,7 +201,7 @@ strides = {"x": 8, "y": 8}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -220,7 +220,7 @@ strides = {"x": 2, "y": 2}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -292,7 +292,7 @@ strides = {"x": 8, "y": 8, "z": 8}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -311,7 +311,7 @@ strides = {"x": 2, "y": 2, "z": 2}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -393,7 +393,7 @@ strides = {"x": 4, "y": 4, "time": 5}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -415,7 +415,7 @@ strides = {"x": 1, "y": 1, "time": 1}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -456,7 +456,7 @@ strides = {"time": 30}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,
@@ -514,7 +514,7 @@ strides = {"x": 8, "y": 8, "time": 1}
 domain_limits = None#{"lat": slice(-10, 10)}
 check_full_scan = True
 
-xrda_batches = XRDABatcher(
+xrda_batches = XRDAPatcher(
     da=da,
     patches=patches,
     strides=strides,

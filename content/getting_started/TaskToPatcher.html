@@ -476,7 +476,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">hydra</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">oceanbench._src.datasets.base</span> <span class="k">as</span> <span class="nn">obds</span>
+<span class="kn">from</span> <span class="nn">xrpatcher</span> <span class="kn">import</span> <span class="n">XRDAPatcher</span>
 <span class="kn">import</span> <span class="nn">oceanbench._src.geoprocessing.gridding</span> <span class="k">as</span> <span class="nn">obgrid</span>
 </pre></div>
 </div>
@@ -547,7 +547,7 @@ document.write(`
     <span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
     
 
-    <span class="k">return</span> <span class="n">obds</span><span class="o">.</span><span class="n">XRDABatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
 
 
 
@@ -758,7 +758,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;
     <span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
     
 
-    <span class="k">return</span> <span class="n">obds</span><span class="o">.</span><span class="n">XRDABatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -899,7 +899,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 361), (&#39
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">patcher</span> <span class="o">=</span> <span class="n">obds</span><span class="o">.</span><span class="n">XRDABatcher</span><span class="p">(</span><span class="n">train_da</span><span class="p">,</span> <span class="n">patches</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">patcher</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">train_da</span><span class="p">,</span> <span class="n">patches</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">patcher</span>
 </pre></div>
 </div>

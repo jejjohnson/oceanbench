@@ -458,7 +458,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">einops</span>
 <span class="kn">import</span> <span class="nn">xarray_dataclasses</span> <span class="k">as</span> <span class="nn">xrdataclass</span>
-<span class="kn">from</span> <span class="nn">oceanbench._src.datasets.base</span> <span class="kn">import</span> <span class="n">XRDABatcher</span>
+<span class="kn">from</span> <span class="nn">oceanbench._src.datasets.base</span> <span class="kn">import</span> <span class="n">XRDAPatcher</span>
 
 <span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
 <span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
@@ -466,7 +466,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>This tutorial walks through some of the nice features of the custom <code class="docutils literal notranslate"><span class="pre">XRDABatcher</span></code> class.
+<p>This tutorial walks through some of the nice features of the custom <code class="docutils literal notranslate"><span class="pre">XRDAPatcher</span></code> class.
 This is a custom class that slices and dices through an <code class="docutils literal notranslate"><span class="pre">xr.DataArray</span></code> where a user can specify explicitly the patch dimensions and the strides.
 We preallocated the <em>slices</em> and then we can arbitrarily call the slices at will.
 This is very similar to the <em>torch.utils.data</em> object except we are only working with <code class="docutils literal notranslate"><span class="pre">xr.DataArray</span></code>’s directly.</p>
@@ -483,7 +483,7 @@ These use cases are:</p>
 <li><p>Reconstructing Multiple Variables</p></li>
 <li><p>Choosing Specific Dimensions for Reconstructions</p></li>
 </ul>
-<p>We will walk through each of these and highlight how this can be achieved with the custom <code class="docutils literal notranslate"><span class="pre">XRDABatcher</span></code> class.</p>
+<p>We will walk through each of these and highlight how this can be achieved with the custom <code class="docutils literal notranslate"><span class="pre">XRDAPatcher</span></code> class.</p>
 <section id="case-i-chunking-a-1d-ts">
 <h2>Case I: Chunking a 1D TS<a class="headerlink" href="#case-i-chunking-a-1d-ts" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
@@ -537,7 +537,7 @@ This will give us exactly 12 patches (like 12 months).</p>
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -568,7 +568,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -649,7 +649,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -670,7 +670,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -750,7 +750,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -771,7 +771,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -860,7 +860,7 @@ So the final strides will be <code class="docutils literal notranslate"><span cl
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -884,7 +884,7 @@ However, we can create a different dataset for predictions where we reduce the s
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -924,7 +924,7 @@ This may occur when we have used different methods to make predictions and we wa
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
@@ -992,7 +992,7 @@ So the final strides will be <code class="docutils literal notranslate"><span cl
 <span class="n">domain_limits</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#{&quot;lat&quot;: slice(-10, 10)}</span>
 <span class="n">check_full_scan</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDABatcher</span><span class="p">(</span>
+<span class="n">xrda_batches</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span>
     <span class="n">da</span><span class="o">=</span><span class="n">da</span><span class="p">,</span>
     <span class="n">patches</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
     <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
