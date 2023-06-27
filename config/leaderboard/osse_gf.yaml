@@ -3,7 +3,7 @@ method: bfn
 
 outputs:
   eval_ds:
-    _target_: oceanbench._src.datasets.utils.stack_dataarrays
+    _target_: oceanbench._src.utils.data.stack_dataarrays
     _partial_: true
     dataarrays: 
         ref: '${results.outputs.eval.ref}'
@@ -21,7 +21,7 @@ outputs:
 
   plot_ds:
     maps:
-      _target_: oceanbench._src.datasets.utils.stack_dataarrays
+      _target_: oceanbench._src.utils.data.stack_dataarrays
       _partial_: true
       dataarrays: 
           ref: '${results.outputs.plots.maps.ref}'
