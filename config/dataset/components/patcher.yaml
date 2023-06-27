@@ -8,7 +8,7 @@ ref_grid_var: null
 cfg:
     _target_: oceanbench._src.datasets.base.XRDAPatcher
     da: 
-        _target_: oceanbench._src.datasets.utils.interpstack_dataarrays
+        _target_: oceanbench._src.utils.data.interpstack_dataarrays
         dataarrays: '${...das}'
         ref_grid_var: '${...ref_grid_var}'
     domain_limits: 

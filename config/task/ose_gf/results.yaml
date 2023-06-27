@@ -1,6 +1,5 @@
 #@package _global_.results
 
-task: ???
 
 base_dir: '../oceanbench-data-registry/results/ose_gf'
 outputs:
