@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Physical Variables &#8212; OceanBench</title>
   
@@ -44,6 +44,7 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -68,7 +69,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="AlongTrack Data" href="../alongtrack/AlongTrack.html" />
     <link rel="prev" title="Scaling Domains" href="scaling.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -462,7 +463,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="physical-variables">
-<h1>Physical Variables<a class="headerlink" href="#physical-variables" title="Permalink to this headline">#</a></h1>
+<h1>Physical Variables<a class="headerlink" href="#physical-variables" title="Permalink to this heading">#</a></h1>
 <blockquote>
 <div><p>This notebook looks at some canonical transformations of sea surface height (SSH).
 These are derived variables that can be calculated from SSH and are often very good indicators of performance.</p>
@@ -513,7 +514,7 @@ These are derived variables that can be calculated from SSH and are often very g
 </div>
 </div>
 <section id="sea-surface-height">
-<h2>Sea Surface Height<a class="headerlink" href="#sea-surface-height" title="Permalink to this headline">#</a></h2>
+<h2>Sea Surface Height<a class="headerlink" href="#sea-surface-height" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[
 \begin{aligned}
@@ -553,7 +554,7 @@ These are derived variables that can be calculated from SSH and are often very g
 </div>
 </section>
 <section id="stream-function">
-<h2>Stream Function<a class="headerlink" href="#stream-function" title="Permalink to this headline">#</a></h2>
+<h2>Stream Function<a class="headerlink" href="#stream-function" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[
 \begin{aligned}
@@ -567,7 +568,7 @@ These are derived variables that can be calculated from SSH and are often very g
 \psi = \frac{g}{f_0}\eta
 \]</div>
 <section id="coriolis-parameter">
-<h3>Coriolis Parameter<a class="headerlink" href="#coriolis-parameter" title="Permalink to this headline">#</a></h3>
+<h3>Coriolis Parameter<a class="headerlink" href="#coriolis-parameter" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 f_0 = 2\Omega\sin(\varphi)
@@ -587,7 +588,7 @@ f_0 = 2\Omega\sin(\varphi)
 </div>
 </section>
 <section id="gravity">
-<h3>Gravity<a class="headerlink" href="#gravity" title="Permalink to this headline">#</a></h3>
+<h3>Gravity<a class="headerlink" href="#gravity" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">metpy.constants</span> <span class="kn">import</span> <span class="n">earth_gravity</span> <span class="k">as</span> <span class="n">GRAVITY</span>
@@ -623,7 +624,7 @@ f_0 = 2\Omega\sin(\varphi)
 </section>
 </section>
 <section id="velocities">
-<h2>Velocities<a class="headerlink" href="#velocities" title="Permalink to this headline">#</a></h2>
+<h2>Velocities<a class="headerlink" href="#velocities" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
@@ -664,7 +665,7 @@ v = \frac{\partial \psi}{\partial x}
 </div>
 </section>
 <section id="kinetic-energy">
-<h2>Kinetic Energy<a class="headerlink" href="#kinetic-energy" title="Permalink to this headline">#</a></h2>
+<h2>Kinetic Energy<a class="headerlink" href="#kinetic-energy" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
@@ -693,7 +694,7 @@ E &amp;\approx \frac{1}{2} \mathbb{E}\left[ \mathbf{u}^2\right] \\
 </div>
 </section>
 <section id="relative-vorticity">
-<h2>Relative Vorticity<a class="headerlink" href="#relative-vorticity" title="Permalink to this headline">#</a></h2>
+<h2>Relative Vorticity<a class="headerlink" href="#relative-vorticity" title="Permalink to this heading">#</a></h2>
 <p>Somtimes called the <em>vertical vorticity</em>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -758,7 +759,7 @@ v = \frac{\partial \psi}{\partial x}\\
 </div>
 </section>
 <section id="absolute-vorticity">
-<h2>Absolute Vorticity<a class="headerlink" href="#absolute-vorticity" title="Permalink to this headline">#</a></h2>
+<h2>Absolute Vorticity<a class="headerlink" href="#absolute-vorticity" title="Permalink to this heading">#</a></h2>
 <p>Somtimes called the <em>horizontal divergence</em>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -809,7 +810,7 @@ v = \frac{\partial \psi}{\partial x}\\
 </div>
 </section>
 <section id="divergence">
-<h2>Divergence<a class="headerlink" href="#divergence" title="Permalink to this headline">#</a></h2>
+<h2>Divergence<a class="headerlink" href="#divergence" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[
 \nabla \cdot \vec{\mathbf{u}} = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}
@@ -835,7 +836,7 @@ v = \frac{\partial \psi}{\partial x}\\
 </div>
 </section>
 <section id="enstropy">
-<h2>Enstropy<a class="headerlink" href="#enstropy" title="Permalink to this headline">#</a></h2>
+<h2>Enstropy<a class="headerlink" href="#enstropy" title="Permalink to this heading">#</a></h2>
 <p>This is a summarization of the relative vorticity</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -865,9 +866,9 @@ Z &amp;\approx \frac{1}{2} \mathbb{E}\left[ \zeta^2 \right] \\
 </div>
 </section>
 <section id="strain">
-<h2>Strain<a class="headerlink" href="#strain" title="Permalink to this headline">#</a></h2>
+<h2>Strain<a class="headerlink" href="#strain" title="Permalink to this heading">#</a></h2>
 <section id="shear-strain">
-<h3>Shear Strain<a class="headerlink" href="#shear-strain" title="Permalink to this headline">#</a></h3>
+<h3>Shear Strain<a class="headerlink" href="#shear-strain" title="Permalink to this heading">#</a></h3>
 <p>We also have the <em>Shearing Deformation</em> given by:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -894,7 +895,7 @@ S_s = \frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}
 </div>
 </section>
 <section id="normal-strain">
-<h3>Normal Strain<a class="headerlink" href="#normal-strain" title="Permalink to this headline">#</a></h3>
+<h3>Normal Strain<a class="headerlink" href="#normal-strain" title="Permalink to this heading">#</a></h3>
 <p>Sometimes called <em>Stretching Deformation</em>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -920,7 +921,7 @@ S_s = \frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}
 </div>
 </section>
 <section id="strain-magnitude">
-<h3>Strain Magnitude<a class="headerlink" href="#strain-magnitude" title="Permalink to this headline">#</a></h3>
+<h3>Strain Magnitude<a class="headerlink" href="#strain-magnitude" title="Permalink to this heading">#</a></h3>
 <p>Often, we are interested in the  give by:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -958,7 +959,7 @@ The vorticity and divergence and strain magnitude is coordinate invariant!</p>
 </section>
 </section>
 <section id="okubo-weiss-parameter">
-<h2>Okubo-Weiss Parameter<a class="headerlink" href="#okubo-weiss-parameter" title="Permalink to this headline">#</a></h2>
+<h2>Okubo-Weiss Parameter<a class="headerlink" href="#okubo-weiss-parameter" title="Permalink to this heading">#</a></h2>
 <blockquote>
 <div><p>OW parameter [Okubo, 1970; Weiss, 1991] describes the relative dominance of deformation with respect to rotation of the flow.</p>
 </div></blockquote>

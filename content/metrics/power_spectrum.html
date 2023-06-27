@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Power Spectrum &#8212; OceanBench</title>
   
@@ -44,6 +44,7 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -66,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Power Spectrum Score" href="power_spectrum_score.html" />
     <link rel="prev" title="Pytorch Dataset Integration Demo" href="../ml/pytorch_dataset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -462,7 +463,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="power-spectrum">
-<h1>Power Spectrum<a class="headerlink" href="#power-spectrum" title="Permalink to this headline">#</a></h1>
+<h1>Power Spectrum<a class="headerlink" href="#power-spectrum" title="Permalink to this heading">#</a></h1>
 <blockquote>
 <div><p>In the ocean community, we often operator in the Fourier domain.
 This is useful for assessing the quality of our models and it can also be useful for learning.
@@ -583,10 +584,10 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </div>
 <section id="rescaling">
-<h2>Rescaling<a class="headerlink" href="#rescaling" title="Permalink to this headline">#</a></h2>
+<h2>Rescaling<a class="headerlink" href="#rescaling" title="Permalink to this heading">#</a></h2>
 <p>In a previous notebook, we showed how we can do lat/lon</p>
 <section id="degrees-to-meters">
-<h3>Degrees to Meters<a class="headerlink" href="#degrees-to-meters" title="Permalink to this headline">#</a></h3>
+<h3>Degrees to Meters<a class="headerlink" href="#degrees-to-meters" title="Permalink to this heading">#</a></h3>
 <p>It is often more useful to have things in meters instead of degrees. The units are more meaningful and easier to interpret. So we can do a simple degree to meters transformation included in the library.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -605,7 +606,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </section>
 <section id="datetime64-to-days">
-<h3><code class="docutils literal notranslate"><span class="pre">datetime64</span></code> to Days<a class="headerlink" href="#datetime64-to-days" title="Permalink to this headline">#</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">datetime64</span></code> to Days<a class="headerlink" href="#datetime64-to-days" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.temporal</span> <span class="kn">import</span> <span class="n">time_rescale</span>
@@ -632,10 +633,10 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </section>
 </section>
 <section id="spectral-domain">
-<h2>Spectral Domain<a class="headerlink" href="#spectral-domain" title="Permalink to this headline">#</a></h2>
+<h2>Spectral Domain<a class="headerlink" href="#spectral-domain" title="Permalink to this heading">#</a></h2>
 <p>Now, we can look at how we can represent the data within the Fourier Domain</p>
 <section id="isotropic-assumption">
-<h3>Isotropic Assumption<a class="headerlink" href="#isotropic-assumption" title="Permalink to this headline">#</a></h3>
+<h3>Isotropic Assumption<a class="headerlink" href="#isotropic-assumption" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics</span> <span class="kn">import</span> <span class="n">power_spectrum</span> <span class="k">as</span> <span class="n">psdcalc</span>
@@ -661,7 +662,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </section>
 <section id="plots">
-<h3>Plots<a class="headerlink" href="#plots" title="Permalink to this headline">#</a></h3>
+<h3>Plots<a class="headerlink" href="#plots" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDIsotropic</span><span class="p">:</span>
@@ -732,7 +733,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </div>
 <section id="wavenumber">
-<h4>Wavenumber<a class="headerlink" href="#wavenumber" title="Permalink to this headline">#</a></h4>
+<h4>Wavenumber<a class="headerlink" href="#wavenumber" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDIsotropic</span><span class="p">()</span>
@@ -750,7 +751,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </section>
 <section id="wavelength">
-<h4>Wavelength<a class="headerlink" href="#wavelength" title="Permalink to this headline">#</a></h4>
+<h4>Wavelength<a class="headerlink" href="#wavelength" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDIsotropic</span><span class="p">()</span>
@@ -768,7 +769,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </section>
 <section id="wavenumber-wavelength">
-<h4>Wavenumber + Wavelength<a class="headerlink" href="#wavenumber-wavelength" title="Permalink to this headline">#</a></h4>
+<h4>Wavenumber + Wavelength<a class="headerlink" href="#wavenumber-wavelength" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDIsotropic</span><span class="p">()</span>
@@ -787,9 +788,9 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </section>
 </section>
 <section id="spatial-temporal">
-<h3>Spatial Temporal<a class="headerlink" href="#spatial-temporal" title="Permalink to this headline">#</a></h3>
+<h3>Spatial Temporal<a class="headerlink" href="#spatial-temporal" title="Permalink to this heading">#</a></h3>
 <section id="time-vs-longitude">
-<h4>Time vs Longitude<a class="headerlink" href="#time-vs-longitude" title="Permalink to this headline">#</a></h4>
+<h4>Time vs Longitude<a class="headerlink" href="#time-vs-longitude" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># frequency dims</span>
@@ -924,7 +925,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </section>
 <section id="id1">
-<h4>Wavenumber<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h4>
+<h4>Wavenumber<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_st_plot</span> <span class="o">=</span> <span class="n">PlotPSDSpaceTime</span><span class="p">()</span>
@@ -943,7 +944,7 @@ In this notebook, we showcase how oceanbench has two fundamental transformations
 </div>
 </section>
 <section id="id2">
-<h4>Wavelength<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h4>
+<h4>Wavelength<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_st_plot</span> <span class="o">=</span> <span class="n">PlotPSDSpaceTime</span><span class="p">()</span>
