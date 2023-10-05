@@ -45,7 +45,7 @@ Some highlighted tutorials are listed in the next section.
 
 **Data Registry** [![Open In GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/quentinf00/oceanbench-data-registry)
 
-We have a open data registry located at the [oceanbench-data-registry](https://github.com/quentinf00/oceanbench-data-registry) GitHub repository.
+We have an open data registry located at the [oceanbench-data-registry](https://github.com/quentinf00/oceanbench-data-registry) GitHub repository.
 You can find some more meta-data about the available datasets as well as how to download them yourself.
 
 **Machine Learning Datasets** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://jejjohnson.github.io/oceanbench/content/getting_started/TaskToPatcher.html)
