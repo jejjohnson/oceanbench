@@ -9,7 +9,7 @@ select:
   lon: '${task.outputs.domain.lon}'
 
 degrid:
-  _target_: oceanbench._src.geoprocessing.gridding.grid_to_coord_based
+  _target_: ocn_tools._src.geoprocessing.gridding.grid_to_coord_based
   _partial_: true
   tgt_coord_based_ds: {inp: '${...outputs.eval.ref}', fns: ['${F.call}'], _partial_: false}
 

@@ -25,8 +25,8 @@ hook:
   _target_: oceanbench._src.utils.hydra.const_fn
   const: 
     inp: 
-    - {_target_: oceanbench._src.viz.ygrid_major, _partial_: True}
-    - {_target_: oceanbench._src.viz.xformatter, _partial_: True}
+    - {_target_: ocn_tools._src.viz.ygrid_major, _partial_: True}
+    - {_target_: ocn_tools._src.viz.xformatter, _partial_: True}
     _partial_: false
     fns: [{_target_: builtins.list, _partial_: true}]
 

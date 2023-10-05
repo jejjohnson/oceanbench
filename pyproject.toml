@@ -23,21 +23,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-pyinterp = ">=2022.9.1"
-xarray = ">=2022.3"
-zarr = "^2.14.2"
-dask = "^2023.4.0"
-netcdf4 = "^1.6.3"
-bottleneck = "^1.3.7"
+ocn-tools = { git = "https://github.com/jejjohnson/ocn-tools.git" }
 dvc = "^2.55.0"
-scipy = "^1.10.1"
-xesmf = "^0.7.1"
-xarray-dataclasses = "^1.5.0"
-cmake = ">=3.18.0,<3.19.0"
-numpy-groupies = "^0.9.20"
-pint-xarray = "^0.3"
-xrft = "^1.0.1"
-metpy = "^1.4.1"
 xrpatcher = "^0.0.1"
 rootutils = "^1.0.7"
 

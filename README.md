@@ -48,6 +48,13 @@ Some highlighted tutorials are listed in the next section.
 We have a open data registry located at the [oceanbench-data-registry](https://github.com/quentinf00/oceanbench-data-registry) GitHub repository.
 You can find some more meta-data about the available datasets as well as how to download them yourself.
 
+**Ocean-Tools** [![Open In GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jejjohnson/ocn-tools)
+
+We have our utility functions which make up the backbone of the preprocessing, postprocessing, and some plotting. 
+This is what we piece together to use for creating recipes, pipelines and tasks.
+This repo is located at [jejjohnson/ocn-tools](https://github.com/jejjohnson/ocn-tools). 
+See the docs (**TODO**) for more information.
+
 **Machine Learning Datasets** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://jejjohnson.github.io/oceanbench/content/getting_started/TaskToPatcher.html)
 
 We have a set of tasks related to sea surface height interpolation and they come readily integrated into a digestable ML-ready format.
