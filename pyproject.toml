@@ -38,6 +38,8 @@ numpy-groupies = "^0.9.20"
 pint-xarray = "^0.3"
 xrft = "^1.0.1"
 metpy = "^1.4.1"
+xrpatcher = "^0.0.1"
+rootutils = "^1.0.7"
 
 
 [tool.poetry.group.dev.dependencies]
