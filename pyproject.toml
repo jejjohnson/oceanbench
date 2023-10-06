@@ -61,7 +61,7 @@ jupytext = "^1.14.5"
 
 
 [build-system]
-requires = ["poetry-core", "cmake"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 
