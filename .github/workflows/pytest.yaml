@@ -4,43 +4,23 @@ on:
   push:
     branches:
       - main
-
 jobs:
-  unit-tests:
-    name: Run Tests
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Select the Python versions to test against
-        os: ["ubuntu-latest", "macos-latest"]
-        python-version: ["3.10", "3.11"]
-      fail-fast: true
     steps:
       - name: Check out the code
         uses: actions/checkout@v3.5.2
+      - name: Install Micromamba
+        uses: mamba-org/setup-micromamba@v1
         with:
-          fetch-depth: 1
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      # Install Poetry
-      - name: Install Poetry
-        uses: snok/install-poetry@v1.3.3
-        with:
-          version: 1.4.0
-
-      # Configure Poetry to use the virtual environment in the project
-      - name: Setup Poetry
-        run: |
-          poetry config virtualenvs.in-project true
-
-      # Install the dependencies
-      - name: Install Package
-        run: |
-          poetry install
-
-      # Run the unit tests and build the coverage report
-      - name: Run Tests
-        run: poetry run pytest -v
+          micromamba-version: "1.4.5-0"
+          environment-file: environments/test.yaml
+          init-shell: bash
+          cache-environment: true
+          post-cleanup: "all"
+      - name: install xarray-dataclasses
+        run: pip install --no-deps xarray-dataclasses
+        shell: micromamba-shell {0}
+      - name: pytest
+        run: pytest oceanbench/_src
+        shell: micromamba-shell {0}
