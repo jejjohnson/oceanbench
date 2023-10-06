@@ -7,13 +7,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Conda environment with Micromamba
-        uses: mamba-org/provision-with-micromamba@main
+      # - uses: actions/checkout@v2
+      # - name: Install Conda environment with Micromamba
+      #   uses: mamba-org/provision-with-micromamba@main
+      #   with:
+      #     environment-file: environments/test.yaml
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: environments/test.yaml
-
+          micromamba-version: "1.3.1-0"
+          environment-file: environments/test.yml
+          init-shell: >-
+            bash
+            powershell
+          cache-environment: true
+          post-cleanup: "all"
       - name: install xarray-dataclasses
         run: pip install --no-deps xarray-dataclasses
       - name: pytest
