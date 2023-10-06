@@ -2,7 +2,7 @@ import xarray as xr
 
 
 def regridstack_dataarrays(dataarrays, ref_grid_var=None):
-    import oceanbench._src.geoprocessing.gridding
+    import ocn_tools._src.geoprocessing.gridding
 
     dataarrays = {k: v() if callable(v) else v for k, v in dataarrays.items()}
 
@@ -13,7 +13,7 @@ def regridstack_dataarrays(dataarrays, ref_grid_var=None):
     )
 
     dataarrays = {
-        k: oceanbench._src.geoprocessing.gridding.grid_to_regular_grid(
+        k: ocn_tools._src.geoprocessing.gridding.grid_to_regular_grid(
             src_grid_ds=v,
             tgt_grid_ds=ref_grid,
             keep_attrs=True,
