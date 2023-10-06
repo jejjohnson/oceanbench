@@ -12,7 +12,7 @@ jobs:
       - name: Install Conda environment with Micromamba
         uses: mamba-org/provision-with-micromamba@main
         with:
-          environment-file: environments/linux.yaml
+          environment-file: environments/test.yaml
 
       - name: install xarray-dataclasses
         run: pip install --no-deps xarray-dataclasses
