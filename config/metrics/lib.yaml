@@ -1,7 +1,7 @@
 #@package _global_
 
 psd_isotropic_score:
-    _target_: "oceanbench._src.metrics.power_spectrum.psd_isotropic_score"
+    _target_: "ocn_tools._src.metrics.power_spectrum.psd_isotropic_score"
     _partial_: True
     ref_variable: ref
     study_variable: study
@@ -15,7 +15,7 @@ psd_isotropic_score:
     truncate: True
 
 psd_spacetime_score:
-    _target_: "oceanbench._src.metrics.power_spectrum.psd_spacetime_score"
+    _target_: "ocn_tools._src.metrics.power_spectrum.psd_spacetime_score"
     _partial_: True
     ref_variable: ref
     study_variable: study

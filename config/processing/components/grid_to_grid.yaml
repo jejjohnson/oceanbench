@@ -4,7 +4,7 @@ target_grid:
   resolution: {}
 
 cfg:
-  _target_: "oceanbench._src.geoprocessing.gridding.grid_to_regular_grid"
+  _target_: "ocn_tools._src.geoprocessing.gridding.grid_to_regular_grid"
   _partial_: True
   tgt_grid_ds: ${..target_grid.cfg}
 

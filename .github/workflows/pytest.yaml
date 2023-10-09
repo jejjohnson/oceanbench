@@ -1,20 +1,26 @@
-defaults:
-  run:
-    shell: bash -l {0}
-name: PyTest
-on: [pull_request]
+name: Run Tests
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Conda environment with Micromamba
-        uses: mamba-org/provision-with-micromamba@main
+      - name: Check out the code
+        uses: actions/checkout@v3.5.2
+      - name: Install Micromamba
+        uses: mamba-org/setup-micromamba@v1
         with:
+          micromamba-version: "1.4.5-0"
           environment-file: environments/linux.yaml
-
+          init-shell: bash
+          cache-environment: true
+          post-cleanup: "all"
       - name: install xarray-dataclasses
         run: pip install --no-deps xarray-dataclasses
+        shell: micromamba-shell {0}
       - name: pytest
         run: pytest oceanbench/_src
+        shell: micromamba-shell {0}
