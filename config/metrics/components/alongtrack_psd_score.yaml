@@ -1,6 +1,6 @@
 
 alongtrack_segments:
-  _target_: "oceanbench._src.preprocessing.alongtrack.select_track_segments"
+  _target_: "ocn_tools._src.preprocessing.alongtrack.select_track_segments"
   _partial_: True
   variable: "ref"
   variable_interp: "study"
@@ -10,7 +10,7 @@ alongtrack_segments:
   segment_overlapping: 0.25
 
 psd_welch_score:
-  _target_: "oceanbench._src.metrics.power_spectrum.psd_welch_score"
+  _target_: "ocn_tools._src.metrics.power_spectrum.psd_welch_score"
   _partial_: True
   variable: "study"
   variable_ref: "ref"

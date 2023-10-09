@@ -10,7 +10,3 @@ def pipe(inp, fns):
         out = fn(out)
     return out
 
-
-def add_units(da, units={}):
-    da = da.pint.quantify(units)
-    return da.pint.dequantify()

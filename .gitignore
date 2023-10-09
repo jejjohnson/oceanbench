@@ -156,3 +156,5 @@ notebooks/*.gif
 .DS_Store
 .vscode/settings.json
 \jbook/_build/
+
+\oceanbench-data-registry/

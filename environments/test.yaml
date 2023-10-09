@@ -1,0 +1,16 @@
+name: oceanbench
+channels:
+  - conda-forge
+  - pyviz
+dependencies:
+  - python=3.10
+  - xesmf
+  - pip
+  - pytest
+  - pip:
+      - git+https://github.com/jejjohnson/ocn-tools.git
+      - hydra-core
+      - pyrootutils
+      - loguru
+      - xrpatcher
+      - autoroot
