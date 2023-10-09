@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Get ML-ready dataset from Oceanbench task &#8212; OceanBench</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,14 +38,12 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -68,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Pytorch Dataset Integration Demo" href="pytorch_dataset_integration_example.html" />
     <link rel="prev" title="OceanBench: Sea Surface Height Editions" href="../overview.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:language" content="None"/>
   </head>
   
   
@@ -77,15 +75,6 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
-
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -385,10 +374,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
 </script>
@@ -396,7 +385,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
 </script>
@@ -448,10 +437,10 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="get-ml-ready-dataset-from-oceanbench-task">
-<h1>Get ML-ready dataset from Oceanbench task<a class="headerlink" href="#get-ml-ready-dataset-from-oceanbench-task" title="Permalink to this heading">#</a></h1>
+<h1>Get ML-ready dataset from Oceanbench task<a class="headerlink" href="#get-ml-ready-dataset-from-oceanbench-task" title="Permalink to this headline">#</a></h1>
 <p>Welcome to ocean bench, ocen bench high level concept is the task in which we specify the <strong>data used as input and target</strong> as well as the evaluation <strong>spatial domain</strong> and <strong>evaluation period</strong>.</p>
 <section id="oceanbench-also-provides">
-<h2>Oceanbench also provides:<a class="headerlink" href="#oceanbench-also-provides" title="Permalink to this heading">#</a></h2>
+<h2>Oceanbench also provides:<a class="headerlink" href="#oceanbench-also-provides" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>a <strong>data-registry</strong> storing all the necessary files</p></li>
 <li><p>preconfigured <strong>preprocessing pipelines</strong> to obtain nicely curated xarray datasets</p></li>
@@ -459,7 +448,7 @@ document.write(`
 </ul>
 </section>
 <section id="in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition">
-<h2>In this chapter, for each of the four tasks of the first oceanbench edition:<a class="headerlink" href="#in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition" title="Permalink to this heading">#</a></h2>
+<h2>In this chapter, for each of the four tasks of the first oceanbench edition:<a class="headerlink" href="#in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>We display the configuration of the task</p></li>
 <li><p>We build a training and testing <code class="docutils literal notranslate"><span class="pre">XRDAPatcher</span></code></p></li>
@@ -556,7 +545,7 @@ document.write(`
 </div>
 </section>
 <section id="osse">
-<h2>OSSE<a class="headerlink" href="#osse" title="Permalink to this heading">#</a></h2>
+<h2>OSSE<a class="headerlink" href="#osse" title="Permalink to this headline">#</a></h2>
 <p>We write below a generic function for simulated setups (OSSE) that:</p>
 <ul class="simple">
 <li><p>Loads and stacks all the data specified in the task: <code class="docutils literal notranslate"><span class="pre">task.data</span></code></p></li>
@@ -598,7 +587,7 @@ document.write(`
 </div>
 </div>
 <section id="first-task-nadir-ssh">
-<h3>First Task : Nadir  -&gt; SSH<a class="headerlink" href="#first-task-nadir-ssh" title="Permalink to this heading">#</a></h3>
+<h3>First Task : Nadir  -&gt; SSH<a class="headerlink" href="#first-task-nadir-ssh" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir&#39;</span><span class="p">)</span>
@@ -804,7 +793,7 @@ document.write(`
 </div>
 </section>
 <section id="second-task-nadir-swot-ssh">
-<h3>Second Task: Nadir + SWOT -&gt; SSH<a class="headerlink" href="#second-task-nadir-swot-ssh" title="Permalink to this heading">#</a></h3>
+<h3>Second Task: Nadir + SWOT -&gt; SSH<a class="headerlink" href="#second-task-nadir-swot-ssh" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadirswot&#39;</span><span class="p">)</span>
@@ -938,7 +927,7 @@ document.write(`
 </div>
 </section>
 <section id="third-task-nadir-sst-ssh">
-<h3>Third Task: Nadir + SST -&gt; SSH<a class="headerlink" href="#third-task-nadir-sst-ssh" title="Permalink to this heading">#</a></h3>
+<h3>Third Task: Nadir + SST -&gt; SSH<a class="headerlink" href="#third-task-nadir-sst-ssh" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir_sst&#39;</span><span class="p">)</span>
@@ -990,7 +979,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;
 </section>
 </section>
 <section id="ose">
-<h2>OSE<a class="headerlink" href="#ose" title="Permalink to this heading">#</a></h2>
+<h2>OSE<a class="headerlink" href="#ose" title="Permalink to this headline">#</a></h2>
 <p>Below an example of using Oceanbench with real observation data, the function below:</p>
 <ul class="simple">
 <li><p>Loads coordinate based observation data from the task specification</p></li>
@@ -1040,7 +1029,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;
 </div>
 </div>
 <section id="fourth-task-nadir-nadir">
-<h3>Fourth Task: Nadir -&gt; Nadir<a class="headerlink" href="#fourth-task-nadir-nadir" title="Permalink to this heading">#</a></h3>
+<h3>Fourth Task: Nadir -&gt; Nadir<a class="headerlink" href="#fourth-task-nadir-nadir" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;ose_gf&#39;</span><span class="p">)</span>
@@ -1095,7 +1084,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 361), (&#39
 </section>
 </section>
 <section id="walkthrough-and-visualization">
-<h2>Walkthrough and visualization:<a class="headerlink" href="#walkthrough-and-visualization" title="Permalink to this heading">#</a></h2>
+<h2>Walkthrough and visualization:<a class="headerlink" href="#walkthrough-and-visualization" title="Permalink to this headline">#</a></h2>
 <p>Below we walkthrough and visualize the steps from loading the data to the XRDAPatcher creation</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1232,10 +1221,11 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39
 
               
               
-              
-              
-                <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../overview.html"
@@ -1255,7 +1245,10 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1330,8 +1323,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

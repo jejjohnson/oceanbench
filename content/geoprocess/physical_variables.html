@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Physical Variables &#8212; OceanBench</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,14 +38,12 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -70,7 +68,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="AlongTrack Data" href="../alongtrack/AlongTrack.html" />
     <link rel="prev" title="Scaling Domains" href="scaling.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:language" content="None"/>
   </head>
   
   
@@ -79,15 +77,6 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
-
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -404,10 +393,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
 </script>
@@ -415,7 +404,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
 </script>
@@ -473,7 +462,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="physical-variables">
-<h1>Physical Variables<a class="headerlink" href="#physical-variables" title="Permalink to this heading">#</a></h1>
+<h1>Physical Variables<a class="headerlink" href="#physical-variables" title="Permalink to this headline">#</a></h1>
 <blockquote>
 <div><p>This notebook looks at some canonical transformations of sea surface height (SSH).
 These are derived variables that can be calculated from SSH and are often very good indicators of performance.</p>
@@ -524,7 +513,7 @@ These are derived variables that can be calculated from SSH and are often very g
 </div>
 </div>
 <section id="sea-surface-height">
-<h2>Sea Surface Height<a class="headerlink" href="#sea-surface-height" title="Permalink to this heading">#</a></h2>
+<h2>Sea Surface Height<a class="headerlink" href="#sea-surface-height" title="Permalink to this headline">#</a></h2>
 <div class="math notranslate nohighlight">
 \[
 \begin{aligned}
@@ -564,7 +553,7 @@ These are derived variables that can be calculated from SSH and are often very g
 </div>
 </section>
 <section id="stream-function">
-<h2>Stream Function<a class="headerlink" href="#stream-function" title="Permalink to this heading">#</a></h2>
+<h2>Stream Function<a class="headerlink" href="#stream-function" title="Permalink to this headline">#</a></h2>
 <div class="math notranslate nohighlight">
 \[
 \begin{aligned}
@@ -578,7 +567,7 @@ These are derived variables that can be calculated from SSH and are often very g
 \psi = \frac{g}{f_0}\eta
 \]</div>
 <section id="coriolis-parameter">
-<h3>Coriolis Parameter<a class="headerlink" href="#coriolis-parameter" title="Permalink to this heading">#</a></h3>
+<h3>Coriolis Parameter<a class="headerlink" href="#coriolis-parameter" title="Permalink to this headline">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 f_0 = 2\Omega\sin(\varphi)
@@ -598,7 +587,7 @@ f_0 = 2\Omega\sin(\varphi)
 </div>
 </section>
 <section id="gravity">
-<h3>Gravity<a class="headerlink" href="#gravity" title="Permalink to this heading">#</a></h3>
+<h3>Gravity<a class="headerlink" href="#gravity" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">metpy.constants</span> <span class="kn">import</span> <span class="n">earth_gravity</span> <span class="k">as</span> <span class="n">GRAVITY</span>
@@ -634,7 +623,7 @@ f_0 = 2\Omega\sin(\varphi)
 </section>
 </section>
 <section id="velocities">
-<h2>Velocities<a class="headerlink" href="#velocities" title="Permalink to this heading">#</a></h2>
+<h2>Velocities<a class="headerlink" href="#velocities" title="Permalink to this headline">#</a></h2>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
@@ -675,7 +664,7 @@ v = \frac{\partial \psi}{\partial x}
 </div>
 </section>
 <section id="kinetic-energy">
-<h2>Kinetic Energy<a class="headerlink" href="#kinetic-energy" title="Permalink to this heading">#</a></h2>
+<h2>Kinetic Energy<a class="headerlink" href="#kinetic-energy" title="Permalink to this headline">#</a></h2>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
@@ -704,7 +693,7 @@ E &amp;\approx \frac{1}{2} \mathbb{E}\left[ \mathbf{u}^2\right] \\
 </div>
 </section>
 <section id="relative-vorticity">
-<h2>Relative Vorticity<a class="headerlink" href="#relative-vorticity" title="Permalink to this heading">#</a></h2>
+<h2>Relative Vorticity<a class="headerlink" href="#relative-vorticity" title="Permalink to this headline">#</a></h2>
 <p>Somtimes called the <em>vertical vorticity</em>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -769,7 +758,7 @@ v = \frac{\partial \psi}{\partial x}\\
 </div>
 </section>
 <section id="absolute-vorticity">
-<h2>Absolute Vorticity<a class="headerlink" href="#absolute-vorticity" title="Permalink to this heading">#</a></h2>
+<h2>Absolute Vorticity<a class="headerlink" href="#absolute-vorticity" title="Permalink to this headline">#</a></h2>
 <p>Somtimes called the <em>horizontal divergence</em>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -820,7 +809,7 @@ v = \frac{\partial \psi}{\partial x}\\
 </div>
 </section>
 <section id="divergence">
-<h2>Divergence<a class="headerlink" href="#divergence" title="Permalink to this heading">#</a></h2>
+<h2>Divergence<a class="headerlink" href="#divergence" title="Permalink to this headline">#</a></h2>
 <div class="math notranslate nohighlight">
 \[
 \nabla \cdot \vec{\mathbf{u}} = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}
@@ -846,7 +835,7 @@ v = \frac{\partial \psi}{\partial x}\\
 </div>
 </section>
 <section id="enstropy">
-<h2>Enstropy<a class="headerlink" href="#enstropy" title="Permalink to this heading">#</a></h2>
+<h2>Enstropy<a class="headerlink" href="#enstropy" title="Permalink to this headline">#</a></h2>
 <p>This is a summarization of the relative vorticity</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -876,9 +865,9 @@ Z &amp;\approx \frac{1}{2} \mathbb{E}\left[ \zeta^2 \right] \\
 </div>
 </section>
 <section id="strain">
-<h2>Strain<a class="headerlink" href="#strain" title="Permalink to this heading">#</a></h2>
+<h2>Strain<a class="headerlink" href="#strain" title="Permalink to this headline">#</a></h2>
 <section id="shear-strain">
-<h3>Shear Strain<a class="headerlink" href="#shear-strain" title="Permalink to this heading">#</a></h3>
+<h3>Shear Strain<a class="headerlink" href="#shear-strain" title="Permalink to this headline">#</a></h3>
 <p>We also have the <em>Shearing Deformation</em> given by:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -905,7 +894,7 @@ S_s = \frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}
 </div>
 </section>
 <section id="normal-strain">
-<h3>Normal Strain<a class="headerlink" href="#normal-strain" title="Permalink to this heading">#</a></h3>
+<h3>Normal Strain<a class="headerlink" href="#normal-strain" title="Permalink to this headline">#</a></h3>
 <p>Sometimes called <em>Stretching Deformation</em>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -931,7 +920,7 @@ S_s = \frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}
 </div>
 </section>
 <section id="strain-magnitude">
-<h3>Strain Magnitude<a class="headerlink" href="#strain-magnitude" title="Permalink to this heading">#</a></h3>
+<h3>Strain Magnitude<a class="headerlink" href="#strain-magnitude" title="Permalink to this headline">#</a></h3>
 <p>Often, we are interested in the  give by:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -969,7 +958,7 @@ The vorticity and divergence and strain magnitude is coordinate invariant!</p>
 </section>
 </section>
 <section id="okubo-weiss-parameter">
-<h2>Okubo-Weiss Parameter<a class="headerlink" href="#okubo-weiss-parameter" title="Permalink to this heading">#</a></h2>
+<h2>Okubo-Weiss Parameter<a class="headerlink" href="#okubo-weiss-parameter" title="Permalink to this headline">#</a></h2>
 <blockquote>
 <div><p>OW parameter [Okubo, 1970; Weiss, 1991] describes the relative dominance of deformation with respect to rotation of the flow.</p>
 </div></blockquote>
@@ -1044,10 +1033,11 @@ The vorticity and divergence and strain magnitude is coordinate invariant!</p>
 
               
               
-              
-              
-                <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="scaling.html"
@@ -1067,7 +1057,10 @@ The vorticity and divergence and strain magnitude is coordinate invariant!</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1148,8 +1141,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>
