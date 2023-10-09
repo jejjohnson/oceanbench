@@ -13,7 +13,7 @@ cmaps:
         - {_target_: operator.attrgetter, _args_: [speed]}
         - {_target_: holoviews.plotting.util.process_cmap, _partial_: True}
 
-geocalc: ocn_tools._src.geoprocessing.geostrophic_v2
+geocalc: ocn_tools._src.geoprocessing.geostrophic
 
 attrs:
   ke: {units: 'm$^{2}$s$^{-2}$', standard_name: kinetic_energy, long_name: Kinetic Energy}
