@@ -10,13 +10,13 @@ cfg:
     - _target_: "xarray.${....cls}.sel"
       _partial_: True
       indexers: {time: {_target_: builtins.slice, _args_: '${......time}'}}
-    - _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    - _target_: "ocn_tools._src.geoprocessing.subset.where_slice"
       _partial_: True
       variable: "lat"
       min_val: ${....lat.0}
       max_val: ${....lat.1}
       drop: ${....drop}
-    - _target_: "oceanbench._src.geoprocessing.subset.where_slice"
+    - _target_: "ocn_tools._src.geoprocessing.subset.where_slice"
       _partial_: True
       variable: "lon"
       min_val: ${....lon.0}

@@ -1,5 +1,5 @@
 
-geoval: 'oceanbench._src.geoprocessing.validation'
+geoval: 'ocn_tools._src.geoprocessing.validation'
 
 cfg:
   fns:
