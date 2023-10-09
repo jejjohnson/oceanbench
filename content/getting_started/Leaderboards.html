@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Leaderboards &#8212; OceanBench</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,12 +38,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -66,7 +68,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Evaluating an SSH Mapping algorithm using OceanBench and 4dvarnet-starter" href="ocean_bench_4dvarnet.html" />
     <link rel="prev" title="Plotting maps with ocean bench" href="PlotMaps.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -75,6 +77,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -151,7 +162,11 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="TaskToPatcher.html">Get ML-ready dataset from Oceanbench task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TaskToPatcher.html">From tasks to datasets</a></li>
+
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="pytorch_dataset_integration_example.html">Pytorch Dataset Integration Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PlotMaps.html">Plotting maps with ocean bench</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Leaderboards</a></li>
@@ -374,10 +389,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -385,7 +400,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -432,18 +447,18 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="leaderboards">
-<h1>Leaderboards<a class="headerlink" href="#leaderboards" title="Permalink to this headline">#</a></h1>
+<h1>Leaderboards<a class="headerlink" href="#leaderboards" title="Permalink to this heading">#</a></h1>
 <section id="task-1">
-<h2>Task 1<a class="headerlink" href="#task-1" title="Permalink to this headline">#</a></h2>
-<table class="colwidths-auto table">
+<h2>Task 1<a class="headerlink" href="#task-1" title="Permalink to this heading">#</a></h2>
+<table class="table">
 <thead>
-<tr class="row-odd"><th class="text-right head"><p></p></th>
-<th class="text-right head"><p>nrmse</p></th>
-<th class="text-left head"><p>lambda_x_isotrop</p></th>
-<th class="text-left head"><p>lambda_x_spacetime</p></th>
-<th class="text-left head"><p>lambda_t_spacetime</p></th>
-<th class="text-left head"><p>method</p></th>
-<th class="text-left head"><p>task</p></th>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>nrmse</p></th>
+<th class="head text-left"><p>lambda_x_isotrop</p></th>
+<th class="head text-left"><p>lambda_x_spacetime</p></th>
+<th class="head text-left"><p>lambda_t_spacetime</p></th>
+<th class="head text-left"><p>method</p></th>
+<th class="head text-left"><p>task</p></th>
 </tr>
 </thead>
 <tbody>
@@ -515,16 +530,16 @@ document.write(`
 </table>
 </section>
 <section id="task-2">
-<h2>Task 2<a class="headerlink" href="#task-2" title="Permalink to this headline">#</a></h2>
-<table class="colwidths-auto table">
+<h2>Task 2<a class="headerlink" href="#task-2" title="Permalink to this heading">#</a></h2>
+<table class="table">
 <thead>
-<tr class="row-odd"><th class="text-right head"><p></p></th>
-<th class="text-right head"><p>nrmse</p></th>
-<th class="text-left head"><p>lambda_x_isotrop</p></th>
-<th class="text-left head"><p>lambda_x_spacetime</p></th>
-<th class="text-left head"><p>lambda_t_spacetime</p></th>
-<th class="text-left head"><p>method</p></th>
-<th class="text-left head"><p>task</p></th>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>nrmse</p></th>
+<th class="head text-left"><p>lambda_x_isotrop</p></th>
+<th class="head text-left"><p>lambda_x_spacetime</p></th>
+<th class="head text-left"><p>lambda_t_spacetime</p></th>
+<th class="head text-left"><p>method</p></th>
+<th class="head text-left"><p>task</p></th>
 </tr>
 </thead>
 <tbody>
@@ -596,16 +611,16 @@ document.write(`
 </table>
 </section>
 <section id="task-3">
-<h2>Task 3<a class="headerlink" href="#task-3" title="Permalink to this headline">#</a></h2>
-<table class="colwidths-auto table">
+<h2>Task 3<a class="headerlink" href="#task-3" title="Permalink to this heading">#</a></h2>
+<table class="table">
 <thead>
-<tr class="row-odd"><th class="text-right head"><p></p></th>
-<th class="text-right head"><p>nrmse</p></th>
-<th class="text-left head"><p>lambda_x_isotrop</p></th>
-<th class="text-left head"><p>lambda_x_spacetime</p></th>
-<th class="text-left head"><p>lambda_t_spacetime</p></th>
-<th class="text-left head"><p>method</p></th>
-<th class="text-left head"><p>task</p></th>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>nrmse</p></th>
+<th class="head text-left"><p>lambda_x_isotrop</p></th>
+<th class="head text-left"><p>lambda_x_spacetime</p></th>
+<th class="head text-left"><p>lambda_t_spacetime</p></th>
+<th class="head text-left"><p>method</p></th>
+<th class="head text-left"><p>task</p></th>
 </tr>
 </thead>
 <tbody>
@@ -629,14 +644,14 @@ document.write(`
 </table>
 </section>
 <section id="task-4">
-<h2>Task 4<a class="headerlink" href="#task-4" title="Permalink to this headline">#</a></h2>
-<table class="colwidths-auto table">
+<h2>Task 4<a class="headerlink" href="#task-4" title="Permalink to this heading">#</a></h2>
+<table class="table">
 <thead>
-<tr class="row-odd"><th class="text-right head"><p></p></th>
-<th class="text-right head"><p>nrmse</p></th>
-<th class="text-left head"><p>lambda_x_alongtrack</p></th>
-<th class="text-left head"><p>method</p></th>
-<th class="text-left head"><p>task</p></th>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>nrmse</p></th>
+<th class="head text-left"><p>lambda_x_alongtrack</p></th>
+<th class="head text-left"><p>method</p></th>
+<th class="head text-left"><p>task</p></th>
 </tr>
 </thead>
 <tbody>
@@ -738,7 +753,7 @@ document.write(`
 </div>
 </section>
 <section id="task-1-osse-gf-nadirs">
-<h2>Task 1: OSSE GF Nadirs<a class="headerlink" href="#task-1-osse-gf-nadirs" title="Permalink to this headline">#</a></h2>
+<h2>Task 1: OSSE GF Nadirs<a class="headerlink" href="#task-1-osse-gf-nadirs" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task_cfg</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir&#39;</span><span class="p">)</span>
@@ -765,15 +780,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-06-12 07:47:47,512][HYDRA] Launching 8 jobs locally
-[2023-06-12 07:47:47,513][HYDRA] 	#0 : method=bfn task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:01,862][HYDRA] 	#1 : method=4dvarnet task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:09,376][HYDRA] 	#2 : method=duacs task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:16,701][HYDRA] 	#3 : method=dymost task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:23,670][HYDRA] 	#4 : method=miost task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:30,863][HYDRA] 	#5 : method=nerf_ffn task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:38,522][HYDRA] 	#6 : method=nerf_mlp task=osse_gf_nadir/leaderboard
-[2023-06-12 07:48:48,624][HYDRA] 	#7 : method=nerf_siren task=osse_gf_nadir/leaderboard
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-10-09 12:26:08,098][HYDRA] Launching 8 jobs locally
+[2023-10-09 12:26:08,099][HYDRA] 	#0 : method=bfn task=osse_gf_nadir/leaderboard
+[2023-10-09 12:26:16,550][HYDRA] 	#1 : method=4dvarnet task=osse_gf_nadir/leaderboard
+[2023-10-09 12:26:23,625][HYDRA] 	#2 : method=duacs task=osse_gf_nadir/leaderboard
+[2023-10-09 12:26:31,505][HYDRA] 	#3 : method=dymost task=osse_gf_nadir/leaderboard
+[2023-10-09 12:26:38,834][HYDRA] 	#4 : method=miost task=osse_gf_nadir/leaderboard
+[2023-10-09 12:26:45,435][HYDRA] 	#5 : method=nerf_ffn task=osse_gf_nadir/leaderboard
+[2023-10-09 12:26:53,715][HYDRA] 	#6 : method=nerf_mlp task=osse_gf_nadir/leaderboard
+[2023-10-09 12:27:03,211][HYDRA] 	#7 : method=nerf_siren task=osse_gf_nadir/leaderboard
 |    |   nrmse | lambda_x_isotrop   | lambda_x_spacetime   | lambda_t_spacetime   | method     | task                         |
 |---:|--------:|:-------------------|:---------------------|:---------------------|:-----------|:-----------------------------|
 |  0 |   0.927 | 88.18 km           | 138.64 km            | 10.43 days           | bfn        | DC2020 OSSE Gulfstream Nadir |
@@ -790,7 +805,7 @@ document.write(`
 </div>
 </section>
 <section id="task-2-osse-gf-nadirs-swot">
-<h2>Task 2: OSSE GF Nadirs + SWOT<a class="headerlink" href="#task-2-osse-gf-nadirs-swot" title="Permalink to this headline">#</a></h2>
+<h2>Task 2: OSSE GF Nadirs + SWOT<a class="headerlink" href="#task-2-osse-gf-nadirs-swot" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task_cfg</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadirswot&#39;</span><span class="p">)</span>
@@ -817,15 +832,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-06-12 07:49:22,278][HYDRA] Launching 8 jobs locally
-[2023-06-12 07:49:22,279][HYDRA] 	#0 : method=bfn task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:49:30,415][HYDRA] 	#1 : method=4dvarnet task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:49:37,730][HYDRA] 	#2 : method=duacs task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:49:45,051][HYDRA] 	#3 : method=dymost task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:49:51,901][HYDRA] 	#4 : method=miost task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:49:58,817][HYDRA] 	#5 : method=nerf_ffn task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:50:06,711][HYDRA] 	#6 : method=nerf_mlp task=osse_gf_nadirswot/leaderboard
-[2023-06-12 07:50:16,877][HYDRA] 	#7 : method=nerf_siren task=osse_gf_nadirswot/leaderboard
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-10-09 11:55:26,012][HYDRA] Launching 8 jobs locally
+[2023-10-09 11:55:26,012][HYDRA] 	#0 : method=bfn task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:55:34,297][HYDRA] 	#1 : method=4dvarnet task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:55:41,771][HYDRA] 	#2 : method=duacs task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:55:48,604][HYDRA] 	#3 : method=dymost task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:55:55,942][HYDRA] 	#4 : method=miost task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:56:03,289][HYDRA] 	#5 : method=nerf_ffn task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:56:10,677][HYDRA] 	#6 : method=nerf_mlp task=osse_gf_nadirswot/leaderboard
+[2023-10-09 11:56:20,857][HYDRA] 	#7 : method=nerf_siren task=osse_gf_nadirswot/leaderboard
 |    |   nrmse | lambda_x_isotrop   | lambda_x_spacetime   | lambda_t_spacetime   | method     | task                                |
 |---:|--------:|:-------------------|:---------------------|:---------------------|:-----------|:------------------------------------|
 |  0 |   0.935 | 64.45 km           | 118.11 km            | 35.95 days           | bfn        | DC2020 OSSE Gulfstream Nadir + Swot |
@@ -842,7 +857,7 @@ document.write(`
 </div>
 </section>
 <section id="task-3-osse-gf-nadir-sst">
-<h2>Task 3: OSSE GF: Nadir + SST<a class="headerlink" href="#task-3-osse-gf-nadir-sst" title="Permalink to this headline">#</a></h2>
+<h2>Task 3: OSSE GF: Nadir + SST<a class="headerlink" href="#task-3-osse-gf-nadir-sst" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task_cfg</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir_sst&#39;</span><span class="p">)</span>
@@ -869,9 +884,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-06-12 07:50:35,246][HYDRA] Launching 2 jobs locally
-[2023-06-12 07:50:35,246][HYDRA] 	#0 : method=musti task=osse_gf_nadir_sst/leaderboard
-[2023-06-12 07:50:42,737][HYDRA] 	#1 : method=4dvarnet task=osse_gf_nadir_sst/leaderboard
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-10-09 11:56:38,993][HYDRA] Launching 2 jobs locally
+[2023-10-09 11:56:38,994][HYDRA] 	#0 : method=musti task=osse_gf_nadir_sst/leaderboard
+[2023-10-09 11:56:45,548][HYDRA] 	#1 : method=4dvarnet task=osse_gf_nadir_sst/leaderboard
 |    |   nrmse | lambda_x_isotrop   | lambda_x_spacetime   | lambda_t_spacetime   | method   | task                        |
 |---:|--------:|:-------------------|:---------------------|:---------------------|:---------|:----------------------------|
 |  0 |   0.946 | 45.70 km           | 137.66 km            | 4.14 days            | musti    | OSSE Gulfstream Nadir + SST |
@@ -882,7 +897,7 @@ document.write(`
 </div>
 </section>
 <section id="task-4-ose-gf">
-<h2>Task 4: OSE GF<a class="headerlink" href="#task-4-ose-gf" title="Permalink to this headline">#</a></h2>
+<h2>Task 4: OSE GF<a class="headerlink" href="#task-4-ose-gf" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task_cfg</span><span class="p">(</span><span class="s1">&#39;ose_gf&#39;</span><span class="p">)</span>
@@ -912,15 +927,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-06-12 07:51:13,620][HYDRA] Launching 8 jobs locally
-[2023-06-12 07:51:13,621][HYDRA] 	#0 : method=bfn task=ose_gf/leaderboard
-[2023-06-12 07:51:33,455][HYDRA] 	#1 : method=4dvarnet task=ose_gf/leaderboard
-[2023-06-12 07:51:42,206][HYDRA] 	#2 : method=convlstm task=ose_gf/leaderboard
-[2023-06-12 07:51:47,830][HYDRA] 	#3 : method=convlstm_sst task=ose_gf/leaderboard
-[2023-06-12 07:51:52,772][HYDRA] 	#4 : method=musti task=ose_gf/leaderboard
-[2023-06-12 07:51:59,738][HYDRA] 	#5 : method=duacs task=ose_gf/leaderboard
-[2023-06-12 07:52:04,533][HYDRA] 	#6 : method=dymost task=ose_gf/leaderboard
-[2023-06-12 07:52:08,962][HYDRA] 	#7 : method=miost task=ose_gf/leaderboard
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2023-10-09 12:18:24,644][HYDRA] Launching 8 jobs locally
+[2023-10-09 12:18:24,644][HYDRA] 	#0 : method=bfn task=ose_gf/leaderboard
+[2023-10-09 12:18:44,043][HYDRA] 	#1 : method=4dvarnet task=ose_gf/leaderboard
+[2023-10-09 12:18:52,652][HYDRA] 	#2 : method=convlstm task=ose_gf/leaderboard
+[2023-10-09 12:18:58,752][HYDRA] 	#3 : method=convlstm_sst task=ose_gf/leaderboard
+[2023-10-09 12:19:03,596][HYDRA] 	#4 : method=musti task=ose_gf/leaderboard
+[2023-10-09 12:19:11,127][HYDRA] 	#5 : method=duacs task=ose_gf/leaderboard
+[2023-10-09 12:19:15,762][HYDRA] 	#6 : method=dymost task=ose_gf/leaderboard
+[2023-10-09 12:19:20,311][HYDRA] 	#7 : method=miost task=ose_gf/leaderboard
 |    |   nrmse | lambda_x_alongtrack   | method       | task                  |
 |---:|--------:|:----------------------|:-------------|:----------------------|
 |  0 |   0.884 | 121.65 km             | bfn          | DC2021 OSE Gulfstream |
@@ -963,11 +978,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="PlotMaps.html"
@@ -987,10 +1001,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1060,8 +1071,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

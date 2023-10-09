@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Get ML-ready dataset from Oceanbench task &#8212; OceanBench</title>
+    <title>From tasks to datasets &#8212; OceanBench</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,12 +38,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -66,7 +68,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Pytorch Dataset Integration Demo" href="pytorch_dataset_integration_example.html" />
     <link rel="prev" title="OceanBench: Sea Surface Height Editions" href="../overview.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -75,6 +77,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -151,7 +162,11 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Get ML-ready dataset from Oceanbench task</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">From tasks to datasets</a></li>
+
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="pytorch_dataset_integration_example.html">Pytorch Dataset Integration Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PlotMaps.html">Plotting maps with ocean bench</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Leaderboards.html">Leaderboards</a></li>
@@ -374,10 +389,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -385,7 +400,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -402,7 +417,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Get ML-ready dataset from Oceanbench task</h1>
+    <h1>From tasks to datasets</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -412,20 +427,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#oceanbench-also-provides">Oceanbench also provides:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition">In this chapter, for each of the four tasks of the first oceanbench edition:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#osse">OSSE</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-task-nadir-ssh">First Task : Nadir  -&gt; SSH</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#second-task-nadir-swot-ssh">Second Task: Nadir + SWOT -&gt; SSH</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#third-task-nadir-sst-ssh">Third Task: Nadir + SST -&gt; SSH</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">From tasks to datasets</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#osse">OSSE</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ose">OSE</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#with-hydra">With Hydra</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-walkthrough-and-visualization">Task 1 Walkthrough and visualization:</a></li>
 </ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ose">OSE</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourth-task-nadir-nadir">Fourth Task: Nadir -&gt; Nadir</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walkthrough-and-visualization">Walkthrough and visualization:</a></li>
-</ul>
+
             </nav>
         </div>
     </div>
@@ -436,29 +444,18 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="get-ml-ready-dataset-from-oceanbench-task">
-<h1>Get ML-ready dataset from Oceanbench task<a class="headerlink" href="#get-ml-ready-dataset-from-oceanbench-task" title="Permalink to this headline">#</a></h1>
-<p>Welcome to ocean bench, ocen bench high level concept is the task in which we specify the <strong>data used as input and target</strong> as well as the evaluation <strong>spatial domain</strong> and <strong>evaluation period</strong>.</p>
-<section id="oceanbench-also-provides">
-<h2>Oceanbench also provides:<a class="headerlink" href="#oceanbench-also-provides" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>a <strong>data-registry</strong> storing all the necessary files</p></li>
-<li><p>preconfigured <strong>preprocessing pipelines</strong> to obtain nicely curated xarray datasets</p></li>
-<li><p>an XRDAPatcher that provides <strong>patch-based browsing</strong> of arbitratry <code class="docutils literal notranslate"><span class="pre">xarray.DataArray</span></code></p></li>
-</ul>
-</section>
-<section id="in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition">
-<h2>In this chapter, for each of the four tasks of the first oceanbench edition:<a class="headerlink" href="#in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>We display the configuration of the task</p></li>
-<li><p>We build a training and testing <code class="docutils literal notranslate"><span class="pre">XRDAPatcher</span></code></p></li>
-<li><p>display the fields of a single item of the patcher object</p></li>
-</ul>
+  <section id="from-tasks-to-datasets">
+<h1>From tasks to datasets<a class="headerlink" href="#from-tasks-to-datasets" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;notebooks&#39;</span><span class="p">:</span>
-    <span class="o">%</span><span class="k">cd</span> /Users/eman/code_projects/oceanbench/
+    <span class="o">%</span><span class="k">cd</span> ..
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/raid/localscratch/qfebvre/oceanbench
 </pre></div>
 </div>
 </div>
@@ -466,47 +463,18 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">env</span> LOGURU_LEVEL=WARNING
-<span class="c1"># import autoroot</span>
 <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">hydra</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">xrpatcher</span> <span class="kn">import</span> <span class="n">XRDAPatcher</span>
-<span class="kn">import</span> <span class="nn">oceanbench._src.geoprocessing.gridding</span> <span class="k">as</span> <span class="nn">obgrid</span>
+<span class="kn">import</span> <span class="nn">xrpatcher</span>
+<span class="kn">import</span> <span class="nn">ocn_tools._src.geoprocessing.gridding</span> <span class="k">as</span> <span class="nn">obgrid</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>env: LOGURU_LEVEL=WARNING
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rootutils</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">rootutils</span><span class="o">.</span><span class="n">find_root</span><span class="p">(</span><span class="n">indicator</span><span class="o">=</span><span class="s2">&quot;.project-root&quot;</span><span class="p">)</span>
-<span class="c1"># set root directory</span>
-<span class="n">rootutils</span><span class="o">.</span><span class="n">set_root</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="c1"># path to the root directory</span>
-    <span class="n">project_root_env_var</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># set the PROJECT_ROOT environment variable to root directory</span>
-    <span class="n">dotenv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># load environment variables from .env if exists in root directory</span>
-    <span class="n">pythonpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># add root directory to the PYTHONPATH (helps with imports)</span>
-    <span class="n">cwd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># change current working directory to the root directory (helps with filepaths)</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pwd
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/eman/code_projects/oceanbench
 </pre></div>
 </div>
 </div>
@@ -519,25 +487,15 @@ document.write(`
 <span class="kn">from</span> <span class="nn">omegaconf</span> <span class="kn">import</span> <span class="n">OmegaConf</span>
 
 <span class="k">def</span> <span class="nf">pprint_cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    colorful printing of configs</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;```yaml</span><span class="se">\n\n</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">+</span><span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">OmegaConf</span><span class="o">.</span><span class="n">to_container</span><span class="p">(</span><span class="n">cfg</span><span class="p">),</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\n\n</span><span class="s2">```&quot;&quot;&quot;</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">get_cfg</span><span class="p">(</span><span class="n">cfg_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load task config using hydra, and instantiate it</span>
-<span class="sd">    Relevant docs:</span>
-<span class="sd">    https://hydra.cc/docs/advanced/compose_api/</span>
-<span class="sd">    https://hydra.cc/docs/advanced/instantiate_objects/overview/</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">hydra</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;../../../config&#39;</span><span class="p">,</span> <span class="n">version_base</span><span class="o">=</span><span class="s1">&#39;1.3&#39;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">hydra</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="s1">&#39;../config&#39;</span><span class="p">,</span> <span class="n">version_base</span><span class="o">=</span><span class="s1">&#39;1.3&#39;</span><span class="p">):</span>
         <span class="n">cfg</span> <span class="o">=</span> <span class="n">hydra</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">cfg_path</span><span class="p">)</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">outputs</span>
     <span class="n">pprint_cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hydra</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="n">task_name</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">task_name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">get_cfg</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;task/</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s1">/task&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -545,13 +503,7 @@ document.write(`
 </div>
 </section>
 <section id="osse">
-<h2>OSSE<a class="headerlink" href="#osse" title="Permalink to this headline">#</a></h2>
-<p>We write below a generic function for simulated setups (OSSE) that:</p>
-<ul class="simple">
-<li><p>Loads and stacks all the data specified in the task: <code class="docutils literal notranslate"><span class="pre">task.data</span></code></p></li>
-<li><p>selects the spatio-temporal domain of the task <code class="docutils literal notranslate"><span class="pre">task.splits</span></code> <code class="docutils literal notranslate"><span class="pre">task.domain</span></code></p></li>
-<li><p>Creates a XRDAPatcher using the <code class="docutils literal notranslate"><span class="pre">patcher_kw</span></code> parameters</p></li>
-</ul>
+<h1>OSSE<a class="headerlink" href="#osse" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">patcher_from_osse_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">patcher_kw</span><span class="p">,</span> <span class="n">ref_var</span><span class="o">=</span><span class="s1">&#39;ssh&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;trainval&#39;</span><span class="p">):</span>
@@ -561,7 +513,7 @@ document.write(`
         <span class="n">lon</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">lon</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">domain_limits</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">default_domain_limits</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;domain_limits&#39;</span><span class="p">,</span> <span class="p">{})}</span>
-    <span class="n">task_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">domain_limits</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> 
+    <span class="n">task_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">domain_limits</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     
     <span class="n">da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
         <span class="p">{</span>
@@ -572,7 +524,7 @@ document.write(`
     <span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
     
 
-    <span class="k">return</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xrpatcher</span><span class="o">.</span><span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
 
 
 
@@ -586,8 +538,6 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="first-task-nadir-ssh">
-<h3>First Task : Nadir  -&gt; SSH<a class="headerlink" href="#first-task-nadir-ssh" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir&#39;</span><span class="p">)</span>
@@ -605,9 +555,6 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>osse_gf_nadir
-</pre></div>
-</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">obs</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;${...data.outputs.nadir_gridded}&#39;</span><span class="p p-Indicator">,</span><span class="nt"> ssh</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;${...data.outputs.ssh}&#39;</span><span class="p p-Indicator">}</span>
 <span class="nt">domain</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">lat</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">33</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">43</span><span class="p p-Indicator">]</span>
@@ -618,182 +565,26 @@ document.write(`
 <span class="w">  </span><span class="nt">trainval</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;2013-01-01&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;2013-09-30&#39;</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/file_manager.py:209,</span> in <span class="ni">CachingFileManager._acquire_with_cache_info</span><span class="nt">(self, needs_lock)</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">209</span>     <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span> <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainVal XArray Patcher
+==============
+DataArray size: OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 273), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Patches:        OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 5), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Strides:        OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 1), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)])
+Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)]) 
 
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/lru_cache.py:55,</span> in <span class="ni">LRUCache.__getitem__</span><span class="nt">(self, key)</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">55</span>     <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
-<span class="ne">KeyError</span>: [&lt;class &#39;netCDF4._netCDF4.Dataset&#39;&gt;, (&#39;/Users/eman/code_projects/oceanbench-data-registry/osse_natl60/grid/natl_obs_nadir.nc&#39;,), &#39;r&#39;, ((&#39;clobber&#39;, True), (&#39;diskless&#39;, False), (&#39;format&#39;, &#39;NETCDF4&#39;), (&#39;persist&#39;, False)), &#39;267242ff-aaa6-4864-9873-a91de691f87d&#39;]
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">eman</span><span class="o">/</span><span class="n">code_projects</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">/</span><span class="n">jbook</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">getting_started</span><span class="o">/</span><span class="n">TaskToPatcher</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">12</span> <span class="n">line</span> <span class="mi">5</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=0&#39;</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir&#39;</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">patcher_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">patches</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="n">strides</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=4&#39;</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">train_patcher</span> <span class="o">=</span> <span class="n">patcher_from_osse_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">patcher_kw</span><span class="o">=</span><span class="n">patcher_kw</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=5&#39;</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">test_patcher</span> <span class="o">=</span> <span class="n">patcher_from_osse_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">patcher_kw</span><span class="o">=</span><span class="n">patcher_kw</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=7&#39;</span><span class="o">&gt;</span><span class="mi">8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">TrainVal&#39;</span><span class="p">,</span> <span class="n">train_patcher</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">eman</span><span class="o">/</span><span class="n">code_projects</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">/</span><span class="n">jbook</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">getting_started</span><span class="o">/</span><span class="n">TaskToPatcher</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">12</span> <span class="n">line</span> <span class="mi">8</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=1&#39;</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">default_domain_limits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="n">split</span><span class="p">]),</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=3&#39;</span><span class="o">&gt;</span><span class="mi">4</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">lat</span><span class="p">),</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=4&#39;</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">lon</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">lon</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=5&#39;</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=6&#39;</span><span class="o">&gt;</span><span class="mi">7</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">domain_limits</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">default_domain_limits</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;domain_limits&#39;</span><span class="p">,</span> <span class="p">{})}</span>
-<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=7&#39;</span><span class="o">&gt;</span><span class="mi">8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">task_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">domain_limits</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> 
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=9&#39;</span><span class="o">&gt;</span><span class="mi">10</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=10&#39;</span><span class="o">&gt;</span><span class="mi">11</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="p">{</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=11&#39;</span><span class="o">&gt;</span><span class="mi">12</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>         <span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">task_data</span><span class="p">[</span><span class="n">ref_var</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=14&#39;</span><span class="o">&gt;</span><span class="mi">15</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="p">}</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=15&#39;</span><span class="o">&gt;</span><span class="mi">16</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=18&#39;</span><span class="o">&gt;</span><span class="mi">19</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">return</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
-
-<span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">eman</span><span class="o">/</span><span class="n">code_projects</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">/</span><span class="n">jbook</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">getting_started</span><span class="o">/</span><span class="n">TaskToPatcher</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">12</span> <span class="n">line</span> <span class="mi">8</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=1&#39;</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">default_domain_limits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">splits</span><span class="p">[</span><span class="n">split</span><span class="p">]),</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=3&#39;</span><span class="o">&gt;</span><span class="mi">4</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">lat</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">lat</span><span class="p">),</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=4&#39;</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">lon</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">lon</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=5&#39;</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=6&#39;</span><span class="o">&gt;</span><span class="mi">7</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">domain_limits</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">default_domain_limits</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;domain_limits&#39;</span><span class="p">,</span> <span class="p">{})}</span>
-<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=7&#39;</span><span class="o">&gt;</span><span class="mi">8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">task_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">domain_limits</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> 
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=9&#39;</span><span class="o">&gt;</span><span class="mi">10</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=10&#39;</span><span class="o">&gt;</span><span class="mi">11</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="p">{</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=11&#39;</span><span class="o">&gt;</span><span class="mi">12</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>         <span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">task_data</span><span class="p">[</span><span class="n">ref_var</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=14&#39;</span><span class="o">&gt;</span><span class="mi">15</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="p">}</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=15&#39;</span><span class="o">&gt;</span><span class="mi">16</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X12sZmlsZQ%3D%3D?line=18&#39;</span><span class="o">&gt;</span><span class="mi">19</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">return</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
-
-<span class="nn">File ~/code_projects/oceanbench/oceanbench/_src/utils/hydra.py:63,</span> in <span class="ni">pipe</span><span class="nt">(inp, fns)</span>
-<span class="g g-Whitespace">     </span><span class="mi">61</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fns</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">62</span>     <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">63</span>         <span class="n">out</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">64</span>     <span class="k">elif</span> <span class="s1">&#39;askw&#39;</span> <span class="ow">in</span> <span class="n">fn</span> <span class="ow">and</span> <span class="s1">&#39;fn&#39;</span> <span class="ow">in</span> <span class="n">fn</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">65</span>         <span class="n">out</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="s1">&#39;fn&#39;</span><span class="p">](</span><span class="o">**</span><span class="p">{</span><span class="n">fn</span><span class="p">[</span><span class="s1">&#39;askw&#39;</span><span class="p">]:</span> <span class="n">out</span><span class="p">})</span>
-
-<span class="nn">File ~/code_projects/oceanbench/oceanbench/_src/utils/hydra.py:63,</span> in <span class="ni">pipe</span><span class="nt">(inp, fns)</span>
-<span class="g g-Whitespace">     </span><span class="mi">61</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fns</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">62</span>     <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">63</span>         <span class="n">out</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">64</span>     <span class="k">elif</span> <span class="s1">&#39;askw&#39;</span> <span class="ow">in</span> <span class="n">fn</span> <span class="ow">and</span> <span class="s1">&#39;fn&#39;</span> <span class="ow">in</span> <span class="n">fn</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">65</span>         <span class="n">out</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="s1">&#39;fn&#39;</span><span class="p">](</span><span class="o">**</span><span class="p">{</span><span class="n">fn</span><span class="p">[</span><span class="s1">&#39;askw&#39;</span><span class="p">]:</span> <span class="n">out</span><span class="p">})</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/api.py:540,</span> in <span class="ni">open_dataset</span><span class="nt">(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, inline_array, backend_kwargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">528</span> <span class="n">decoders</span> <span class="o">=</span> <span class="n">_resolve_decoders_kwargs</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span>     <span class="n">decode_cf</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>     <span class="n">open_backend_dataset_parameters</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">open_dataset_parameters</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">536</span>     <span class="n">decode_coords</span><span class="o">=</span><span class="n">decode_coords</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">537</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">539</span> <span class="n">overwrite_encoded_chunks</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;overwrite_encoded_chunks&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">540</span> <span class="n">backend_ds</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">541</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">542</span>     <span class="n">drop_variables</span><span class="o">=</span><span class="n">drop_variables</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">543</span>     <span class="o">**</span><span class="n">decoders</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">545</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">546</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">_dataset_from_backend_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">547</span>     <span class="n">backend_ds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">548</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">556</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">557</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">558</span> <span class="k">return</span> <span class="n">ds</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/netCDF4_.py:572,</span> in <span class="ni">NetCDF4BackendEntrypoint.open_dataset</span><span class="nt">(self, filename_or_obj, mask_and_scale, decode_times, concat_characters, decode_coords, drop_variables, use_cftime, decode_timedelta, group, mode, format, clobber, diskless, persist, lock, autoclose)</span>
-<span class="g g-Whitespace">    </span><span class="mi">551</span> <span class="k">def</span> <span class="nf">open_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">552</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">553</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">568</span>     <span class="n">autoclose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">569</span> <span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">571</span>     <span class="n">filename_or_obj</span> <span class="o">=</span> <span class="n">_normalize_path</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">572</span>     <span class="n">store</span> <span class="o">=</span> <span class="n">NetCDF4DataStore</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">573</span>         <span class="n">filename_or_obj</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">574</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">575</span>         <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">576</span>         <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">577</span>         <span class="n">clobber</span><span class="o">=</span><span class="n">clobber</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">578</span>         <span class="n">diskless</span><span class="o">=</span><span class="n">diskless</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">579</span>         <span class="n">persist</span><span class="o">=</span><span class="n">persist</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">580</span>         <span class="n">lock</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">581</span>         <span class="n">autoclose</span><span class="o">=</span><span class="n">autoclose</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">582</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">584</span>     <span class="n">store_entrypoint</span> <span class="o">=</span> <span class="n">StoreBackendEntrypoint</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">585</span>     <span class="k">with</span> <span class="n">close_on_error</span><span class="p">(</span><span class="n">store</span><span class="p">):</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/netCDF4_.py:376,</span> in <span class="ni">NetCDF4DataStore.open</span><span class="nt">(cls, filename, mode, format, group, clobber, diskless, persist, lock, lock_maker, autoclose)</span>
-<span class="g g-Whitespace">    </span><span class="mi">370</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">371</span>     <span class="n">clobber</span><span class="o">=</span><span class="n">clobber</span><span class="p">,</span> <span class="n">diskless</span><span class="o">=</span><span class="n">diskless</span><span class="p">,</span> <span class="n">persist</span><span class="o">=</span><span class="n">persist</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span>
-<span class="g g-Whitespace">    </span><span class="mi">372</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">373</span> <span class="n">manager</span> <span class="o">=</span> <span class="n">CachingFileManager</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">374</span>     <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">375</span> <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">376</span> <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">manager</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span> <span class="n">autoclose</span><span class="o">=</span><span class="n">autoclose</span><span class="p">)</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/netCDF4_.py:323,</span> in <span class="ni">NetCDF4DataStore.__init__</span><span class="nt">(self, manager, group, mode, lock, autoclose)</span>
-<span class="g g-Whitespace">    </span><span class="mi">321</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">group</span>
-<span class="g g-Whitespace">    </span><span class="mi">322</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
-<span class="ne">--&gt; </span><span class="mi">323</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">data_model</span>
-<span class="g g-Whitespace">    </span><span class="mi">324</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">filepath</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">325</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_remote</span> <span class="o">=</span> <span class="n">is_remote_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/netCDF4_.py:385,</span> in <span class="ni">NetCDF4DataStore.ds</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">383</span> <span class="nd">@property</span>
-<span class="g g-Whitespace">    </span><span class="mi">384</span> <span class="k">def</span> <span class="nf">ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">385</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquire</span><span class="p">()</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/netCDF4_.py:379,</span> in <span class="ni">NetCDF4DataStore._acquire</span><span class="nt">(self, needs_lock)</span>
-<span class="g g-Whitespace">    </span><span class="mi">378</span> <span class="k">def</span> <span class="nf">_acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needs_lock</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">379</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">acquire_context</span><span class="p">(</span><span class="n">needs_lock</span><span class="p">)</span> <span class="k">as</span> <span class="n">root</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">380</span>         <span class="n">ds</span> <span class="o">=</span> <span class="n">_nc4_require_group</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">381</span>     <span class="k">return</span> <span class="n">ds</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/contextlib.py:137,</span> in <span class="ni">_GeneratorContextManager.__enter__</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">135</span> <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span>
-<span class="g g-Whitespace">    </span><span class="mi">136</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">137</span>     <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">138</span> <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">139</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;generator didn&#39;t yield&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/file_manager.py:197,</span> in <span class="ni">CachingFileManager.acquire_context</span><span class="nt">(self, needs_lock)</span>
-<span class="g g-Whitespace">    </span><span class="mi">194</span> <span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
-<span class="g g-Whitespace">    </span><span class="mi">195</span> <span class="k">def</span> <span class="nf">acquire_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needs_lock</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">196</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Context manager for acquiring a file.&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">197</span>     <span class="n">file</span><span class="p">,</span> <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquire_with_cache_info</span><span class="p">(</span><span class="n">needs_lock</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>     <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="k">yield</span> <span class="n">file</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/xarray/backends/file_manager.py:215,</span> in <span class="ni">CachingFileManager._acquire_with_cache_info</span><span class="nt">(self, needs_lock)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span>     <span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span>
-<span class="ne">--&gt; </span><span class="mi">215</span> <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opener</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="c1"># ensure file doesn&#39;t get overridden when opened again</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
-
-<span class="nn">File src/netCDF4/_netCDF4.pyx:2464,</span> in <span class="ni">netCDF4._netCDF4.Dataset.__init__</span><span class="nt">()</span>
-
-<span class="nn">File src/netCDF4/_netCDF4.pyx:2027,</span> in <span class="ni">netCDF4._netCDF4._ensure_nc_success</span><span class="nt">()</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/Users/eman/code_projects/oceanbench-data-registry/osse_natl60/grid/natl_obs_nadir.nc&#39;
+Test XArray Patcher
+==============
+DataArray size: OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 42), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Patches:        OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 5), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Strides:        OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 1), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)])
+Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)]) 
 </pre></div>
 </div>
+<img alt="../../_images/9d357f5c64649b8a5f9fb8f3651e75c1f6cfe62e0a5263bb960204a5e0ae5474.png" src="../../_images/9d357f5c64649b8a5f9fb8f3651e75c1f6cfe62e0a5263bb960204a5e0ae5474.png" />
+<img alt="../../_images/d122215a9c0a7b9732cef3f3b42c3fdaf481ec20645077d8e0f308fdb91ea919.png" src="../../_images/d122215a9c0a7b9732cef3f3b42c3fdaf481ec20645077d8e0f308fdb91ea919.png" />
 </div>
 </div>
-</section>
-<section id="second-task-nadir-swot-ssh">
-<h3>Second Task: Nadir + SWOT -&gt; SSH<a class="headerlink" href="#second-task-nadir-swot-ssh" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadirswot&#39;</span><span class="p">)</span>
@@ -811,123 +602,36 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">MissingConfigException</span><span class="g g-Whitespace">                    </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">eman</span><span class="o">/</span><span class="n">code_projects</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">/</span><span class="n">jbook</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">getting_started</span><span class="o">/</span><span class="n">TaskToPatcher</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">12</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="o">----&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=0&#39;</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadirswot&#39;</span><span class="p">)</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=2&#39;</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">patcher_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">patches</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="n">strides</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=4&#39;</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">train_patcher</span> <span class="o">=</span> <span class="n">patcher_from_osse_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">patcher_kw</span><span class="o">=</span><span class="n">patcher_kw</span><span class="p">)</span>
-
-<span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">eman</span><span class="o">/</span><span class="n">code_projects</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">/</span><span class="n">jbook</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">getting_started</span><span class="o">/</span><span class="n">TaskToPatcher</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">12</span> <span class="n">line</span> <span class="mi">2</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=23&#39;</span><span class="o">&gt;</span><span class="mi">24</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="n">task_name</span><span class="p">):</span>
-<span class="o">---&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=24&#39;</span><span class="o">&gt;</span><span class="mi">25</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="k">return</span> <span class="n">get_cfg</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;task/</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s1">/task&#39;</span><span class="p">)</span>
-
-<span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">eman</span><span class="o">/</span><span class="n">code_projects</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">/</span><span class="n">jbook</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">getting_started</span><span class="o">/</span><span class="n">TaskToPatcher</span><span class="o">.</span><span class="n">ipynb</span> <span class="n">Cell</span> <span class="mi">12</span> <span class="n">line</span> <span class="mi">2</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=12&#39;</span><span class="o">&gt;</span><span class="mi">13</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">     &lt;a href=&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=13&#39;&gt;14&lt;/a&gt; Load task config using hydra, and instantiate it</span>
-<span class="s2">     &lt;a href=&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=14&#39;&gt;15&lt;/a&gt; Relevant docs:</span>
-<span class="s2">     &lt;a href=&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=15&#39;&gt;16&lt;/a&gt; https://hydra.cc/docs/advanced/compose_api/</span>
-<span class="s2">     &lt;a href=&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=16&#39;&gt;17&lt;/a&gt; https://hydra.cc/docs/advanced/instantiate_objects/overview/</span>
-<span class="s2">     &lt;a href=&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=17&#39;&gt;18&lt;/a&gt; &quot;&quot;&quot;</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=18&#39;</span><span class="o">&gt;</span><span class="mi">19</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">with</span> <span class="n">hydra</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="s1">&#39;../config&#39;</span><span class="p">,</span> <span class="n">version_base</span><span class="o">=</span><span class="s1">&#39;1.3&#39;</span><span class="p">):</span>
-<span class="o">---&gt;</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=19&#39;</span><span class="o">&gt;</span><span class="mi">20</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>     <span class="n">cfg</span> <span class="o">=</span> <span class="n">hydra</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">cfg_path</span><span class="p">)</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">outputs</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=20&#39;</span><span class="o">&gt;</span><span class="mi">21</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">pprint_cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
-     <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;vscode-notebook-cell:/Users/eman/code_projects/oceanbench/jbook/content/getting_started/TaskToPatcher.ipynb#X14sZmlsZQ%3D%3D?line=21&#39;</span><span class="o">&gt;</span><span class="mi">22</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="k">return</span> <span class="n">hydra</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/hydra/compose.py:38,</span> in <span class="ni">compose</span><span class="nt">(config_name, overrides, return_hydra_config, strict)</span>
-<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="n">gh</span> <span class="o">=</span> <span class="n">GlobalHydra</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="k">assert</span> <span class="n">gh</span><span class="o">.</span><span class="n">hydra</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-<span class="ne">---&gt; </span><span class="mi">38</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">hydra</span><span class="o">.</span><span class="n">compose_config</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">39</span>     <span class="n">config_name</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span>     <span class="n">run_mode</span><span class="o">=</span><span class="n">RunMode</span><span class="o">.</span><span class="n">RUN</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="n">from_shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="n">with_log_configuration</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span> <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">DictConfig</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">47</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">return_hydra_config</span><span class="p">:</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/hydra/_internal/hydra.py:594,</span> in <span class="ni">Hydra.compose_config</span><span class="nt">(self, config_name, overrides, run_mode, with_log_configuration, from_shell, validate_sweep_overrides)</span>
-<span class="g g-Whitespace">    </span><span class="mi">576</span> <span class="k">def</span> <span class="nf">compose_config</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">577</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">578</span>     <span class="n">config_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">583</span>     <span class="n">validate_sweep_overrides</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">584</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DictConfig</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">585</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">586</span><span class="sd">     :param config_name:</span>
-<span class="g g-Whitespace">    </span><span class="mi">587</span><span class="sd">     :param overrides:</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">591</span><span class="sd">     :return:</span>
-<span class="g g-Whitespace">    </span><span class="mi">592</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">594</span>     <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_loader</span><span class="o">.</span><span class="n">load_configuration</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">595</span>         <span class="n">config_name</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">596</span>         <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">597</span>         <span class="n">run_mode</span><span class="o">=</span><span class="n">run_mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">598</span>         <span class="n">from_shell</span><span class="o">=</span><span class="n">from_shell</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">599</span>         <span class="n">validate_sweep_overrides</span><span class="o">=</span><span class="n">validate_sweep_overrides</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">600</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">601</span>     <span class="k">if</span> <span class="n">with_log_configuration</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">602</span>         <span class="n">configure_log</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">hydra</span><span class="o">.</span><span class="n">hydra_logging</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">hydra</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/hydra/_internal/config_loader_impl.py:142,</span> in <span class="ni">ConfigLoaderImpl.load_configuration</span><span class="nt">(self, config_name, overrides, run_mode, from_shell, validate_sweep_overrides)</span>
-<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">def</span> <span class="nf">load_configuration</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">135</span>     <span class="n">config_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">139</span>     <span class="n">validate_sweep_overrides</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">140</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DictConfig</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">141</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">142</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_configuration_impl</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">143</span>             <span class="n">config_name</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">144</span>             <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">145</span>             <span class="n">run_mode</span><span class="o">=</span><span class="n">run_mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">146</span>             <span class="n">from_shell</span><span class="o">=</span><span class="n">from_shell</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">147</span>             <span class="n">validate_sweep_overrides</span><span class="o">=</span><span class="n">validate_sweep_overrides</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">148</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">149</span>     <span class="k">except</span> <span class="n">OmegaConfBaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">150</span>         <span class="k">raise</span> <span class="n">ConfigCompositionException</span><span class="p">()</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span> <span class="kn">from</span> <span class="nn">e</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/hydra/_internal/config_loader_impl.py:243,</span> in <span class="ni">ConfigLoaderImpl._load_configuration_impl</span><span class="nt">(self, config_name, overrides, run_mode, from_shell, validate_sweep_overrides)</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="k">def</span> <span class="nf">_load_configuration_impl</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">235</span>     <span class="n">config_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span>     <span class="n">validate_sweep_overrides</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">240</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DictConfig</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">241</span>     <span class="kn">from</span> <span class="nn">hydra</span> <span class="kn">import</span> <span class="n">__version__</span><span class="p">,</span> <span class="n">version</span>
-<span class="ne">--&gt; </span><span class="mi">243</span>     <span class="bp">self</span><span class="o">.</span><span class="n">ensure_main_config_source_available</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">244</span>     <span class="n">parsed_overrides</span><span class="p">,</span> <span class="n">caching_repo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_overrides_and_create_caching_repo</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">245</span>         <span class="n">config_name</span><span class="p">,</span> <span class="n">overrides</span>
-<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">248</span>     <span class="k">if</span> <span class="n">validate_sweep_overrides</span><span class="p">:</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/hydra/_internal/config_loader_impl.py:129,</span> in <span class="ni">ConfigLoaderImpl.ensure_main_config_source_available</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">124</span>     <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">125</span>         <span class="s2">&quot;Primary config directory not found.</span><span class="se">\n</span><span class="s2">Check that the&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">126</span>         <span class="sa">f</span><span class="s2">&quot; config directory &#39;</span><span class="si">{</span><span class="n">source</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39; exists and readable&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">127</span>     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">129</span> <span class="bp">self</span><span class="o">.</span><span class="n">_missing_config_error</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">130</span>     <span class="n">config_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">with_search_path</span><span class="o">=</span><span class="kc">False</span>
-<span class="g g-Whitespace">    </span><span class="mi">131</span> <span class="p">)</span>
-
-<span class="nn">File ~/miniconda3/envs/oceanbench_311/lib/python3.11/site-packages/hydra/_internal/config_loader_impl.py:102,</span> in <span class="ni">ConfigLoaderImpl._missing_config_error</span><span class="nt">(self, config_name, msg, with_search_path)</span>
-<span class="g g-Whitespace">     </span><span class="mi">99</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">100</span>         <span class="k">return</span> <span class="n">msg</span>
-<span class="ne">--&gt; </span><span class="mi">102</span> <span class="k">raise</span> <span class="n">MissingConfigException</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span>     <span class="n">missing_cfg_file</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">add_search_path</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span> <span class="p">)</span>
-
-<span class="ne">MissingConfigException</span>: Primary config directory not found.
-<span class="n">Check</span> <span class="n">that</span> <span class="n">the</span> <span class="n">config</span> <span class="n">directory</span> <span class="s1">&#39;/Users/eman/code_projects/oceanbench/jbook/content/config&#39;</span> <span class="n">exists</span> <span class="ow">and</span> <span class="n">readable</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">obs</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;${...data.outputs.swot_gridded}&#39;</span><span class="p p-Indicator">,</span><span class="nt"> ssh</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;${...data.outputs.ssh}&#39;</span><span class="p p-Indicator">}</span>
+<span class="nt">domain</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">lat</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">33</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">43</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">lon</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">-65</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-55</span><span class="p p-Indicator">]</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DC2020 OSSE Gulfstream Nadir + Swot</span>
+<span class="nt">splits</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;2012-10-22&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;2012-12-02&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">trainval</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;2013-01-01&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;2013-09-30&#39;</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainVal XArray Patcher
+==============
+DataArray size: OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 273), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Patches:        OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 5), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Strides:        OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 1), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)])
+Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)]) 
+
+
+Test XArray Patcher
+==============
+DataArray size: OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 42), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Patches:        OrderedDict([(&#39;variable&#39;, 2), (&#39;time&#39;, 5), (&#39;lat&#39;, 200), (&#39;lon&#39;, 200)])
+Strides:        OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 1), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)])
+Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;lat&#39;, 1), (&#39;lon&#39;, 1)]) 
+</pre></div>
+</div>
+<img alt="../../_images/d78bb3108b9519ba4a3b0051489f3162ec001894aeb132f586f82c8156f223fb.png" src="../../_images/d78bb3108b9519ba4a3b0051489f3162ec001894aeb132f586f82c8156f223fb.png" />
+<img alt="../../_images/d122215a9c0a7b9732cef3f3b42c3fdaf481ec20645077d8e0f308fdb91ea919.png" src="../../_images/d122215a9c0a7b9732cef3f3b42c3fdaf481ec20645077d8e0f308fdb91ea919.png" />
 </div>
 </div>
-</section>
-<section id="third-task-nadir-sst-ssh">
-<h3>Third Task: Nadir + SST -&gt; SSH<a class="headerlink" href="#third-task-nadir-sst-ssh" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;osse_gf_nadir_sst&#39;</span><span class="p">)</span>
@@ -977,15 +681,8 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;
 </div>
 </div>
 </section>
-</section>
 <section id="ose">
-<h2>OSE<a class="headerlink" href="#ose" title="Permalink to this headline">#</a></h2>
-<p>Below an example of using Oceanbench with real observation data, the function below:</p>
-<ul class="simple">
-<li><p>Loads coordinate based observation data from the task specification</p></li>
-<li><p>Grid the data to a a specific resolution specified in the parameter</p></li>
-<li><p>creates a XRDAPatcher obsject from the gridded observations</p></li>
-</ul>
+<h1>OSE<a class="headerlink" href="#ose" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">patcher_from_ose_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">tgt_grid_resolution</span><span class="p">,</span> <span class="n">patcher_kw</span><span class="p">,</span> <span class="n">ref_var</span><span class="o">=</span><span class="s1">&#39;ssh&#39;</span><span class="p">,</span>  <span class="n">split</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">):</span>
@@ -1023,13 +720,11 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 38), (&#39;
     <span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
     
 
-    <span class="k">return</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xrpatcher</span><span class="o">.</span><span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="o">**</span><span class="n">patcher_kw</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<section id="fourth-task-nadir-nadir">
-<h3>Fourth Task: Nadir -&gt; Nadir<a class="headerlink" href="#fourth-task-nadir-nadir" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="s1">&#39;ose_gf&#39;</span><span class="p">)</span>
@@ -1082,10 +777,11 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 361), (&#39
 </div>
 </div>
 </section>
+<section id="with-hydra">
+<h1>With Hydra<a class="headerlink" href="#with-hydra" title="Permalink to this heading">#</a></h1>
 </section>
-<section id="walkthrough-and-visualization">
-<h2>Walkthrough and visualization:<a class="headerlink" href="#walkthrough-and-visualization" title="Permalink to this headline">#</a></h2>
-<p>Below we walkthrough and visualize the steps from loading the data to the XRDAPatcher creation</p>
+<section class="tex2jax_ignore mathjax_ignore" id="task-1-walkthrough-and-visualization">
+<h1>Task 1 Walkthrough and visualization:<a class="headerlink" href="#task-1-walkthrough-and-visualization" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_t0</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">)):</span>
@@ -1164,7 +860,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 361), (&#39
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">patcher</span> <span class="o">=</span> <span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">train_da</span><span class="p">,</span> <span class="n">patches</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">patcher</span> <span class="o">=</span> <span class="n">xrpatcher</span><span class="o">.</span><span class="n">XRDAPatcher</span><span class="p">(</span><span class="n">train_da</span><span class="p">,</span> <span class="n">patches</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">patcher</span>
 </pre></div>
 </div>
@@ -1187,13 +883,12 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.plot.facetgrid.FacetGrid at 0x7f3c87304640&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.plot.facetgrid.FacetGrid at 0x7fd0e7f0dd20&gt;
 </pre></div>
 </div>
 <img alt="../../_images/a08a375ca3a356ce0846f3f9eaea7923c1a59630c29782fa1767b9c220ce3972.png" src="../../_images/a08a375ca3a356ce0846f3f9eaea7923c1a59630c29782fa1767b9c220ce3972.png" />
 </div>
 </div>
-</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1205,27 +900,26 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "oceanbench"
         },
         kernelOptions: {
-            name: "python3",
+            name: "oceanbench",
             path: "./content/getting_started"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'oceanbench'</script>
 
                 </article>
               
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../overview.html"
@@ -1245,10 +939,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1263,20 +954,13 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 269), (&#39
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#oceanbench-also-provides">Oceanbench also provides:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-this-chapter-for-each-of-the-four-tasks-of-the-first-oceanbench-edition">In this chapter, for each of the four tasks of the first oceanbench edition:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#osse">OSSE</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-task-nadir-ssh">First Task : Nadir  -&gt; SSH</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#second-task-nadir-swot-ssh">Second Task: Nadir + SWOT -&gt; SSH</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#third-task-nadir-sst-ssh">Third Task: Nadir + SST -&gt; SSH</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">From tasks to datasets</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#osse">OSSE</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ose">OSE</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#with-hydra">With Hydra</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-walkthrough-and-visualization">Task 1 Walkthrough and visualization:</a></li>
 </ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ose">OSE</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourth-task-nadir-nadir">Fourth Task: Nadir -&gt; Nadir</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walkthrough-and-visualization">Walkthrough and visualization:</a></li>
-</ul>
+
   </nav></div>
 
 </div></div>
@@ -1323,8 +1007,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

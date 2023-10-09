@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>AlongTrack Evaluation &#8212; OceanBench</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,12 +38,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -68,7 +70,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="XArrayDataset" href="../ml/xrdataset.html" />
     <link rel="prev" title="AlongTrack Data - SWOT" href="AlongTrack_SWOT.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -77,6 +79,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -153,7 +164,11 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/TaskToPatcher.html">Get ML-ready dataset from Oceanbench task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/TaskToPatcher.html">From tasks to datasets</a></li>
+
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/pytorch_dataset_integration_example.html">Pytorch Dataset Integration Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/PlotMaps.html">Plotting maps with ocean bench</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/Leaderboards.html">Leaderboards</a></li>
@@ -376,10 +391,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -387,7 +402,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -447,7 +462,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="alongtrack-evaluation">
-<h1>AlongTrack Evaluation<a class="headerlink" href="#alongtrack-evaluation" title="Permalink to this headline">#</a></h1>
+<h1>AlongTrack Evaluation<a class="headerlink" href="#alongtrack-evaluation" title="Permalink to this heading">#</a></h1>
 <blockquote>
 <div><p>In this notebook, we look at how to evaluate alongtrack data. In the OSSE setting in previous notebooks, we saw that we can evaluate our method on the alongtracks and then compare our learned field with the field from the simulation. In the OSE setting, we don’t have the original field. So we need to evaluate the field directly on the leave-one-out alongtrack. We demonstrate some simple statistics in the real and spectral space that we can perform.</p>
 </div></blockquote>
@@ -483,7 +498,7 @@ document.write(`
 </div>
 </div>
 <section id="data">
-<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">#</a></h2>
+<h2>Data<a class="headerlink" href="#data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ls<span class="w"> </span><span class="s2">&quot;/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/results&quot;</span>
@@ -1022,7 +1037,7 @@ Attributes: (12/44)
 </div>
 </section>
 <section id="field">
-<h2>Field<a class="headerlink" href="#field" title="Permalink to this headline">#</a></h2>
+<h2>Field<a class="headerlink" href="#field" title="Permalink to this heading">#</a></h2>
 <p>Now, we will load a field from a method that interpolated the data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1064,7 +1079,7 @@ OSE_ssh_mapping_BFN.nc
 </div>
 </section>
 <section id="gridding">
-<h2>Gridding<a class="headerlink" href="#gridding" title="Permalink to this headline">#</a></h2>
+<h2>Gridding<a class="headerlink" href="#gridding" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_DUACS</span> <span class="o">=</span> <span class="s2">&quot;/gpfswork/rech/yrf/commun/data_challenges/dc21a_ose/test/results/OSE_ssh_mapping_DUACS.nc&quot;</span>
@@ -1560,7 +1575,7 @@ Attributes:
 </div>
 </div>
 <section id="regridding">
-<h3>Regridding<a class="headerlink" href="#regridding" title="Permalink to this headline">#</a></h3>
+<h3>Regridding<a class="headerlink" href="#regridding" title="Permalink to this heading">#</a></h3>
 <p>Now, we will need to regrid our field to the alongtrack data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2943,7 +2958,7 @@ Attributes: (12/44)
 </section>
 </section>
 <section id="alongtrack-segments">
-<h2>AlongTrack Segments<a class="headerlink" href="#alongtrack-segments" title="Permalink to this headline">#</a></h2>
+<h2>AlongTrack Segments<a class="headerlink" href="#alongtrack-segments" title="Permalink to this heading">#</a></h2>
 <p><strong>TODO</strong>: Need to explain this better.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3493,10 +3508,10 @@ Attributes:
 </div>
 </section>
 <section id="real-statistics">
-<h2>Real Statistics<a class="headerlink" href="#real-statistics" title="Permalink to this headline">#</a></h2>
+<h2>Real Statistics<a class="headerlink" href="#real-statistics" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="statistics">
-<h2>Statistics<a class="headerlink" href="#statistics" title="Permalink to this headline">#</a></h2>
+<h2>Statistics<a class="headerlink" href="#statistics" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># psd_calc.psd_welch_score(ds_segments, &quot;ssh&quot;, &quot;ssh_interp&quot;, delta_x=delta_x, nperseg=nperseg).score</span>
@@ -3506,9 +3521,9 @@ Attributes:
 </div>
 </section>
 <section id="spectral-statistics">
-<h2>Spectral Statistics<a class="headerlink" href="#spectral-statistics" title="Permalink to this headline">#</a></h2>
+<h2>Spectral Statistics<a class="headerlink" href="#spectral-statistics" title="Permalink to this heading">#</a></h2>
 <section id="power-spectrum">
-<h3>Power Spectrum<a class="headerlink" href="#power-spectrum" title="Permalink to this headline">#</a></h3>
+<h3>Power Spectrum<a class="headerlink" href="#power-spectrum" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SSH AlongTrack</span>
@@ -3989,7 +4004,7 @@ Coordinates:
              dtype=&#x27;float64&#x27;, name=&#x27;wavenumber&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-d881107f-147f-4a90-95c4-2e0f564eb09e' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-d881107f-147f-4a90-95c4-2e0f564eb09e' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <section id="figure">
-<h4>Figure<a class="headerlink" href="#figure" title="Permalink to this headline">#</a></h4>
+<h4>Figure<a class="headerlink" href="#figure" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDIsotropic</span><span class="p">:</span>
@@ -4097,7 +4112,7 @@ Coordinates:
 </section>
 </section>
 <section id="power-spectrum-score">
-<h3>Power Spectrum Score<a class="headerlink" href="#power-spectrum-score" title="Permalink to this headline">#</a></h3>
+<h3>Power Spectrum Score<a class="headerlink" href="#power-spectrum-score" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 \text{PSD}(u,\hat{u}) = 1 - \frac{\mathcal{F}(u) - \mathcal{F}(\hat{u})}{\mathcal{F}(u)}
@@ -4111,7 +4126,7 @@ Coordinates:
 </div>
 </div>
 <section id="resolved-scale">
-<h4>Resolved Scale<a class="headerlink" href="#resolved-scale" title="Permalink to this headline">#</a></h4>
+<h4>Resolved Scale<a class="headerlink" href="#resolved-scale" title="Permalink to this heading">#</a></h4>
 <p>We can assign an arbitrary threshhold which we decide as the “resolved scale” for the quantity of interest. In this case, we decided 0.5 which is the minimum signal-to-noise ratio that we deem trustworthy.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -4133,7 +4148,7 @@ Coordinates:
 </div>
 </section>
 <section id="id1">
-<h4>Figure<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h4>
+<h4>Figure<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDScoreIsotropic</span><span class="p">(</span><span class="n">PlotPSDIsotropic</span><span class="p">):</span>
@@ -4260,11 +4275,10 @@ Coordinates:
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="AlongTrack_SWOT.html"
@@ -4284,10 +4298,7 @@ Coordinates:
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -4370,8 +4381,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

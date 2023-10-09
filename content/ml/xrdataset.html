@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>XArrayDataset &#8212; OceanBench</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,12 +38,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -68,7 +70,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Pytorch Dataset Integration Demo" href="pytorch_dataset.html" />
     <link rel="prev" title="AlongTrack Evaluation" href="../alongtrack/AlongTrack_Eval.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -77,6 +79,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -153,7 +164,11 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/TaskToPatcher.html">Get ML-ready dataset from Oceanbench task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/TaskToPatcher.html">From tasks to datasets</a></li>
+
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/pytorch_dataset_integration_example.html">Pytorch Dataset Integration Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/PlotMaps.html">Plotting maps with ocean bench</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/Leaderboards.html">Leaderboards</a></li>
@@ -393,10 +408,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -404,7 +419,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -449,7 +464,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="xarraydataset">
-<h1>XArrayDataset<a class="headerlink" href="#xarraydataset" title="Permalink to this headline">#</a></h1>
+<h1>XArrayDataset<a class="headerlink" href="#xarraydataset" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autoroot</span>
@@ -485,7 +500,7 @@ These use cases are:</p>
 </ul>
 <p>We will walk through each of these and highlight how this can be achieved with the custom <code class="docutils literal notranslate"><span class="pre">XRDAPatcher</span></code> class.</p>
 <section id="case-i-chunking-a-1d-ts">
-<h2>Case I: Chunking a 1D TS<a class="headerlink" href="#case-i-chunking-a-1d-ts" title="Permalink to this headline">#</a></h2>
+<h2>Case I: Chunking a 1D TS<a class="headerlink" href="#case-i-chunking-a-1d-ts" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TIME</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
@@ -583,7 +598,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 </div>
 </section>
 <section id="case-ii-patchify-a-2d-grid">
-<h2>Case II: Patchify a 2D Grid<a class="headerlink" href="#case-ii-patchify-a-2d-grid" title="Permalink to this headline">#</a></h2>
+<h2>Case II: Patchify a 2D Grid<a class="headerlink" href="#case-ii-patchify-a-2d-grid" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TIME</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
@@ -685,7 +700,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 </div>
 </section>
 <section id="case-iii-cube-ify-a-3d-volume">
-<h2>Case III: Cube-ify a 3D Volume<a class="headerlink" href="#case-iii-cube-ify-a-3d-volume" title="Permalink to this headline">#</a></h2>
+<h2>Case III: Cube-ify a 3D Volume<a class="headerlink" href="#case-iii-cube-ify-a-3d-volume" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TIME</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
@@ -786,7 +801,7 @@ Our method will give a warning (optional) which lets the user know there is an i
 </div>
 </section>
 <section id="case-iv-cube-ify-a-2d-t-spatio-temporal-field">
-<h2>Case IV: Cube-ify a 2D+T Spatio-Temporal Field<a class="headerlink" href="#case-iv-cube-ify-a-2d-t-spatio-temporal-field" title="Permalink to this headline">#</a></h2>
+<h2>Case IV: Cube-ify a 2D+T Spatio-Temporal Field<a class="headerlink" href="#case-iv-cube-ify-a-2d-t-spatio-temporal-field" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TIME</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
@@ -900,7 +915,7 @@ However, we can create a different dataset for predictions where we reduce the s
 <p>So this will cover use because we can take a weighted average of all of the predictions!</p>
 </section>
 <section id="case-v-reconstructing-with-multiple-variables">
-<h2>Case V: Reconstructing with multiple variables<a class="headerlink" href="#case-v-reconstructing-with-multiple-variables" title="Permalink to this headline">#</a></h2>
+<h2>Case V: Reconstructing with multiple variables<a class="headerlink" href="#case-v-reconstructing-with-multiple-variables" title="Permalink to this heading">#</a></h2>
 <p>In this example, we look at how we can do reconstructions with multiple variables.
 This may occur when we have used different methods to make predictions and we want to reconstruct all of them.</p>
 <p>Another example is when we have some sort of latent variable representation and we would like to reconstruct each of the latent variable representations.</p>
@@ -957,7 +972,7 @@ This may occur when we have used different methods to make predictions and we wa
 </div>
 </section>
 <section id="case-vi-choosing-a-specific-dimension-for-reconstruction">
-<h2>Case VI: Choosing a Specific Dimension for Reconstruction<a class="headerlink" href="#case-vi-choosing-a-specific-dimension-for-reconstruction" title="Permalink to this headline">#</a></h2>
+<h2>Case VI: Choosing a Specific Dimension for Reconstruction<a class="headerlink" href="#case-vi-choosing-a-specific-dimension-for-reconstruction" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
@@ -1075,11 +1090,10 @@ So, like above, we can simply pass the correct dimensions to the reconstruction.
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../alongtrack/AlongTrack_Eval.html"
@@ -1099,10 +1113,7 @@ So, like above, we can simply pass the correct dimensions to the reconstruction.
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1170,8 +1181,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

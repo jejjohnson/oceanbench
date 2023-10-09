@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Power Spectrum Score &#8212; OceanBench</title>
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,12 +38,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
@@ -68,7 +70,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Pixel Densities" href="../viz/pixel_densities.html" />
     <link rel="prev" title="Power Spectrum" href="power_spectrum.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -77,6 +79,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -153,7 +164,11 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/TaskToPatcher.html">Get ML-ready dataset from Oceanbench task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/TaskToPatcher.html">From tasks to datasets</a></li>
+
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/pytorch_dataset_integration_example.html">Pytorch Dataset Integration Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/PlotMaps.html">Plotting maps with ocean bench</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/Leaderboards.html">Leaderboards</a></li>
@@ -393,10 +408,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -404,7 +419,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -468,7 +483,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="power-spectrum-score">
-<h1>Power Spectrum Score<a class="headerlink" href="#power-spectrum-score" title="Permalink to this headline">#</a></h1>
+<h1>Power Spectrum Score<a class="headerlink" href="#power-spectrum-score" title="Permalink to this heading">#</a></h1>
 <blockquote>
 <div><p>In the ocean community, we often operator in the Fourier domain.
 This is useful for assessing the quality of our models and it can also be useful for learning.
@@ -606,7 +621,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </div>
 <section id="regridding">
-<h2>Regridding<a class="headerlink" href="#regridding" title="Permalink to this headline">#</a></h2>
+<h2>Regridding<a class="headerlink" href="#regridding" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.gridding</span> <span class="kn">import</span> <span class="n">grid_to_regular_grid</span>
@@ -626,7 +641,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </div>
 <section id="interpolate-nans">
-<h3>Interpolate NANs<a class="headerlink" href="#interpolate-nans" title="Permalink to this headline">#</a></h3>
+<h3>Interpolate NANs<a class="headerlink" href="#interpolate-nans" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.geoprocessing.interpolate</span> <span class="kn">import</span> <span class="n">fillnans</span>
@@ -644,7 +659,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </section>
 <section id="units">
-<h3>Units<a class="headerlink" href="#units" title="Permalink to this headline">#</a></h3>
+<h3>Units<a class="headerlink" href="#units" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_units</span><span class="p">(</span><span class="n">da</span><span class="p">):</span>
@@ -671,10 +686,10 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </section>
 </section>
 <section id="rescaling">
-<h2>Rescaling<a class="headerlink" href="#rescaling" title="Permalink to this headline">#</a></h2>
+<h2>Rescaling<a class="headerlink" href="#rescaling" title="Permalink to this heading">#</a></h2>
 <p>In a previous notebook, we showed how we can do lat/lon</p>
 <section id="degrees-to-meters">
-<h3>Degrees to Meters<a class="headerlink" href="#degrees-to-meters" title="Permalink to this headline">#</a></h3>
+<h3>Degrees to Meters<a class="headerlink" href="#degrees-to-meters" title="Permalink to this heading">#</a></h3>
 <p>It is often more useful to have things in meters instead of degrees. The units are more meaningful and easier to interpret. So we can do a simple degree to meters transformation included in the library.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -704,7 +719,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </section>
 </section>
 <section id="spectral-domain">
-<h2>Spectral Domain<a class="headerlink" href="#spectral-domain" title="Permalink to this headline">#</a></h2>
+<h2>Spectral Domain<a class="headerlink" href="#spectral-domain" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rmse_da</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="n">da_ref</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
@@ -745,7 +760,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 <p>Now, we can look at how we can represent the data within the Fourier Domain</p>
 <section id="isotropic-assumption">
-<h3>Isotropic Assumption<a class="headerlink" href="#isotropic-assumption" title="Permalink to this headline">#</a></h3>
+<h3>Isotropic Assumption<a class="headerlink" href="#isotropic-assumption" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics</span> <span class="kn">import</span> <span class="n">power_spectrum</span> <span class="k">as</span> <span class="n">psdcalc</span>
@@ -767,7 +782,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </section>
 <section id="plots">
-<h3>Plots<a class="headerlink" href="#plots" title="Permalink to this headline">#</a></h3>
+<h3>Plots<a class="headerlink" href="#plots" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PlotPSDIsotropic</span><span class="p">:</span>
@@ -838,7 +853,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </div>
 <section id="wavenumber-wavelength">
-<h4>Wavenumber + Wavelength<a class="headerlink" href="#wavenumber-wavelength" title="Permalink to this headline">#</a></h4>
+<h4>Wavenumber + Wavelength<a class="headerlink" href="#wavenumber-wavelength" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psd_iso_plot</span> <span class="o">=</span> <span class="n">PlotPSDIsotropic</span><span class="p">()</span>
@@ -865,7 +880,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </section>
 </section>
 <section id="psd-score">
-<h3>PSD Score<a class="headerlink" href="#psd-score" title="Permalink to this headline">#</a></h3>
+<h3>PSD Score<a class="headerlink" href="#psd-score" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 \text{Score}_{PSD} = 1 - \frac{PSD(u) - PSD(\hat{u})}{PSD(u)}
@@ -998,9 +1013,9 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </section>
 <section id="spatial-temporal">
-<h3>Spatial Temporal<a class="headerlink" href="#spatial-temporal" title="Permalink to this headline">#</a></h3>
+<h3>Spatial Temporal<a class="headerlink" href="#spatial-temporal" title="Permalink to this heading">#</a></h3>
 <section id="time-vs-longitude">
-<h4>Time vs Longitude<a class="headerlink" href="#time-vs-longitude" title="Permalink to this headline">#</a></h4>
+<h4>Time vs Longitude<a class="headerlink" href="#time-vs-longitude" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># frequency dims</span>
@@ -1138,7 +1153,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </section>
 <section id="wavenumber">
-<h4>Wavenumber<a class="headerlink" href="#wavenumber" title="Permalink to this headline">#</a></h4>
+<h4>Wavenumber<a class="headerlink" href="#wavenumber" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -1171,7 +1186,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </div>
 </section>
 <section id="wavelength">
-<h4>Wavelength<a class="headerlink" href="#wavelength" title="Permalink to this headline">#</a></h4>
+<h4>Wavelength<a class="headerlink" href="#wavelength" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -1205,7 +1220,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 </section>
 </section>
 <section id="space-time-psd-score">
-<h3>Space-Time PSD Score<a class="headerlink" href="#space-time-psd-score" title="Permalink to this headline">#</a></h3>
+<h3>Space-Time PSD Score<a class="headerlink" href="#space-time-psd-score" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">oceanbench._src.metrics.utils</span> <span class="kn">import</span> <span class="n">find_intercept_1D</span><span class="p">,</span> <span class="n">find_intercept_2D</span>
@@ -1420,11 +1435,10 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="power_spectrum.html"
@@ -1444,10 +1458,7 @@ file_ref = &quot;/gpfswork/rech/yrf/commun/data_challenges/dc20a_osse/staging/na
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1534,8 +1545,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>
