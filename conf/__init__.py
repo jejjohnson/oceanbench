@@ -16,9 +16,10 @@ import ocn_tools._src.geoprocessing.temporal as ocntem
 import ocn_tools._src.metrics.stats as ocnmst
 import ocn_tools._src.metrics.power_spectrum as ocnmps
 import operator
-from dataclasses import asdict
+import oceanbench._src.utils.hydra
+from dataclasses import asdict, dataclass
 import dataclasses
-
+import matplotlib.ticker
 ###  Reasoning: Better composability and updatability:
 """
 all pipelines are described with dict[str, callable]
@@ -39,9 +40,14 @@ the piping function takes the resulting dict and sort the functions depending on
 # Hydra utils
 pb = hydra_zen.make_custom_builds_fn(zen_partial=True)
 b = hydra_zen.make_custom_builds_fn(zen_partial=False)
+pbc = hydra_zen.make_custom_builds_fn(hydra_convert='all', zen_partial=True)
+bc = hydra_zen.make_custom_builds_fn(hydra_convert='all')
 
 def zen_compose(d):
     return toolz.compose_left(*(d[k] for k in sorted(d)))
+
+def from_recipe(rec):
+    return pb(toolz.apply, b(zen_compose, asdict(rec)))
 
 def packed_caller(name, args=[], kwargs={}):
     print(name)
@@ -301,6 +307,42 @@ get_plot_data = hydra_zen.make_config(
     _1=b(operator.itemgetter, 'study'),
     _2=b(operator.methodcaller, 'isel', time=10),
 )
+levels= hydra_zen.make_config(
+    _1=minmax_cfg('study'), # x -> (min(x[study]), max(x[study]))
+    _2=pb(packed_caller, 'tick_values'), # [vmin, vmax]->  (x -> x.tick_values(vmin, vmax))
+    _3=b(operator.methodcaller, '__call__', b(matplotlib.ticker.MaxNLocator, 5)), 
+)
+linestyles= hydra_zen.make_config(
+    _4=pb(operator.le, 0),
+    _5=b(oceanbench._src.utils.hydra.rpartial, pb(np.where) ,'-', '--'),
+    bases=(levels,),
+)
+
+hvplot_contour = hydra_zen.make_config(
+    _2=pb(operator.methodcaller, '__call__'), # x -> (f -> f(x))
+    _21=pb(toolz.do, pb(print, '21\n')),
+    _3=pb(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
+            levels=from_recipe(levels()),
+            linestyle=from_recipe(linestyles())
+    )),
+    _4=pb(toolz.merge, dict( # d -> merge(d, ...)
+        kind='contour',
+        colorbar=False,
+        aspect=1, x='lon', y='lat',
+        alpha=0.5, linewidth=2,
+        color='black',
+    )),
+    _5=pb(packed_caller, 'hvplot', []) # d: (x -> x.hvplot(**d))
+)
+
+contour_plot = hydra_zen.make_config(
+    _1=b(toolz.juxt,  # x -> [(x-> x.hvplot(**d), x_plt)]
+        pb(toolz.apply, b(zen_compose, asdict(hvplot_contour()))),
+        pb(toolz.apply, b(zen_compose, asdict(get_plot_data()))),
+    ),
+    _2=pb(packed_caller, '__call__' ), # [f, inp] -> (x -> x(f, inp))
+    _3=b(operator.methodcaller, '__call__', pb(toolz.apply)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
+)
 def minmax_cfg(v):
     return b(toolz.compose_left, 
         b(operator.itemgetter, v),  # x -> x[v]
@@ -311,23 +353,24 @@ def minmax_cfg(v):
 
 hvplot_image = hydra_zen.make_config(
     _2=pb(operator.methodcaller, '__call__'), # x -> (f -> f(x))
-    _3=pb(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
+    _3=pbc(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
         xlim=minmax_cfg('lon'),
         ylim=minmax_cfg('lat'),
-        clim=minmax_cfg('ref'),
+        # clim=minmax_cfg('ref'),
     )),
-    _4=pb(toolz.merge, dict( # d -> merge(d, ...)
+    _4=pbc(toolz.merge,
+          dict( # d -> merge(d, ...)
         kind='image',
         cmap=cmocmap('speed'),
-        clim=b(tuple, [0,30]),
+        clim=b(tuple, (0,30)),
         aspect=1,
         x='lon',
         y='lat',
-        hydra_convert='all',
-    )),
-    _5=pb(packed_caller, 'hvplot', []) # d: (x -> x.hvplot(**d))
+    )
+          ),
+    _5=pb(packed_caller, 'hvplot', []), # d: (x -> x.hvplot(**d))
 )
-image_plot = hydra_zen.make_config(
+image_plot = hydra_zen.make_config(zen_dataclass=dict(cls_name='ImagePlot'),
     _1=b(toolz.juxt,  # x -> [(x-> x.hvplot(**d), x_plt)]
         pb(toolz.apply, b(zen_compose, asdict(hvplot_image()))),
         pb(toolz.apply, b(zen_compose, asdict(get_plot_data()))),
@@ -335,12 +378,36 @@ image_plot = hydra_zen.make_config(
     _2=pb(packed_caller, '__call__' ), # [f, inp] -> (x -> x(f, inp))
     _3=b(operator.methodcaller, '__call__', pb(toolz.apply)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
 )
-hydra_zen.instantiate(toolz.apply(b(zen_compose, toolz.dissoc(hydra_zen.instantiate(hvplot_image), '_5'))))(eval_ds)
+
+
+map_overlay = hydra_zen.make_config(
+    _1=b(toolz.juxt,  # x -> [(x-> x.hvplot(**d), x_plt)]
+        pb(toolz.apply, b(zen_compose, asdict(image_plot()))),
+        pb(toolz.apply, b(zen_compose, asdict(contour_plot()))),
+    ),
+    _2=pb(packed_caller, '__call__' ), # [f, inp] -> (x -> x(f, inp))
+    _3=b(operator.methodcaller, '__call__', pb(operator.mul)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
+)
+
+# hydra_zen.instantiate(toolz.apply(b(zen_compose, toolz.dissoc(hydra_zen.instantiate(hvplot_image), '_5'))))(eval_ds)
 plt = (hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(image_plot()))),))
+print(hydra_zen.to_yaml(pb(toolz.apply, b(zen_compose, asdict(image_plot()))),))
+cfg=pb(toolz.apply, b(zen_compose, asdict(image_plot())))
+print(hydra_zen.to_yaml(cfg))
+
+plt = (hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(map_overlay()))),))
 plt(st)
 
+plots = hydra_zen.make_config(
+    strain=dict(
+        pp=hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(strain_pp())))),
+        plt=hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(strain_plt())))),
+    )
+)
+dict(strain=dict(pp=strain, plt=strain_plot)
 leaderboard = hydra_zen.make_config(
-    build_eval_ds=pb(toolz.apply, b(zen_compose, asdict(build_eval_ds()))),
+    build_diag_ds=pb(toolz.apply, b(zen_compose, asdict(build_eval_ds()))),
+    plots=plots,
     metrics=metrics,
     metrics_fmt=metrics_fmt,
     summary_fmt=pb(join_apply, dfunc='${metrics_fmt}'),
