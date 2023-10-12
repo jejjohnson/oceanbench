@@ -1,4 +1,4 @@
-from operator import itemgetter, methodcaller
+from operator import itemgetter as igetter, methodcaller as caller
 import numpy as np
 import pandas as pd
 import hydra_zen
@@ -49,9 +49,11 @@ def zen_compose(d):
 def from_recipe(rec):
     return pb(toolz.apply, b(zen_compose, asdict(rec)))
 
+def from_recipe_and_inp(rec, inp):
+    return pb(toolz.apply, b(zen_compose, asdict(rec)), inp)
+
 def packed_caller(name, args=[], kwargs={}):
-    print(name)
-    return operator.methodcaller(name, *args, **kwargs)
+    return caller(name, *args, **kwargs)
 
 def join_apply(d, dfunc):
     return {k: dfunc.get(k, toolz.identity)(v) for k, v in d.items()}
@@ -59,11 +61,11 @@ def join_apply(d, dfunc):
 def cmocmap(name):
     import cmocean.cm
     import holoviews
-    # import importlib
     return holoviews.plotting.util.process_cmap(getattr(cmocean.cm, name))
-    # return b(list, b(holoviews.plotting.util.process_cmap, b(getattr, b(importlib.import_module, 'cmocean.cm'), name)))
-    # return getattr(cmocean.cm, name)
 
+
+p_yaml = lambda cfg: print(hydra_zen.to_yaml(cfg, sort_keys=True))
+I = hydra_zen.instantiate
 ## Cfgs
 
 ## Recipes
@@ -73,91 +75,82 @@ base_prepro = hydra_zen.make_config(
     _1=pb(ocnval.validate_latlon),
     _2=pb(ocnval.validate_time),
     _3=pb(ocnval.validate_ssh),
-    _4=b(operator.itemgetter, 'ssh'),
+    _4=b(igetter, 'ssh'),
 )
-print(hydra_zen.to_yaml(base_prepro))
+# p_yaml(base_prepro)
     
 grid_ssh_prepro = hydra_zen.make_config(
     _01=pb(ocnval.decode_cf_time, units='seconds since 2012-10-01 00:00:00'),
     bases=(base_prepro,),
 )
-print(hydra_zen.to_yaml(grid_ssh_prepro, sort_keys=True))
+# p_yaml(grid_ssh_prepro)
 
 
 grid_sst_prepro = hydra_zen.make_config(
     _01=pb(ocnval.decode_cf_time, units='seconds since 2012-10-01 00:00:00'),
     _3=pb(ocndat.add_units, units=dict(sst='celsius')),
-    _4=b(operator.itemgetter, 'sst'),
+    _4=b(igetter, 'sst'),
     bases=(base_prepro,),
 )
 
 grid_obs_prepro = hydra_zen.make_config(
-    _01=b(operator.methodcaller, 'rename', ssh_mod='ssh'),
+    _01=b(caller, 'rename', ssh_mod='ssh'),
     _02=pb(ocnval.decode_cf_time, units='days since 2012-10-01'),
     bases=(base_prepro,),
 )
-print(hydra_zen.to_yaml(grid_obs_prepro, sort_keys=True))
+# p_yaml(grid_obs_prepro)
 
 
 ### Results Postpro
 
 base_osse_postpro = hydra_zen.make_config(
     _5=b(
-        operator.methodcaller, 'sel',
+        caller, 'sel',
         lat=b(slice, '${task.domain.lat.0}', '${task.domain.lat.1}'),
         lon=b(slice, '${task.domain.lon.0}', '${task.domain.lon.1}',), 
         # time=b(slice, '${task.splits.test.0}', '${task.splits.test.1}'),
     ),
-    _61=b(operator.methodcaller,'resample', time='1D'),
-    _62=b(operator.methodcaller,'mean'),
+    _61=b(caller,'resample', time='1D'),
+    _62=b(caller,'mean'),
     _7=b(
-        operator.methodcaller, 'sel',
+        caller, 'sel',
         time=b(slice, '${task.splits.test.0}', '${task.splits.test.1}'),
     ),
-    _71=b(operator.methodcaller,'to_dataset', name='ssh'),
+    _71=b(caller,'to_dataset', name='ssh'),
     _72=pb(ocngri.grid_to_regular_grid, tgt_grid_ds='${task.eval_grid}'),
-    _8=b(operator.itemgetter, 'ssh'),
+    _8=b(igetter, 'ssh'),
 )
 
 
-print(hydra_zen.to_yaml(base_osse_postpro, sort_keys=True))
+# p_yaml(base_osse_postpro)
 
 results_prepostpro=hydra_zen.make_config(
     _01=b(toolz.identity),
     bases=(base_prepro, base_osse_postpro)
 )
-print(hydra_zen.to_yaml(results_prepostpro, sort_keys=True))
+# p_yaml(results_prepostpro)
 
 ref_postpro=hydra_zen.make_config(
-    _499=b(operator.methodcaller, '__call__'),
+    _499=b(caller, '__call__'),
     bases=(base_osse_postpro,)
 )
-print(hydra_zen.to_yaml(ref_postpro, sort_keys=True))
+# p_yaml(ref_postpro)
 
 data_natl60 = hydra_zen.make_config(
-    ssh = pb(toolz.apply,
-        b(zen_compose, asdict(grid_ssh_prepro())),
+    ssh = from_recipe_and_inp(grid_ssh_prepro(),
         b(xr.open_dataset, '../oceanbench-data-registry/osse_natl60/grid/natl_mod_ssh_daily.nc')
     ),
-    sst = pb(toolz.apply,
-        b(zen_compose, d=asdict(grid_sst_prepro())),
+    sst = from_recipe_and_inp(grid_sst_prepro(),
         b(xr.open_dataset, '../oceanbench-data-registry/osse_natl60/grid/natl_mod_sst.nc')
     ),
-    nadir_gridded = pb(toolz.apply,
-        b(zen_compose, d=asdict(grid_obs_prepro())),
+    nadir_gridded = from_recipe_and_inp(grid_obs_prepro(),
         b(xr.open_dataset, '../oceanbench-data-registry/osse_natl60/grid/natl_obs_nadir.nc')
     ),
-    swot_gridded = pb(toolz.apply,
-        b(zen_compose, d=asdict(grid_obs_prepro())),
+    swot_gridded = from_recipe_and_inp(grid_obs_prepro(),
         b(xr.open_dataset, '../oceanbench-data-registry/osse_natl60/grid/natl_obs_nadirswot.nc')
     )
 )
-# print(hydra_zen.to_yaml(zen_compose(asdict(grid_ssh_prepro()))))
-print(hydra_zen.to_yaml(data_natl60, sort_keys=True))
-# hydra_zen.instantiate(data_natl60).nadir_gridded()
-# hydra_zen.instantiate(data_natl60).swot_gridded()
-# hydra_zen.instantiate(data_natl60).ssh()
-# hydra_zen.instantiate(data_natl60).sst()
+# p_yaml(data_natl60)
 
 ### EvalDs
 ## Tasks:
@@ -177,32 +170,23 @@ osse_nadir = hydra_zen.make_config(
             time=b(pd.date_range, '${task.splits.test.0}', '${task.splits.test.1}', freq='1D'),
         )
     ),
-    # natl60=data_natl60,
 )
-print(hydra_zen.to_yaml(osse_nadir, sort_keys=True))
-# hydra_zen.instantiate(osse_nadir).data.ssh()
+# p_yaml(osse_nadir)
 
-starter_recipe = results_prepostpro(_01=b(operator.methodcaller, 'rename', out='ssh'))
-ost_recipe = results_prepostpro(_01=b(operator.methodcaller, 'rename', gssh='ssh'))
+starter_recipe = results_prepostpro(_01=b(caller, 'rename', out='ssh'))
+ost_recipe = results_prepostpro(_01=b(caller, 'rename', gssh='ssh'))
 osse_nadir_results = hydra_zen.make_config(
-    ref = pb(toolz.apply,
-        b(zen_compose, asdict(ref_postpro())), '${task.data.ssh}',
-    ),
+    ref = from_recipe_and_inp(ref_postpro(), '${task.data.ssh}'),
     methods = {
-        '4dvarnet': pb(toolz.apply,
-            b(zen_compose, asdict(starter_recipe)),
+        '4dvarnet': from_recipe_and_inp(starter_recipe,
             b(xr.open_dataset, '../oceanbench-data-registry/results/osse_gf_nadir/4dvarnet.nc')
         ),
-        'miost': pb(toolz.apply,
-            b(zen_compose, asdict(ost_recipe)),
+        'miost': from_recipe_and_inp(ost_recipe,
             b(xr.open_dataset, '../oceanbench-data-registry/results/osse_gf_nadir/miost.nc')
         ),
     },
-    # task=osse_nadir
 )
-print(hydra_zen.to_yaml(osse_nadir_results, sort_keys=True))
-# hydra_zen.instantiate(osse_nadir_results).ref()
-# hydra_zen.instantiate(osse_nadir_results).methods.miost()
+# p_yaml(osse_nadir_results)
 
 
 
@@ -210,7 +194,7 @@ build_eval_ds = hydra_zen.make_config(
     _0=pb(toolz.identity),
     _1=pb(toolz.assoc, dict(ref='${results.ref}'), 'study'),
     _2=pb(ocnuda.stack_dataarrays, ref_var='ref'),
-    _3=b(operator.methodcaller, 'to_dataset', dim='variable'),
+    _3=b(caller, 'to_dataset', dim='variable'),
     _4=pb(ocndat.add_units, units=dict(study='meter', ref='meter')),
 )
     
@@ -223,15 +207,15 @@ nrmse = hydra_zen.make_config(
     _2=pb(float),
 )
 _psd_prepro=hydra_zen.make_config(
-    _1=b(operator.methodcaller,'to_dataset', name='ssh'),
+    _1=b(caller,'to_dataset', name='ssh'),
     _2=pb(ocnint.fillnan_gauss_seidel, variable='ssh'),
     _3=pb(ocnspa.latlon_deg2m),
     _4=pb(ocntem.time_rescale, freq_dt=1, freq_unit='day', t0='2012-10-22T12:00:00'),
-    _5=b(operator.itemgetter, 'ssh'),
+    _5=b(igetter, 'ssh'),
 )
-psd_prepro = pb(toolz.apply, b(zen_compose, asdict(_psd_prepro())))
+psd_prepro = from_recipe(_psd_prepro())
 base_lambda = hydra_zen.make_config(
-    _1=b(operator.methodcaller, 'map', func=psd_prepro),
+    _1=b(caller, 'map', func=psd_prepro),
 )
 
 psd_kws = dict( ref_variable='ref', study_variable='study',
@@ -241,59 +225,66 @@ psd_kws = dict( ref_variable='ref', study_variable='study',
 
 lambda_x_isotrop = hydra_zen.make_config(
     _2=pb(ocnmps.psd_isotropic_score, psd_dims=['lon', 'lat'], avg_dims=['time'], **psd_kws),
-    _3=b(operator.itemgetter, 1),
+    _3=b(igetter, 1),
     bases=(base_lambda,)
 )
 lambda_x_spacetime = hydra_zen.make_config(
     _2=pb(ocnmps.psd_spacetime_score, psd_dims=['time', 'lon'], avg_dims=['lat'], **psd_kws),
-    _3=b(operator.itemgetter, 1),
+    _3=b(igetter, 1),
     bases=(base_lambda,)
 )
 lambda_t_spacetime = hydra_zen.make_config(
     _2=pb(ocnmps.psd_spacetime_score, psd_dims=['time', 'lon'], avg_dims=['lat'], **psd_kws),
-    _3=b(operator.itemgetter, 2),
+    _3=b(igetter, 2),
     bases=(base_lambda,)
 )
 metrics = hydra_zen.make_config(
-    nrmse=pb(toolz.apply, b(zen_compose, asdict(nrmse()))),
-    lambda_x_isotrop=pb(toolz.apply, b(zen_compose, asdict(lambda_x_isotrop()))),
-    lambda_x_spacetime=pb(toolz.apply, b(zen_compose, asdict(lambda_x_spacetime()))),
-    lambda_t_spacetime=pb(toolz.apply, b(zen_compose, asdict(lambda_t_spacetime()))),
+    nrmse=from_recipe(nrmse()),
+    lambda_x_isotrop=from_recipe(lambda_x_isotrop()),
+    lambda_x_spacetime=from_recipe(lambda_x_spacetime()),
+    lambda_t_spacetime=from_recipe(lambda_t_spacetime()),
 )
 
 summary=hydra_zen.make_config(
-    _1=pb(operator.methodcaller, '__call__'),
+    _1=pb(caller, '__call__'),
     _2=pb(toolz.valmap, d='${metrics}'),
 )
 
-print(hydra_zen.to_yaml(osse_nadir_results, sort_keys=True))
+# p_yaml(osse_nadir_results)
 
 lambda_x_fmt = hydra_zen.make_config(
     _1=pb(operator.mul, 1e-3),
-    _2=pb(operator.methodcaller, 'format'),
+    _2=pb(caller, 'format'),
     _3=b(toolz.flip, toolz.apply, '{:.2f} km'),
 )
 
 lambda_t_fmt = hydra_zen.make_config(
-    _2=pb(operator.methodcaller, 'format'),
+    _2=pb(caller, 'format'),
     _3=b(toolz.flip, toolz.apply, '{:.2f} days'),
 )
 nrmse_fmt = hydra_zen.make_config(
-    _2=pb(operator.methodcaller, 'format'),
+    _2=pb(caller, 'format'),
     _3=b(toolz.flip, toolz.apply, '{:.3f}'),
 )
 metrics_fmt=hydra_zen.make_config(
-    nrmse=pb(toolz.apply, b(zen_compose, asdict(nrmse_fmt()))),
-    lambda_x_isotrop=pb(toolz.apply, b(zen_compose, asdict(lambda_x_fmt()))),
-    lambda_x_spacetime=pb(toolz.apply, b(zen_compose, asdict(lambda_x_fmt()))),
-    lambda_t_spacetime=pb(toolz.apply, b(zen_compose, asdict(lambda_t_fmt()))),
+    nrmse=from_recipe(nrmse_fmt()),
+    lambda_x_isotrop=from_recipe(lambda_x_fmt()),
+    lambda_x_spacetime=from_recipe(lambda_x_fmt()),
+    lambda_t_spacetime=from_recipe(lambda_t_fmt()),
 )
 
 
+def minmax_cfg(v):
+    return b(toolz.compose_left, 
+        b(igetter, v),  # x -> x[v]
+        b(toolz.juxt, pb(np.min), pb(np.max)), # x -> (min(x), max(x)) 
+        pb(map, pb(float)), # [x1, x2] -> [float(x1), float(x2)]
+        pb(tuple),  # [x1, x2] -> (x1, x2)
+    )
 ### Plots
 
-strain = hydra_zen.make_config(
-    _1=b(operator.methodcaller, 'to_dataset', name='ssh'),
+strain_pp = hydra_zen.make_config(
+    _1=b(caller, 'to_dataset', name='ssh'),
     _12=pb(ocnval.validate_ssh),
     _2=pb(ocngeo.geostrophic_velocities),
     _3=pb(ocngeo.strain_magnitude),
@@ -301,16 +292,14 @@ strain = hydra_zen.make_config(
     _5=b(operator.attrgetter, 'strain'),
 )
 
-# toolz.juxt(min, max)([0,1])
-
 get_plot_data = hydra_zen.make_config(
-    _1=b(operator.itemgetter, 'study'),
-    _2=b(operator.methodcaller, 'isel', time=10),
+    _1=b(igetter, 'study'),
+    _2=b(caller, 'isel', time=10),
 )
 levels= hydra_zen.make_config(
     _1=minmax_cfg('study'), # x -> (min(x[study]), max(x[study]))
     _2=pb(packed_caller, 'tick_values'), # [vmin, vmax]->  (x -> x.tick_values(vmin, vmax))
-    _3=b(operator.methodcaller, '__call__', b(matplotlib.ticker.MaxNLocator, 5)), 
+    _3=b(caller, '__call__', b(matplotlib.ticker.MaxNLocator, 5)), 
 )
 linestyles= hydra_zen.make_config(
     _4=pb(operator.le, 0),
@@ -319,8 +308,7 @@ linestyles= hydra_zen.make_config(
 )
 
 hvplot_contour = hydra_zen.make_config(
-    _2=pb(operator.methodcaller, '__call__'), # x -> (f -> f(x))
-    _21=pb(toolz.do, pb(print, '21\n')),
+    _2=pb(caller, '__call__'), # x -> (f -> f(x))
     _3=pb(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
             levels=from_recipe(levels()),
             linestyle=from_recipe(linestyles())
@@ -341,72 +329,51 @@ contour_plot = hydra_zen.make_config(
         pb(toolz.apply, b(zen_compose, asdict(get_plot_data()))),
     ),
     _2=pb(packed_caller, '__call__' ), # [f, inp] -> (x -> x(f, inp))
-    _3=b(operator.methodcaller, '__call__', pb(toolz.apply)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
+    _3=b(caller, '__call__', pb(toolz.apply)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
 )
-def minmax_cfg(v):
-    return b(toolz.compose_left, 
-        b(operator.itemgetter, v),  # x -> x[v]
-        b(toolz.juxt, pb(np.min), pb(np.max)), # x -> (min(x), max(x)) 
-        pb(map, pb(float)), # [x1, x2] -> [float(x1), float(x2)]
-        pb(tuple),  # [x1, x2] -> (x1, x2)
-    )
 
 hvplot_image = hydra_zen.make_config(
-    _2=pb(operator.methodcaller, '__call__'), # x -> (f -> f(x))
+    _2=pb(caller, '__call__'), # x -> (f -> f(x))
     _3=pbc(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
-        xlim=minmax_cfg('lon'),
-        ylim=minmax_cfg('lat'),
-        # clim=minmax_cfg('ref'),
+        xlim=minmax_cfg('lon'), ylim=minmax_cfg('lat'),
     )),
     _4=pbc(toolz.merge,
           dict( # d -> merge(d, ...)
-        kind='image',
-        cmap=cmocmap('speed'),
-        clim=b(tuple, (0,30)),
-        aspect=1,
-        x='lon',
-        y='lat',
+        kind='image', cmap=cmocmap('speed'), clim=b(tuple, (0,30)),
+        aspect=1, x='lon', y='lat',
     )
           ),
     _5=pb(packed_caller, 'hvplot', []), # d: (x -> x.hvplot(**d))
 )
 image_plot = hydra_zen.make_config(zen_dataclass=dict(cls_name='ImagePlot'),
     _1=b(toolz.juxt,  # x -> [(x-> x.hvplot(**d), x_plt)]
-        pb(toolz.apply, b(zen_compose, asdict(hvplot_image()))),
-        pb(toolz.apply, b(zen_compose, asdict(get_plot_data()))),
+        from_recipe(hvplot_image()),
+        from_recipe(get_plot_data()),
     ),
     _2=pb(packed_caller, '__call__' ), # [f, inp] -> (x -> x(f, inp))
-    _3=b(operator.methodcaller, '__call__', pb(toolz.apply)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
+    _3=b(caller, '__call__', pb(toolz.apply)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
 )
 
 
-map_overlay = hydra_zen.make_config(
+strain_plt = hydra_zen.make_config(
     _1=b(toolz.juxt,  # x -> [(x-> x.hvplot(**d), x_plt)]
-        pb(toolz.apply, b(zen_compose, asdict(image_plot()))),
-        pb(toolz.apply, b(zen_compose, asdict(contour_plot()))),
+        from_recipe(image_plot()),
+        from_recipe(contour_plot()),
     ),
     _2=pb(packed_caller, '__call__' ), # [f, inp] -> (x -> x(f, inp))
-    _3=b(operator.methodcaller, '__call__', pb(operator.mul)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
+    _3=b(caller, '__call__', pb(operator.mul)), # g -> g(toolz.apply) = apply(f, inp) = f(inp)
 )
 
-# hydra_zen.instantiate(toolz.apply(b(zen_compose, toolz.dissoc(hydra_zen.instantiate(hvplot_image), '_5'))))(eval_ds)
-plt = (hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(image_plot()))),))
-print(hydra_zen.to_yaml(pb(toolz.apply, b(zen_compose, asdict(image_plot()))),))
-cfg=pb(toolz.apply, b(zen_compose, asdict(image_plot())))
-print(hydra_zen.to_yaml(cfg))
 
-plt = (hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(map_overlay()))),))
-plt(st)
 
 plots = hydra_zen.make_config(
     strain=dict(
-        pp=hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(strain_pp())))),
-        plt=hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(strain_plt())))),
+        pp=b(caller, 'map', from_recipe(strain_pp())),
+        plt=from_recipe(strain_plt())
     )
 )
-dict(strain=dict(pp=strain, plt=strain_plot)
 leaderboard = hydra_zen.make_config(
-    build_diag_ds=pb(toolz.apply, b(zen_compose, asdict(build_eval_ds()))),
+    build_diag_ds=from_recipe(build_eval_ds()),
     plots=plots,
     metrics=metrics,
     metrics_fmt=metrics_fmt,
@@ -417,20 +384,15 @@ leaderboard = hydra_zen.make_config(
     data=data_natl60,
 )
 
-il = hydra_zen.instantiate(leaderboard)
-eval_ds = il.build_eval_ds(il.results.methods.miost())
+il = I(leaderboard)
+eval_ds = il.build_diag_ds(il.results.methods.miost())
 summ = il.summary(eval_ds)
-il.summary_fmt(summ)
-
-print(hydra_zen.to_yaml(image_plot, sort_keys=True))
-strainfn = (hydra_zen.instantiate(pb(toolz.apply, b(zen_compose, asdict(strain()))),))
-
-st = eval_ds.map(strainfn)
+print(il.summary_fmt(summ))
+pp, plt = il.plots.strain.pp, il.plots.strain.plt
+plt(eval_ds.pipe(pp))
+# st = eval_ds.map(strainfn)
 ### Plots
 
-
-print(hydra_zen.to_yaml(hvplot_image, sort_keys=True))
-print(hydra_zen.to_yaml(hvplot_image, sort_keys=True))
 
 ## Pipelines
 ### DataLoading
