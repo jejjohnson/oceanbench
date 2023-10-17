@@ -24,9 +24,12 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
 ocn-tools = { git = "https://github.com/jejjohnson/ocn-tools.git" }
-dvc = "^2.55.0"
+# dvc = "^2.55.0"
 xrpatcher = "^0.0.1"
 rootutils = "^1.0.7"
+hydra-core = "^1.3.2"
+hydra-zen = "^0.11.0"
+toolz= "^0.12.0"
 
 
 [tool.poetry.group.dev.dependencies]
