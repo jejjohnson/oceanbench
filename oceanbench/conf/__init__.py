@@ -77,7 +77,7 @@ tasks_store = store(group='task', package='oceanbench.task', overwrite_ok=True)
 
 ## Recipes
 ### Grid Prepro
-base_prepro = hydra_zen.make_config(config_name='ssh_prepro',
+base_prepro = hydra_zen.make_config(zen_dataclass={'cls_name': 'ssh_prepro'},
     _0=pb(toolz.identity),
     _1=pb(ocnval.validate_latlon),
     _2=pb(ocnval.validate_time),
@@ -87,7 +87,7 @@ base_prepro = hydra_zen.make_config(config_name='ssh_prepro',
 # p_yaml(base_prepro)
 recipe_store(base_prepro)
     
-grid_ssh_prepro = hydra_zen.make_config(config_name='natl_ssh_prepro',
+grid_ssh_prepro = hydra_zen.make_config(zen_dataclass={'cls_name': 'natl_ssh_prepro'},
     _01=pb(ocnval.decode_cf_time, units='seconds since 2012-10-01 00:00:00'),
     bases=(base_prepro,),
 )
@@ -95,7 +95,7 @@ grid_ssh_prepro = hydra_zen.make_config(config_name='natl_ssh_prepro',
 
 recipe_store(grid_ssh_prepro)
 
-grid_sst_prepro = hydra_zen.make_config(config_name='natl_sst_prepro',
+grid_sst_prepro = hydra_zen.make_config(zen_dataclass={'cls_name': 'natl_sst_prepro'},
     _01=pb(ocnval.decode_cf_time, units='seconds since 2012-10-01 00:00:00'),
     _3=pb(ocndat.add_units, units=dict(sst='celsius')),
     _4=b(igetter, 'sst'),
@@ -103,7 +103,7 @@ grid_sst_prepro = hydra_zen.make_config(config_name='natl_sst_prepro',
 )
 
 recipe_store(grid_sst_prepro)
-grid_obs_prepro = hydra_zen.make_config(config_name='natl_obs_prepro',
+grid_obs_prepro = hydra_zen.make_config(zen_dataclass={'cls_name': 'natl_obs_prepro'},
     _01=b(caller, 'rename', ssh_mod='ssh'),
     _02=pb(ocnval.decode_cf_time, units='days since 2012-10-01'),
     bases=(base_prepro,),
@@ -114,7 +114,7 @@ recipe_store(grid_obs_prepro)
 
 ### Results Postpro
 
-base_osse_postpro = hydra_zen.make_config(config_name='osse_task_postpro',
+base_osse_postpro = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_task_postpro'},
     _5=b(
         caller, 'sel',
         lat=b(slice, '${task.domain.lat.0}', '${task.domain.lat.1}'),
@@ -135,21 +135,21 @@ recipe_store(base_osse_postpro)
 
 # p_yaml(base_osse_postpro)
 
-results_prepostpro=hydra_zen.make_config(config_name='osse_results_prepostpro',
+results_prepostpro=hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_results_prepostpro'},
     _01=b(toolz.identity),
     bases=(base_prepro, base_osse_postpro)
 )
 # p_yaml(results_prepostpro)
 recipe_store(results_prepostpro)
 
-ref_postpro=hydra_zen.make_config(config_name='osse_ref_postpro',
+ref_postpro=hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_ref_postpro'},
     _499=b(caller, '__call__'),
     bases=(base_osse_postpro,)
 )
 # p_yaml(ref_postpro)
 recipe_store(ref_postpro)
 
-data_natl60 = hydra_zen.make_config(config_name='osse_natl60_data',
+data_natl60 = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_natl60_data'},
     ssh = from_recipe_and_inp(grid_ssh_prepro(),
         b(xr.open_dataset, '../oceanbench-data-registry/osse_natl60/grid/natl_mod_ssh_daily.nc')
     ),
@@ -168,7 +168,7 @@ pipelines_store(data_natl60)
 
 ### EvalDs
 ## Tasks:
-osse_nadir = hydra_zen.make_config(config_name='dc2020_osse_gf_nadir',
+osse_nadir = hydra_zen.make_config(zen_dataclass={'cls_name': 'dc2020_osse_gf_nadir'},
     name='DC2020 OSSE Gulfstream Nadir',
     domain=dict(lat=[33, 43], lon=[-65, -55]),
     data=dict(obs='${data.nadir_gridded}', ssh='${data.ssh}'),
@@ -193,7 +193,7 @@ ost_recipe = results_prepostpro(_01=b(caller, 'rename', gssh='ssh'))
 recipe_store(starter_recipe, name='osse_starter_prepostpro')
 recipe_store(ost_recipe, name='osse_ost_prepostpro')
 
-osse_nadir_results = hydra_zen.make_config(config_name='osse_nadir_results',
+osse_nadir_results = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_nadir_results'},
     ref = from_recipe_and_inp(ref_postpro(), '${task.data.ssh}'),
     methods = {
         '4dvarnet': from_recipe_and_inp(starter_recipe,
@@ -209,7 +209,7 @@ pipelines_store(osse_nadir_results)
 
 
 
-build_eval_ds = hydra_zen.make_config(config_name='osse_build_eval_ds',
+build_eval_ds = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_build_eval_ds'},
     _0=pb(toolz.identity),
     _1=pb(toolz.assoc, dict(ref='${results.ref}'), 'study'),
     _2=pb(ocnuda.stack_dataarrays, ref_var='ref'),
@@ -222,13 +222,13 @@ recipe_store(build_eval_ds)
 # eval_ds =
     ### Metrics
 
-nrmse = hydra_zen.make_config(config_name='nrmse_metric',
+nrmse = hydra_zen.make_config(zen_dataclass={'cls_name': 'nrmse_metric'},
     _1=pb(ocnmst.nrmse_ds, reference='ref', target='study', dim=['lat', 'lon', 'time']),
     _2=pb(float),
 )
 recipe_store(nrmse)
 
-_psd_prepro=hydra_zen.make_config(config_name='psd_metric_prepro',
+_psd_prepro=hydra_zen.make_config(zen_dataclass={'cls_name': 'psd_metric_prepro'},
     _1=b(caller,'to_dataset', name='ssh'),
     _2=pb(ocnint.fillnan_gauss_seidel, variable='ssh'),
     _3=pb(ocnspa.latlon_deg2m),
@@ -247,27 +247,27 @@ psd_kws = dict( ref_variable='ref', study_variable='study',
           window_correction=True, true_amplitude=True, truncate=True
 )
 
-lambda_x_isotrop = hydra_zen.make_config(config_name='lambda_x_isotrop_metric',
+lambda_x_isotrop = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_x_isotrop_metric'},
     _2=pb(ocnmps.psd_isotropic_score, psd_dims=['lon', 'lat'], avg_dims=['time'], **psd_kws),
     _3=b(igetter, 1),
     bases=(base_lambda,)
 )
 recipe_store(lambda_x_isotrop)
 
-lambda_x_spacetime = hydra_zen.make_config(config_name='lambda_x_spacetime_metric',
+lambda_x_spacetime = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_x_spacetime_metric'},
     _2=pb(ocnmps.psd_spacetime_score, psd_dims=['time', 'lon'], avg_dims=['lat'], **psd_kws),
     _3=b(igetter, 1),
     bases=(base_lambda,)
 )
 recipe_store(lambda_x_spacetime)
-lambda_t_spacetime = hydra_zen.make_config(config_name='lambda_t_spacetime_metric',
+lambda_t_spacetime = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_t_spacetime_metric'},
     _2=pb(ocnmps.psd_spacetime_score, psd_dims=['time', 'lon'], avg_dims=['lat'], **psd_kws),
     _3=b(igetter, 2),
     bases=(base_lambda,)
 )
 recipe_store(lambda_t_spacetime)
 
-metrics = hydra_zen.make_config(config_name='osse_metrics_fns',
+metrics = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_metrics_fns'},
     nrmse=from_recipe(nrmse()),
     lambda_x_isotrop=from_recipe(lambda_x_isotrop()),
     lambda_x_spacetime=from_recipe(lambda_x_spacetime()),
@@ -275,7 +275,7 @@ metrics = hydra_zen.make_config(config_name='osse_metrics_fns',
 )
 pipelines_store(metrics)
 
-summary=hydra_zen.make_config(config_name='osse_summary',
+summary=hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_summary'},
     _1=pb(caller, '__call__'),
     _2=pb(toolz.valmap, d='${metrics}'),
 )
@@ -283,18 +283,18 @@ summary=hydra_zen.make_config(config_name='osse_summary',
 recipe_store(summary)
 # p_yaml(osse_nadir_results)
 
-lambda_x_fmt = hydra_zen.make_config(config_name='lambda_x_fmt',
+lambda_x_fmt = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_x_fmt'},
     _1=pb(operator.mul, 1e-3),
     _2=pb(caller, 'format'),
     _3=b(toolz.flip, toolz.apply, '{:.2f} km'),
 )
 recipe_store(lambda_x_fmt)
-lambda_t_fmt = hydra_zen.make_config(config_name='lambda_t_fmt',
+lambda_t_fmt = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_t_fmt'},
     _2=pb(caller, 'format'),
     _3=b(toolz.flip, toolz.apply, '{:.2f} days'),
 )
 recipe_store(lambda_t_fmt)
-nrmse_fmt = hydra_zen.make_config(config_name='nrmse_fmt',
+nrmse_fmt = hydra_zen.make_config(zen_dataclass={'cls_name': 'nrmse_fmt'},
     _2=pb(caller, 'format'),
     _3=b(toolz.flip, toolz.apply, '{:.3f}'),
 )
@@ -316,7 +316,7 @@ def minmax_cfg(v):
     )
 ### Plots
 
-strain_pp = hydra_zen.make_config(config_name='strain_prepro',
+strain_pp = hydra_zen.make_config(zen_dataclass={'cls_name': 'strain_prepro'},
     _1=b(caller, 'to_dataset', name='ssh'),
     _12=pb(ocnval.validate_ssh),
     _2=pb(ocngeo.geostrophic_velocities),
@@ -327,20 +327,20 @@ strain_pp = hydra_zen.make_config(config_name='strain_prepro',
 recipe_store(strain_pp)
 
 
-levels= hydra_zen.make_config(config_name='contour_plot_levels',
+levels= hydra_zen.make_config(zen_dataclass={'cls_name': 'contour_plot_levels'},
     _1=minmax_cfg('study'), # x -> (min(x[study]), max(x[study]))
     _2=pb(packed_caller, 'tick_values'), # [vmin, vmax]->  (x -> x.tick_values(vmin, vmax))
     _3=b(caller, '__call__', b(matplotlib.ticker.MaxNLocator, 5)), 
 )
 recipe_store(levels)
-linestyles= hydra_zen.make_config(config_name='contour_plot_linestyles',
+linestyles= hydra_zen.make_config(zen_dataclass={'cls_name': 'contour_plot_linestyles'},
     _4=pb(operator.le, 0),
     _5=b(oceanbench._src.utils.hydra.rpartial, pb(np.where) ,'-', '--'),
     bases=(levels,),
 )
 recipe_store(linestyles)
 
-hvplot_contour = hydra_zen.make_config(config_name='hvplot_contour',
+hvplot_contour = hydra_zen.make_config(zen_dataclass={'cls_name': 'hvplot_contour'},
     _2=pb(caller, '__call__'), # x -> (f -> f(x))
     _3=pb(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
             levels=from_recipe(levels()),
@@ -370,7 +370,7 @@ def fork_cfg(f_cfg, g_cfg, h_cfg):
         _3=b(caller, '__call__', f_cfg), # (x -> x(f) = f(gg, hh))
     )
 
-hvplot_image = hydra_zen.make_config(config_name='hvplot_image_strain',
+hvplot_image = hydra_zen.make_config(zen_dataclass={'cls_name': 'hvplot_image_strain'},
     _2=pb(caller, '__call__'), # x -> (f -> f(x))
     _3=pbc(toolz.valmap, d=dict(  # f -> {k: f(v) for k,v..}
         xlim=minmax_cfg('lon'), ylim=minmax_cfg('lat'),
@@ -387,7 +387,7 @@ recipe_store(hvplot_image)
 
 
 
-build_plot_fn = hydra_zen.make_config(config_name='build_plot_strain_fn',
+build_plot_fn = hydra_zen.make_config(zen_dataclass={'cls_name': 'build_plot_strain_fn'},
     _2=pb(caller, '__call__'), # x -> (f -> f(x))
     _3=b(toolz.flip, toolz.map, 
           [from_recipe(hvplot_image()),
@@ -406,7 +406,7 @@ def anim(data, plot_fn):
         zip(data.time.values, map(plot_fn, data.transpose('time', ...)))
     )
 
-plots = hydra_zen.make_config(config_name='ssh_plots_fns',
+plots = hydra_zen.make_config(zen_dataclass={'cls_name': 'ssh_plots_fns'},
     anim=pb(anim),
     strain=dict(
         pp=b(caller, 'map', from_recipe(strain_pp())),
@@ -414,7 +414,7 @@ plots = hydra_zen.make_config(config_name='ssh_plots_fns',
     )
 )
 pipelines_store(plots)
-leaderboard = hydra_zen.make_config(config_name='osse_gf_nadir',
+leaderboard = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
     build_diag_ds=from_recipe(build_eval_ds()),
     plots=plots,
     metrics=metrics,
