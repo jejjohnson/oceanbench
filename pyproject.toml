@@ -30,6 +30,8 @@ rootutils = "^1.0.7"
 hydra-core = "^1.3.2"
 hydra-zen = "^0.11.0"
 toolz= "^0.12.0"
+loguru = "^0.7.0"
+cmocean = "^3.0.3"
 
 
 [tool.poetry.group.dev.dependencies]

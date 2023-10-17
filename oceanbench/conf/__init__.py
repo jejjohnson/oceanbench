@@ -16,6 +16,7 @@ import ocn_tools._src.geoprocessing.temporal as ocntem
 import ocn_tools._src.metrics.stats as ocnmst
 import ocn_tools._src.metrics.power_spectrum as ocnmps
 import operator
+import oceanbench._src
 import oceanbench._src.utils.hydra
 from dataclasses import asdict, dataclass
 import dataclasses
