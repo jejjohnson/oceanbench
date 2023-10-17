@@ -67,10 +67,12 @@ def cmocmap(name):
 
 p_yaml = lambda cfg: print(hydra_zen.to_yaml(cfg, sort_keys=True))
 I = hydra_zen.instantiate
-recipe_store = hydra_zen.store(group='recipes', package='oceanbench.recipe')
-pipelines_store = hydra_zen.store(group='pipelines', package='oceanbench.pipeline')
-leaderboard_store = hydra_zen.store(group='leaderboard', package='oceanbench.leaderboard')
-tasks_store = hydra_zen.store(group='task', package='oceanbench.task')
+
+store = hydra_zen.store(package='oceanbench', overwrite_ok=True)
+recipe_store = store(group='recipes', package='oceanbench.recipe', overwrite_ok=True)
+pipelines_store = store(group='pipelines', package='oceanbench.pipeline', overwrite_ok=True)
+leaderboard_store = store(group='leaderboard', package='oceanbench.leaderboard', overwrite_ok=True)
+tasks_store = store(group='task', package='oceanbench.task', overwrite_ok=True)
 ## Cfgs
 
 ## Recipes
