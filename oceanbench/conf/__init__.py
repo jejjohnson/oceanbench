@@ -377,7 +377,7 @@ hvplot_image = hydra_zen.make_config(config_name='hvplot_image_strain',
     )),
     _4=pbc(toolz.merge,
           dict( # d -> merge(d, ...)
-        kind='image', cmap=cmocmap('speed'), clim=b(tuple, (0,30)),
+        kind='image', cmap=b(cmocmap, 'speed'), clim=b(tuple, (0,30)),
         aspect=1, x='lon', y='lat',
     )
           ),
