@@ -34,9 +34,6 @@ the piping function takes the resulting dict and sort the functions depending on
 """
 
 
-
-
-
 ###
 # Hydra utils
 pb = hydra_zen.make_custom_builds_fn(zen_partial=True)
@@ -141,7 +138,7 @@ recipe_store(base_osse_postpro)
 # p_yaml(base_osse_postpro)
 
 results_prepostpro=hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_results_prepostpro'},
-    _01=b(toolz.identity),
+    _01=pb(toolz.identity),
     bases=(base_prepro, base_osse_postpro)
 )
 # p_yaml(results_prepostpro)
