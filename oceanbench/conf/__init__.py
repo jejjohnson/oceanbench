@@ -360,17 +360,11 @@ hvplot_contour = hydra_zen.make_config(zen_dataclass={'cls_name': 'hvplot_contou
 recipe_store(hvplot_contour)
 
 def fork(f, g, h):
-    return lambda x: f(g(x), h(x))
-
-def fork_cfg(f_cfg, g_cfg, h_cfg):
     """
     x -> f(g(x), h(x))
     """
-    return hydra_zen.make_config(
-        _1=b(toolz.juxt,  g_cfg, h_cfg), # x -> [(x-> g(x), h(x))]
-        _2=pb(packed_caller, '__call__' ), # [gg, hh] -> (x -> x(gg, hh))
-        _3=b(caller, '__call__', f_cfg), # (x -> x(f) = f(gg, hh))
-    )
+    return lambda x: f(g(x), h(x))
+
 
 hvplot_image = hydra_zen.make_config(zen_dataclass={'cls_name': 'hvplot_image_strain'},
     _2=pb(caller, '__call__'), # x -> (f -> f(x))
@@ -417,15 +411,16 @@ plots = hydra_zen.make_config(zen_dataclass={'cls_name': 'ssh_plots_fns'},
 )
 pipelines_store(plots)
 leaderboard = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
-    build_diag_ds=from_recipe(build_eval_ds()),
-    plots=plots,
-    metrics=metrics,
-    metrics_fmt=metrics_fmt,
-    summary_fmt=pb(join_apply, dfunc='${metrics_fmt}'),
-    summary=pb(toolz.apply, b(zen_compose, asdict(summary()))),
-    task=osse_nadir,
-    results=osse_nadir_results,
-    data=data_natl60,
+    task=osse_nadir, # Task specification domain, data, period
+    data=data_natl60, # Src data specification, files preprocessing, validation
+    diag_prepro=from_recipe(results_prepostpro()), # method output preprocessing 
+    build_diag_ds=from_recipe(build_eval_ds()), # merge output with reference for diagnostic computation
+    plots=plots, # plots preprocessing and configuration functions
+    metrics=metrics, # metrics computation functions
+    summary=pb(toolz.apply, b(zen_compose, asdict(summary()))), # utility function to compute all metrics from a diagnostic dataset
+    diag_data=osse_nadir_results, #  ref data preprocessing + existing method preprocessed results output
+    metrics_fmt=metrics_fmt, # metrics formatting functions
+    summary_fmt=pb(join_apply, dfunc='${metrics_fmt}'), # utility function to output all formatted metrics from a diagnostic dataset
 )
 leaderboard_store(leaderboard)
 
