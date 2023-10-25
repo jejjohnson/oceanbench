@@ -213,7 +213,7 @@ pipelines_store(osse_nadir_results)
 
 build_eval_ds = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_build_eval_ds'},
     _0=pb(toolz.identity),
-    _1=pb(toolz.assoc, dict(ref='${results.ref}'), 'study'),
+    _1=pb(toolz.assoc, dict(ref='${diag_data.ref}'), 'study'),
     _2=pb(ocnuda.stack_dataarrays, ref_var='ref'),
     _3=b(caller, 'to_dataset', dim='variable'),
     _4=pb(ocndat.add_units, units=dict(study='meter', ref='meter')),
@@ -413,13 +413,13 @@ pipelines_store(plots)
 leaderboard = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
     task=osse_nadir, # Task specification domain, data, period
     data=data_natl60, # Src data specification, files preprocessing, validation
+    diag_data=osse_nadir_results, #  ref data preprocessing + existing method preprocessed results output
     diag_prepro=from_recipe(results_prepostpro()), # method output preprocessing 
     build_diag_ds=from_recipe(build_eval_ds()), # merge output with reference for diagnostic computation
     plots=plots, # plots preprocessing and configuration functions
     metrics=metrics, # metrics computation functions
-    summary=pb(toolz.apply, b(zen_compose, asdict(summary()))), # utility function to compute all metrics from a diagnostic dataset
-    diag_data=osse_nadir_results, #  ref data preprocessing + existing method preprocessed results output
     metrics_fmt=metrics_fmt, # metrics formatting functions
+    summary=pb(toolz.apply, b(zen_compose, asdict(summary()))), # utility function to compute all metrics from a diagnostic dataset
     summary_fmt=pb(join_apply, dfunc='${metrics_fmt}'), # utility function to output all formatted metrics from a diagnostic dataset
 )
 leaderboard_store(leaderboard)
