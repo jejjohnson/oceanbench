@@ -185,7 +185,7 @@ tasks_store(osse_nadir)
 
 # starter_recipe = results_prepostpro(_01=b(caller, 'rename', rec_ssh='ssh'))
 ost_recipe = results_prepostpro(_01=b(caller, 'rename', gssh='ssh'))
-recipe_store(starter_recipe, name='osse_starter_prepostpro')
+# recipe_store(starter_recipe, name='osse_starter_prepostpro')
 recipe_store(ost_recipe, name='osse_ost_prepostpro')
 
 osse_nadir_results = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_nadir_results'},
