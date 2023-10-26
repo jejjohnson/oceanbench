@@ -73,7 +73,7 @@ store = hydra_zen.ZenStore(
 )
 recipe_store = store(group='oceanbench/recipes', package='oceanbench.recipe')
 pipelines_store = store(group='oceanbench/pipelines', package='oceanbench.pipeline')
-xptoolkit_store = store(group='oceanbench/xptoolkit', package='oceanbench.xptoolkit')
+testbench_store = store(group='oceanbench/testbench', package='oceanbench.testbench')
 tasks_store = store(group='oceanbench/task', package='oceanbench.task')
 ## Cfgs
 
@@ -276,7 +276,7 @@ summary=hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_summary'},
 )
 
 recipe_store(summary)
-p_yaml(osse_nadir_results)
+# p_yaml(osse_nadir_results)
 
 lambda_x_fmt = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_x_fmt'},
     _1=pb(operator.mul, 1e-3),
@@ -409,7 +409,7 @@ plots = hydra_zen.make_config(zen_dataclass={'cls_name': 'ssh_plots_fns'},
     )
 )
 pipelines_store(plots)
-toolkit = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
+testbench = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
     task=osse_nadir, # Task specification domain, data, period
     data=data_natl60, # Src data specification, files preprocessing, validation
     diag_data=osse_nadir_results, #  ref data preprocessing + existing method preprocessed results output
@@ -429,13 +429,13 @@ toolkit = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
         )
     ),
 )
-xptoolkit_store(toolkit)
+testbench_store(testbench)
 
 if __name__ == '__main__':
     import hvplot.xarray
     import hvplot
     hvplot.extension('matplotlib')
-    il = I(toolkit)
+    il = I(testbench)
     eval_ds = il.build_diag_ds(il.diag_data.methods.miost())
     eval_ds = il.build_diag_ds(il.diag_data.methods['4dvarnet']())
     summ = il.summary(eval_ds)
