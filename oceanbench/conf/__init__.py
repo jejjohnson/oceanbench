@@ -73,7 +73,7 @@ store = hydra_zen.ZenStore(
 )
 recipe_store = store(group='oceanbench/recipes', package='oceanbench.recipe')
 pipelines_store = store(group='oceanbench/pipelines', package='oceanbench.pipeline')
-leaderboard_store = store(group='oceanbench/leaderboard', package='oceanbench.leaderboard')
+xptoolkit_store = store(group='oceanbench/xptoolkit', package='oceanbench.xptoolkit')
 tasks_store = store(group='oceanbench/task', package='oceanbench.task')
 ## Cfgs
 
@@ -119,18 +119,18 @@ recipe_store(grid_obs_prepro)
 base_osse_postpro = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_task_postpro'},
     _5=b(
         caller, 'sel',
-        lat=b(slice, '${task.domain.lat.0}', '${task.domain.lat.1}'),
-        lon=b(slice, '${task.domain.lon.0}', '${task.domain.lon.1}',), 
+        lat=b(slice, '${task.estimation_target.lat.0}', '${task.estimation_target.lat.1}'),
+        lon=b(slice, '${task.estimation_target.lon.0}', '${task.estimation_target.lon.1}',), 
         # time=b(slice, '${task.splits.test.0}', '${task.splits.test.1}'),
     ),
     _61=b(caller,'resample', time='1D'),
     _62=b(caller,'mean'),
     _7=b(
         caller, 'sel',
-        time=b(slice, '${task.splits.test.0}', '${task.splits.test.1}'),
+        time=b(slice, '${task.estimation_target.time.0}', '${task.estimation_target.time.1}'),
     ),
     _71=b(caller,'to_dataset', name='ssh'),
-    _72=pb(ocngri.grid_to_regular_grid, tgt_grid_ds='${task.eval_grid}'),
+    _72=pb(ocngri.grid_to_regular_grid, tgt_grid_ds='${eval_grid}'),
     _8=b(igetter, 'ssh'),
 )
 recipe_store(base_osse_postpro)
@@ -168,29 +168,22 @@ data_natl60 = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_natl60_data
 pipelines_store(data_natl60)
 # p_yaml(data_natl60)
 
+
 ### EvalDs
 ## Tasks:
 osse_nadir = hydra_zen.make_config(zen_dataclass={'cls_name': 'dc2020_osse_gf_nadir'},
     name='DC2020 OSSE Gulfstream Nadir',
-    domain=dict(lat=[33, 43], lon=[-65, -55]),
     data=dict(obs='${data.nadir_gridded}', ssh='${data.ssh}'),
-    splits=dict(
-        test=['2012-10-22', '2012-12-02'],
-        trainval=['2013-01-01', '2013-09-30'],
-    ),
-    eval_grid=b(
-        xr.Dataset,
-        coords=dict(
-            lat=b(np.arange, '${task.domain.lat.0}', '${task.domain.lat.1}', 0.05),
-            lon=b(np.arange, '${task.domain.lon.0}', '${task.domain.lon.1}', 0.05),
-            time=b(pd.date_range, '${task.splits.test.0}', '${task.splits.test.1}', freq='1D'),
-        )
-    ),
+    offlimits=dict(ssh=dict(time=['2012-10-01', '2012-12-31'])),
+    eval_input=dict(obs=dict(time=['2012-10-01', '2012-12-31'])),
+    estimation_target=dict(
+        lat=[33, 43], lon=[-65, -55], time=['2012-10-22', '2012-12-02'], variable=['ssh']
+    )
 )
 tasks_store(osse_nadir)
 # p_yaml(osse_nadir)
 
-starter_recipe = results_prepostpro(_01=b(caller, 'rename', out='ssh'))
+# starter_recipe = results_prepostpro(_01=b(caller, 'rename', rec_ssh='ssh'))
 ost_recipe = results_prepostpro(_01=b(caller, 'rename', gssh='ssh'))
 recipe_store(starter_recipe, name='osse_starter_prepostpro')
 recipe_store(ost_recipe, name='osse_ost_prepostpro')
@@ -198,7 +191,7 @@ recipe_store(ost_recipe, name='osse_ost_prepostpro')
 osse_nadir_results = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_nadir_results'},
     ref = from_recipe_and_inp(ref_postpro(), '${task.data.ssh}'),
     methods = {
-        '4dvarnet': from_recipe_and_inp(starter_recipe,
+        '4dvarnet': from_recipe_and_inp(results_prepostpro(),
             b(xr.open_dataset, '../oceanbench-data-registry/results/osse_gf_nadir/4dvarnet.nc')
         ),
         'miost': from_recipe_and_inp(ost_recipe,
@@ -283,7 +276,7 @@ summary=hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_summary'},
 )
 
 recipe_store(summary)
-# p_yaml(osse_nadir_results)
+p_yaml(osse_nadir_results)
 
 lambda_x_fmt = hydra_zen.make_config(zen_dataclass={'cls_name': 'lambda_x_fmt'},
     _1=pb(operator.mul, 1e-3),
@@ -325,6 +318,7 @@ strain_pp = hydra_zen.make_config(zen_dataclass={'cls_name': 'strain_prepro'},
     _3=pb(ocngeo.strain_magnitude),
     _4=pb(ocngeo.coriolis_normalized, variable='strain'),
     _5=b(operator.attrgetter, 'strain'),
+    _6=b(caller, 'isel', lat=b(slice, 2, -2), lon=b(slice, 2, -2)),
 )
 recipe_store(strain_pp)
 
@@ -352,7 +346,7 @@ hvplot_contour = hydra_zen.make_config(zen_dataclass={'cls_name': 'hvplot_contou
         kind='contour',
         colorbar=False,
         aspect=1, x='lon', y='lat',
-        alpha=0.5, linewidth=2,
+        alpha=0.7, linewidth=3,
         color='black',
     )),
     _5=pb(packed_caller, 'hvplot', []) # d: (x -> x.hvplot(**d))
@@ -363,7 +357,9 @@ def fork(f, g, h):
     """
     x -> f(g(x), h(x))
     """
-    return lambda x: f(g(x), h(x))
+    def _fork(x):
+        return f(g(x), h(x))
+    return _fork
 
 
 hvplot_image = hydra_zen.make_config(zen_dataclass={'cls_name': 'hvplot_image_strain'},
@@ -386,8 +382,11 @@ recipe_store(hvplot_image)
 build_plot_fn = hydra_zen.make_config(zen_dataclass={'cls_name': 'build_plot_strain_fn'},
     _2=pb(caller, '__call__'), # x -> (f -> f(x))
     _3=b(toolz.flip, toolz.map, 
-          [from_recipe(hvplot_image()),
-           from_recipe(hvplot_contour())]
+          [
+         from_recipe(hvplot_image()),
+           # from_recipe(hvplot_contour()),
+           from_recipe(hvplot_contour()),
+           ]
     ),
     _31=pb(list),
     _32=pb(toolz.do, b(caller, 'insert', 0, pb(operator.mul))),
@@ -410,7 +409,7 @@ plots = hydra_zen.make_config(zen_dataclass={'cls_name': 'ssh_plots_fns'},
     )
 )
 pipelines_store(plots)
-leaderboard = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
+toolkit = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
     task=osse_nadir, # Task specification domain, data, period
     data=data_natl60, # Src data specification, files preprocessing, validation
     diag_data=osse_nadir_results, #  ref data preprocessing + existing method preprocessed results output
@@ -421,15 +420,24 @@ leaderboard = hydra_zen.make_config(zen_dataclass={'cls_name': 'osse_gf_nadir'},
     metrics_fmt=metrics_fmt, # metrics formatting functions
     summary=pb(toolz.apply, b(zen_compose, asdict(summary()))), # utility function to compute all metrics from a diagnostic dataset
     summary_fmt=pb(join_apply, dfunc='${metrics_fmt}'), # utility function to output all formatted metrics from a diagnostic dataset
+    eval_grid=b(
+        xr.Dataset,
+        coords=dict(
+            lat=b(np.arange, '${task.estimation_target.lat.0}', '${task.estimation_target.lat.1}', 0.05),
+            lon=b(np.arange, '${task.estimation_target.lon.0}', '${task.estimation_target.lon.1}', 0.05),
+            time=b(pd.date_range, '${task.estimation_target.time.0}', '${task.estimation_target.time.1}', freq='1D'),
+        )
+    ),
 )
-leaderboard_store(leaderboard)
+xptoolkit_store(toolkit)
 
 if __name__ == '__main__':
     import hvplot.xarray
     import hvplot
     hvplot.extension('matplotlib')
-    il = I(leaderboard)
-    eval_ds = il.build_diag_ds(il.results.methods.miost())
+    il = I(toolkit)
+    eval_ds = il.build_diag_ds(il.diag_data.methods.miost())
+    eval_ds = il.build_diag_ds(il.diag_data.methods['4dvarnet']())
     summ = il.summary(eval_ds)
     print(il.summary_fmt(summ))
     pp, plt, p_anim = il.plots.strain.pp, il.plots.strain.plt, il.plots.anim
@@ -440,7 +448,6 @@ if __name__ == '__main__':
         holomap='gif', fps=3
     )
 
-    recipe_store.get_entry('recipes', 'ssh_prepro')
 # st = eval_ds.map(strainfn)
 ### Plots
 
