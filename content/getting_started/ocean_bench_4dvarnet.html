@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Evaluating an SSH Mapping algorithm using OceanBench and 4dvarnet-starter &#8212; OceanBench</title>
   
@@ -19,49 +18,53 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'content/getting_started/ocean_bench_4dvarnet';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -76,10 +79,9 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -120,11 +122,14 @@ const thebe_selector_output = ".output, .cell_output"
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -139,6 +144,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../overview.html">
@@ -147,10 +153,22 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     <p class="title logo__title">OceanBench</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -387,6 +405,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -396,6 +415,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -455,12 +475,12 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="evaluating-an-ssh-mapping-algorithm-using-oceanbench-and-4dvarnet-starter">
-<h1>Evaluating an SSH Mapping algorithm using OceanBench and 4dvarnet-starter<a class="headerlink" href="#evaluating-an-ssh-mapping-algorithm-using-oceanbench-and-4dvarnet-starter" title="Permalink to this heading">#</a></h1>
+<h1>Evaluating an SSH Mapping algorithm using OceanBench and 4dvarnet-starter<a class="headerlink" href="#evaluating-an-ssh-mapping-algorithm-using-oceanbench-and-4dvarnet-starter" title="Link to this heading">#</a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
 <p>In this notebook we show how to:</p>
 <ul class="simple">
 <li><p>install necessary package</p></li>
@@ -472,9 +492,9 @@ document.write(`
 </ul>
 </section>
 <section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
 <section id="download-source-from-github">
-<h3>Download source from github<a class="headerlink" href="#download-source-from-github" title="Permalink to this heading">#</a></h3>
+<h3>Download source from github<a class="headerlink" href="#download-source-from-github" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>oceanbench-data-registry</strong>: data-registry for versioning and accessing your ocean datasets everywhere</p></li>
 <li><p><strong>4dvarnet-starter</strong>: implementation of the 4dvarnet algorithm using pytorch lightning</p></li>
@@ -494,9 +514,9 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!git clone https://github.com/CIA-Oceanix/4dvarnet-starter.git
-!git clone https://github.com/quentinf00/oceanbench-data-registry.git
-!git clone https://github.com/jejjohnson/oceanbench.git
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">CIA</span><span class="o">-</span><span class="n">Oceanix</span><span class="o">/</span><span class="mi">4</span><span class="n">dvarnet</span><span class="o">-</span><span class="n">starter</span><span class="o">.</span><span class="n">git</span>
+<span class="err">!</span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">quentinf00</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">registry</span><span class="o">.</span><span class="n">git</span>
+<span class="err">!</span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jejjohnson</span><span class="o">/</span><span class="n">oceanbench</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 </div>
@@ -528,10 +548,10 @@ Resolving deltas: 100% (1533/1533), done.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%cd 4dvarnet-starter
-!git pull --tags
-!git checkout patch200
-%cd ..
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">cd</span> <span class="mi">4</span><span class="n">dvarnet</span><span class="o">-</span><span class="n">starter</span>
+<span class="err">!</span><span class="n">git</span> <span class="n">pull</span> <span class="o">--</span><span class="n">tags</span>
+<span class="err">!</span><span class="n">git</span> <span class="n">checkout</span> <span class="n">patch200</span>
+<span class="o">%</span><span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
 </div>
@@ -563,12 +583,12 @@ HEAD is now at 968306c Setup fit /raid/localscratch/qfebvre/4dvarnet-starter/out
 </div>
 </section>
 <section id="install-python-packages">
-<h3>Install python packages<a class="headerlink" href="#install-python-packages" title="Permalink to this heading">#</a></h3>
+<h3>Install python packages<a class="headerlink" href="#install-python-packages" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!pip install --quiet condacolab einops pytorch-lightning cmocean pint-xarray numpy_groupies loguru cffi==1.15.1
-import condacolab
-condacolab.install()
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">quiet</span> <span class="n">condacolab</span> <span class="n">einops</span> <span class="n">pytorch</span><span class="o">-</span><span class="n">lightning</span> <span class="n">cmocean</span> <span class="n">pint</span><span class="o">-</span><span class="n">xarray</span> <span class="n">numpy_groupies</span> <span class="n">loguru</span> <span class="n">cffi</span><span class="o">==</span><span class="mf">1.15.1</span>
+<span class="kn">import</span> <span class="nn">condacolab</span>
+<span class="n">condacolab</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -592,8 +612,8 @@ condacolab.install()
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!mamba env update --quiet -f oceanbench/environments/linux.yaml
-!mamba install --quiet -c conda-forge  -c pyviz kornia metpy xrft pyinterp funcy=1.18 fsspec=2022.11.0 dvc-s3=2.21.0 hvplot gcm_filters xesmf
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">mamba</span> <span class="n">env</span> <span class="n">update</span> <span class="o">--</span><span class="n">quiet</span> <span class="o">-</span><span class="n">f</span> <span class="n">oceanbench</span><span class="o">/</span><span class="n">environments</span><span class="o">/</span><span class="n">linux</span><span class="o">.</span><span class="n">yaml</span>
+<span class="err">!</span><span class="n">mamba</span> <span class="n">install</span> <span class="o">--</span><span class="n">quiet</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>  <span class="o">-</span><span class="n">c</span> <span class="n">pyviz</span> <span class="n">kornia</span> <span class="n">metpy</span> <span class="n">xrft</span> <span class="n">pyinterp</span> <span class="n">funcy</span><span class="o">=</span><span class="mf">1.18</span> <span class="n">fsspec</span><span class="o">=</span><span class="mf">2022.11.0</span> <span class="n">dvc</span><span class="o">-</span><span class="n">s3</span><span class="o">=</span><span class="mf">2.21.0</span> <span class="n">hvplot</span> <span class="n">gcm_filters</span> <span class="n">xesmf</span>
 </pre></div>
 </div>
 </div>
@@ -613,7 +633,7 @@ Executing transaction: ...working... done
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!pip --quiet install  &quot;git+https://github.com/jejjohnson/ocn-tools.git&quot; torchaudio
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="o">--</span><span class="n">quiet</span> <span class="n">install</span>  <span class="s2">&quot;git+https://github.com/jejjohnson/ocn-tools.git&quot;</span> <span class="n">torchaudio</span>
 </pre></div>
 </div>
 </div>
@@ -653,7 +673,7 @@ Executing transaction: ...working... done
 </div>
 </section>
 <section id="download-data-from-data-registry-using-dvc">
-<h3>Download data from data registry using dvc<a class="headerlink" href="#download-data-from-data-registry-using-dvc" title="Permalink to this heading">#</a></h3>
+<h3>Download data from data registry using dvc<a class="headerlink" href="#download-data-from-data-registry-using-dvc" title="Link to this heading">#</a></h3>
 <p>Files:</p>
 <ul class="simple">
 <li><p><strong>osse_natl60/grid/gf_mod_ssh_daily.nc</strong>: 1 year daily average from NATL60 simulation over gulfstream</p></li>
@@ -662,9 +682,9 @@ Executing transaction: ...working... done
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%cd oceanbench-data-registry
-!dvc pull --quiet -j3 osse_natl60/grid/gf_obs_nadir.nc osse_natl60/grid/gf_mod_ssh_daily.nc results/osse_gf_nadir/duacs.nc
-%cd ..
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">cd</span> <span class="n">oceanbench</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">registry</span>
+<span class="err">!</span><span class="n">dvc</span> <span class="n">pull</span> <span class="o">--</span><span class="n">quiet</span> <span class="o">-</span><span class="n">j3</span> <span class="n">osse_natl60</span><span class="o">/</span><span class="n">grid</span><span class="o">/</span><span class="n">gf_obs_nadir</span><span class="o">.</span><span class="n">nc</span> <span class="n">osse_natl60</span><span class="o">/</span><span class="n">grid</span><span class="o">/</span><span class="n">gf_mod_ssh_daily</span><span class="o">.</span><span class="n">nc</span> <span class="n">results</span><span class="o">/</span><span class="n">osse_gf_nadir</span><span class="o">/</span><span class="n">duacs</span><span class="o">.</span><span class="n">nc</span>
+<span class="o">%</span><span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
 </div>
@@ -678,7 +698,7 @@ Executing transaction: ...working... done
 </section>
 </section>
 <section id="get-ocean-bench-task-data">
-<h2>Get ocean bench task data<a class="headerlink" href="#get-ocean-bench-task-data" title="Permalink to this heading">#</a></h2>
+<h2>Get ocean bench task data<a class="headerlink" href="#get-ocean-bench-task-data" title="Link to this heading">#</a></h2>
 <p><strong>Below is an example on how to load and each file with correct preprocessing</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -761,7 +781,7 @@ Attributes:
 </div>
 </div>
 <section id="from-task-data-to-patcher">
-<h3>From task data to Patcher<a class="headerlink" href="#from-task-data-to-patcher" title="Permalink to this heading">#</a></h3>
+<h3>From task data to Patcher<a class="headerlink" href="#from-task-data-to-patcher" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">importlib</span>
@@ -830,7 +850,7 @@ Num Items:    OrderedDict([(&#39;variable&#39;, 1), (&#39;time&#39;, 67), (&#39;
 </div>
 </section>
 <section id="torch-dataset-and-dataloader">
-<h3>Torch Dataset and DataLoader<a class="headerlink" href="#torch-dataset-and-dataloader" title="Permalink to this heading">#</a></h3>
+<h3>Torch Dataset and DataLoader<a class="headerlink" href="#torch-dataset-and-dataloader" title="Link to this heading">#</a></h3>
 <p>For training a model using pytorch one need two elements:</p>
 <ul class="simple">
 <li><p>a <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> that returns a single instance of what the model needs for training</p></li>
@@ -928,7 +948,7 @@ type(batch.input)=&lt;class &#39;torch.Tensor&#39;&gt;,
 </section>
 </section>
 <section id="configure-the-4dvarnet-lightningmodule-with-hydra">
-<h2>Configure the 4dVarNet LightningModule (with hydra)<a class="headerlink" href="#configure-the-4dvarnet-lightningmodule-with-hydra" title="Permalink to this heading">#</a></h2>
+<h2>Configure the 4dVarNet LightningModule (with hydra)<a class="headerlink" href="#configure-the-4dvarnet-lightningmodule-with-hydra" title="Link to this heading">#</a></h2>
 <p>The 4dvarnet-starter project defines the necessary classes to train a 4dvarnet model using pytorch lightning:</p>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">Lit4VarNet</span></code> specify the training and validation steps (training losses and metrics)</p></li>
@@ -989,7 +1009,7 @@ We use the parameters corresponding to the pretrained model weights available he
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!wget -nc https://s3.eu-central-1.wasabisys.com/melody/quentin_cloud/starter_jobs/patch200/checkpoints/val_rmse=0.0198-epoch=091.ckpt
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">wget</span> <span class="o">-</span><span class="n">nc</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">s3</span><span class="o">.</span><span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mf">1.</span><span class="n">wasabisys</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">melody</span><span class="o">/</span><span class="n">quentin_cloud</span><span class="o">/</span><span class="n">starter_jobs</span><span class="o">/</span><span class="n">patch200</span><span class="o">/</span><span class="n">checkpoints</span><span class="o">/</span><span class="n">val_rmse</span><span class="o">=</span><span class="mf">0.0198</span><span class="o">-</span><span class="n">epoch</span><span class="o">=</span><span class="mf">091.</span><span class="n">ckpt</span>
 </pre></div>
 </div>
 </div>
@@ -1010,9 +1030,9 @@ val_rmse=0.0198-epo 100%[===================&gt;]  10.85M  5.02MB/s    in 2.2s
 </div>
 </section>
 <section id="diagnostics">
-<h2>Diagnostics<a class="headerlink" href="#diagnostics" title="Permalink to this heading">#</a></h2>
+<h2>Diagnostics<a class="headerlink" href="#diagnostics" title="Link to this heading">#</a></h2>
 <section id="using-the-pre-trained-model-to-reconstruct-the-ssh-field">
-<h3>Using the pre-trained model to reconstruct the SSH field<a class="headerlink" href="#using-the-pre-trained-model-to-reconstruct-the-ssh-field" title="Permalink to this heading">#</a></h3>
+<h3>Using the pre-trained model to reconstruct the SSH field<a class="headerlink" href="#using-the-pre-trained-model-to-reconstruct-the-ssh-field" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Using pytorch lightning, we can easily generate the predictions for each batch using the <code class="docutils literal notranslate"><span class="pre">trainer.predict</span></code> api</p></li>
 <li><p>We can leverage oceanbench’s <code class="docutils literal notranslate"><span class="pre">XRDABatcher.reconstruct</span></code>italicized text to stitch merge together the different batches by providing</p>
@@ -1095,7 +1115,7 @@ Loaded model weights from the checkpoint at val_rmse=0.0198-epoch=091.ckpt
 </div>
 </section>
 <section id="compute-the-task-metrics">
-<h3>Compute the task metrics<a class="headerlink" href="#compute-the-task-metrics" title="Permalink to this heading">#</a></h3>
+<h3>Compute the task metrics<a class="headerlink" href="#compute-the-task-metrics" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -1142,7 +1162,7 @@ Loaded model weights from the checkpoint at val_rmse=0.0198-epoch=091.ckpt
 </div>
 </section>
 <section id="visualize-the-maps">
-<h3>Visualize the maps<a class="headerlink" href="#visualize-the-maps" title="Permalink to this heading">#</a></h3>
+<h3>Visualize the maps<a class="headerlink" href="#visualize-the-maps" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cfg</span><span class="o">.</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;4dvarnet&#39;</span>
@@ -2250,7 +2270,7 @@ if (window.Jupyter !== undefined) {
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="Leaderboards.html"
@@ -2278,6 +2298,7 @@ if (window.Jupyter !== undefined) {
             
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
@@ -2325,9 +2346,10 @@ By J. Emmanuel Johnson, Quentin Febvre
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -2351,8 +2373,8 @@ By J. Emmanuel Johnson, Quentin Febvre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
